@@ -1,0 +1,200 @@
+<nav
+  class="fixed top-0 left-0 z-50 w-full flex items-center justify-between px-8 py-3 bg-white/90 backdrop-blur-md border-b border-slate-200"
+>
+  <a href="/" class="flex items-center">
+    <img src="/assets/images/logo.png" alt="BMD-portal Logo" class="h-20 w-auto object-contain" />
+  </a>
+  <button matButton="tonal" class="flex justify-end item-center">Login</button>
+</nav>
+
+<section class="flex-grow flex-items-center justify-center py-32">
+  <div class="text-center p-4">
+    <h1
+      class="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500 animate-fade-in-up"
+    >
+      Digital Registry Portal
+    </h1>
+    <p class="text-blue-600 space-y-4 mt-6 text-xl text-blue-600 max-w-4xl mx-auto leading-8">
+      Welcome to BMD-portal.We are committed to delivering transparent, accessible, and efficient
+      digital services to empower citizens and businesses.
+    </p>
+  </div>
+</section>
+
+<section class="px-6 md:px-12 my-12 pb-12">
+  <mat-card
+    class="relative overflow-hidden rounded-3xl h-[500px] border-0 shadow-xl transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+  >
+    <img
+      src="/assets/images/website-image.png"
+      alt="Digital Services"
+      class="absolute inset-0 w-full h-full object-cover"
+    />
+  </mat-card>
+</section>
+
+<div class="text-center mb-8 mt-12 pt-4">
+  <span
+    class="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-3xl font-medium hover:bg-blue-300"
+  >
+    Our Services
+  </span>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-2 p-2">
+  <div
+    class="p-16 flex flex-col h-full transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+  >
+    <mat-card class="example-card" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title class="p-5 text-blue-600 text-2xl">Birth Certificate</mat-card-title>
+      </mat-card-header>
+      <img mat-card-image [src]="'/assets/images/birth-certificate.png'" alt="Birth certificate" />
+
+      <mat-card-content>
+        <p
+          class="mt-3 mb-6 p-5 flex flex-col flex-grow filled-container-color bg-gray-200 text-blue-900 rounded-lg"
+        >
+          Welcome to our Birth Certificate Service. We make the registration and application process
+          seamless and stress-free. Whether you are applying for a newborn, a delayed birth
+          registration, or a non-availability certificate, our experts ensure your documents are
+          handled quickly and accurately according to government guidelines.
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div
+    class="p-16 h-full transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+  >
+    <mat-card class="example-card" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title class="p-5 text-blue-600 text-2xl">Marriage Certificate</mat-card-title>
+      </mat-card-header>
+      <img
+        mat-card-image
+        [src]="'/assets/images/marriage-certificate.png'"
+        alt="Marriage certificate"
+      />
+      <mat-card-content>
+        <p class="mt-3 mb-6 p-5 flex flex-col flex-grow p-2 bg-gray-200 text-blue-900 rounded-lg">
+          Secure your legal future with a hassle-free marriage registration process. A marriage
+          certificate is vital for legal matters, including visa applications, name changes,
+          passport updates, and insurance claims. Our expert team makes the process quick and
+          legally compliant.
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div
+    class="p-16 flex flex-col h-full transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+  >
+    <mat-card class="example-card" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title class="p-5 text-blue-600 text-2xl">Death Certificate</mat-card-title>
+      </mat-card-header>
+      <img mat-card-image [src]="'/assets/images/death-certificate.png'" alt="Death certificate" />
+      <mat-card-content>
+        <p class="mt-3 mb-6 p-5 flex flex-col flex-grow p-2 bg-gray-200 text-blue-900 rounded-lg">
+          Welcome to our Death Certificate Service. We make the registration and application process
+          seamless and stress-free. Whether you are applying for a new death record, a delayed
+          registration, or a non-availability certificate, our experts ensure your documents are
+          handled quickly and accurately according to government guidelines.
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<div class="text-center mb-12">
+  <span
+    class="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-3xl font-medium hover:bg-blue-300"
+  >
+    How It Works
+  </span>
+</div>
+
+<div class="gap-4 pb-16">
+  <div class="flex flex-col md:flex-row">
+    <div
+      class="w-full md:w-1/3 p-6 flex justify-center items-center transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+    >
+      <img [src]="'/assets/images/register.png'" alt="Register" class="w-full h-full object" />
+    </div>
+    <div class="w-full p-26 md:w-2/3 p-8 bg-blue-100 flex flex-col">
+      <div>
+        <span>01.</span>
+        <h1 class="text-6xl font-bold tracking-tight text-slate-800">Registration</h1>
+      </div>
+      <div>
+        <p class="leading-8 text-black-600">
+          Verify your Aadhaar details, create an account, and securely log in to access online
+          certificate services.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="gap-4 pb-16">
+  <div class="flex flex-col md:flex-row-reverse h-1/2">
+    <div
+      class="w-full md:w-1/3 p-6 flex justify-center items-center transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+    >
+      <img [src]="'/assets/images/book-slot.png'" alt="Register" class="w-full h-full object" />
+    </div>
+    <div class="w-full p-26 md:w-2/3 p-8 bg-blue-100 flex flex-col">
+      <div>
+        <span>02.</span>
+        <h1 class="text-6xl font-bold tracking-tight text-slate-800">Verification</h1>
+      </div>
+      <div>
+        <p class="leading-8 text-black-600">
+          Select the required certificate service, submit the application, upload documents, and
+          schedule a verification slot.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="gap-4 pb-16">
+  <div class="flex flex-col md:flex-row">
+    <div
+      class="w-full md:w-1/3 p-6 flex justify-center items-center transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+    >
+      <img
+        [src]="'/assets/images/download-certificate.png'"
+        alt="Register"
+        class="w-full h-full object"
+      />
+    </div>
+    <div class="w-full p-26 md:w-2/3 p-8 bg-blue-100 flex flex-col">
+      <div>
+        <span>03.</span>
+        <h1 class="text-6xl font-bold tracking-tight text-slate-800">Download Certificate</h1>
+      </div>
+      <div>
+        <p class="leading-8 text-black-600">
+          Complete the video verification process with a clerk and download your approved
+          certificate online.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="bg-gradient-to-r from-blue-400 via-indigo-500 to-cyan-600 text-white mt-10">
+  <div id="top"></div>
+  <div class="max-w-7xl mx-auto px-6 py-8">
+    <div class="text-center">
+      <h2 class="text-3xl font-bold mb-3">BMD Portal</h2>
+
+      <p class="text-lg text-gray-200 max-w-2xl mx-auto">
+        Birth, Marriage & Death Certificate Management Portal. Secure, Fast and Digital Services for
+        Citizens.
+      </p>
+    </div>
+
+    <div class="text-center text-sm text-gray-200">© 2025 BMD Portal. All Rights Reserved.</div>
+  </div>
+</footer>
