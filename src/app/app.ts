@@ -8,6 +8,4 @@ import { HomePage } from './home-page/home-page';
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {
-  protected readonly title = signal('BMD-portal');
-}
+export class App {}
