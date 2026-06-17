@@ -1,0 +1,59 @@
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Aadhar number</mat-label>
+
+    <input matInput type="text" [formControl]="aadharControl" />
+
+    <mat-error>Enter Valid Aadhar Number</mat-error>
+  </mat-form-field>
+
+  <div class="flex items-start">
+    <button matButton="filled" class="!bg-success !text-white !px-6 !py-6" type="button">
+      Send
+    </button>
+  </div>
+</div>
+
+<h2 class="block text-sm font-semibold text-slate-700 mb-1">Enter valid OTP:</h2>
+
+<div class="flex items-center gap-3 mb-4">
+  <div class="flex justify-center items-center mb-3">
+    <mat-form-field appearance="outline" class="w-20 h-16 text-extrabold text-center p-4">
+      <input matInput type="text" maxlength="1" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-20 h-16 text-extrabold text-center p-4">
+      <input matInput type="text" maxlength="1" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-20 h-16 text-extrabold text-center p-4">
+      <input matInput type="text" maxlength="1" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-20 h-16 text-extrabold text-center p-4">
+      <input matInput type="text" maxlength="1" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-20 h-16 text-extrabold text-center p-4">
+      <input matInput type="text" maxlength="1" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-20 h-16 text-extrabold text-center p-4">
+      <input matInput type="text" maxlength="1" />
+    </mat-form-field>
+  </div>
+
+  <button matButton="filled" class="!bg-success !text-white !px-6 !py-6" type="button">
+    Verify
+  </button>
+</div>
+
+<div class="text-center">
+  <p class="text-black-600">Didn't receive OTP?</p>
+
+  <a
+    class="inline-block mt-2 font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors mb-4"
+  >
+    Resend it
+  </a>
+</div>
