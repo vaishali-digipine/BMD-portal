@@ -93,8 +93,8 @@
           <div class="mb-5">
             <label class="block text-sm font-semibold text-slate-700 mb-3">Gender:</label>
             <mat-radio-group aria-label="Gender" formControlName="gender">
-              <mat-radio-button value="1">Option 1</mat-radio-button>
-              <mat-radio-button value="2">Option 2</mat-radio-button>
+              <mat-radio-button value="1">Female</mat-radio-button>
+              <mat-radio-button value="2">Male</mat-radio-button>
             </mat-radio-group>
           </div>
 
@@ -121,7 +121,7 @@
           <label class="block text-sm font-semibold text-slate-700 mb-2">Upload Document:</label>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="mb-5">
             <label class="block text-sm font-semibold text-slate-700 mb-2">Aadhar Card:</label>
             <input
@@ -139,6 +139,18 @@
               (change)="onFileSelected($event)"
               class="border border-black p-2 rounded-md"
               formControlName="employeeId"
+            />
+          </div>
+
+          <div class="mb-5">
+            <label class="block text-sm font-semibold text-slate-700 mb-2"
+              >Employee Signature:</label
+            >
+            <input
+              type="file"
+              (change)="onFileSelected($event)"
+              class="border border-black p-2 rounded-md"
+              formControlName="aadharCard"
             />
           </div>
         </div>
