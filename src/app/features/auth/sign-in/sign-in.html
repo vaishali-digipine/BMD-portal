@@ -1,0 +1,50 @@
+<nav
+  class="fixed top-0 left-0 z-50 w-full flex items-center justify-between px-8 py-3 bg-white/90 backdrop-blur-md border-b border-slate-200"
+>
+  <a href="/" class="flex items-center">
+    <img src="/assets/images/logo.png" alt="BMD-portal Logo" class="h-20 w-auto object-contain" />
+  </a>
+
+  <button matButton="filled" class="flex justify-end item-center" routerLink="/">Home</button>
+</nav>
+
+<section class="pt-18">
+  <div class="min-h-screen flex justify-center items-center mt-1">
+    <mat-card class="w-full max-w-md p-6 rounded-2xl shadow-lg bg-gray-400 border">
+      <div class="text-center mb-6">
+        <h1 class="text-3xl font-bold text-blue-800">
+          Welcome to the Digital Civil Registration Portal
+        </h1>
+      </div>
+      <h1 class="text-3xl font-bold text-center mb-6">Sign in to your account</h1>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <app-email-field [emailControl]="loginForm.controls.email"></app-email-field>
+
+        <app-password-field label="Password" [passwordControl]="loginForm.controls.password">
+        </app-password-field>
+
+        <button matButton="filled" class="w-full">Sign In</button>
+
+        <div class="flex justify-end mt-3">
+          <a
+            routerLink="/forgotPassword"
+            class="text-sm text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+            >Forgot password?</a
+          >
+        </div>
+
+        <div class="text-center mt-8">
+          <p class="text-gray-600">Don't have an account?</p>
+
+          <a
+            routerLink="/userSignup"
+            class="inline-block mt-2 font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+          >
+            Create Account
+          </a>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</section>

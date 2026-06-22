@@ -1,0 +1,67 @@
+<nav
+  class="fixed top-0 left-0 z-50 w-full flex items-center justify-between px-8 py-3 bg-white/90 backdrop-blur-md border-b border-slate-200"
+>
+  <a href="/" class="flex items-center">
+    <img src="/assets/images/logo.png" alt="BMD-portal Logo" class="h-20 w-auto object-contain" />
+  </a>
+
+  <button matButton="filled" class="flex justify-end items-center" routerLink="/">Home</button>
+</nav>
+
+<section class="pt-24">
+  <div class="min-h-screen flex justify-center px-12 py-8">
+    <mat-card class="w-full max-w-5xl rounded-2xl shadow-lg p-6 md:p-8">
+      <div class="text-center mb-6">
+        <h1 class="text-3xl font-bold text-blue-700">Create an account</h1>
+        <mat-icon class="w-16 h-12">account_circle</mat-icon>
+      </div>
+
+      <form [formGroup]="userSignUpForm" (ngSubmit)="onUserSignUp()" class="space-y-4">
+        <app-aadhar-verification [aadharControl]="userSignUpForm.controls.aadharNumber">
+        </app-aadhar-verification>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>User Name</mat-label>
+            <input matInput type="text" formControlName="userName" />
+            <mat-error>Enter User Name</mat-error>
+          </mat-form-field>
+
+          <app-email-field [emailControl]="userSignUpForm.controls.email"></app-email-field>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Mobile No.</mat-label>
+            <input matInput formControlName="mobileNo" />
+            <mat-error>Enter Valid Mobile Number</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <app-password-field
+            label="Password"
+            [passwordControl]="userSignUpForm.controls.password"
+          ></app-password-field>
+          <app-password-field
+            label="Confirm Password"
+            [passwordControl]="userSignUpForm.controls.confirmPassword"
+          ></app-password-field>
+        </div>
+
+        <div class="flex justify-center mt-4">
+          <button matButton="filled" routerLink="/signIn" class="w-64">Sign Up</button>
+        </div>
+
+        <div class="text-center">
+          <a
+            routerLink="/signIn"
+            class="inline-block font-medium text-blue-600 hover:text-blue-700 hover:underline"
+          >
+            Sign In
+          </a>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</section>
