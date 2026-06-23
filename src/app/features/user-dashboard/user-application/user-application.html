@@ -1,0 +1,145 @@
+<nav class="sticky top-0 z-50 bg-white shadow-sm border-b border-slate-200">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+    <img src="/assets/images/logo.png" alt="Logo" class="h-14" />
+
+    <button matButton="filled" routerLink="/userDashboard">Home</button>
+  </div>
+</nav>
+
+<section class="max-w-7xl mx-auto px-6 py-8">
+  <div class="mb-8 text-center">
+    <h1 class="text-3xl font-bold text-slate-800">My Applications</h1>
+
+    <p class="text-slate-500 mt-2">View and track your submitted applications.</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div
+      class="p-6 min-h-[110px] rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+    >
+      <div class="flex items-center gap-4">
+        <div class="p-4 bg-blue-50 rounded-xl">
+          <img src="/assets/images/view-details.png" class="w-8 h-8" />
+        </div>
+
+        <div>
+          <p class="text-2xl text-black font-bold">1</p>
+
+          <h3 class="font-semibold text-slate-800">Total Applications</h3>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="p-6 min-h-[110px] rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+    >
+      <div class="flex items-center gap-4">
+        <div class="p-4 bg-blue-50 rounded-xl">
+          <img src="/assets/images/pending.png" class="w-8 h-8" />
+        </div>
+
+        <div>
+          <p class="text-2xl text-black font-bold">1</p>
+
+          <h3 class="font-semibold text-slate-800">Pending</h3>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="p-6 min-h-[110px] rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+    >
+      <div class="flex items-center gap-4">
+        <div class="p-4 bg-blue-50 rounded-xl">
+          <img src="/assets/images/accept.png" class="w-8 h-8" />
+        </div>
+
+        <div>
+          <p class="text-2xl text-black font-bold">0</p>
+
+          <h3 class="font-semibold text-slate-800">Accepted</h3>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="p-6 min-h-[110px] rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+    >
+      <div class="flex items-center gap-4">
+        <div class="p-4 bg-blue-50 rounded-xl">
+          <img src="/assets/images/reject.png" class="w-8 h-8" />
+        </div>
+
+        <div>
+          <p class="text-2xl text-black font-bold">0</p>
+
+          <h3 class="font-semibold text-slate-800">Rejected</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <mat-card class="rounded-2xl shadow-sm overflow-hidden mt-10">
+    <div class="px-6 py-4">
+      <h2 class="text-lg font-semibold text-slate-800">Application List</h2>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table mat-table [dataSource]="dataSource" class="w-full">
+        <ng-container matColumnDef="serialNo">
+          <th mat-header-cell *matHeaderCellDef class="!bg-blue-50 !text-blue-800 !font-semibold">
+            Sr. No.
+          </th>
+
+          <td mat-cell *matCellDef="let element">
+            {{ element.serialNo }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="applicationNo">
+          <th mat-header-cell *matHeaderCellDef class="!bg-blue-50 !text-blue-800 !font-semibold">
+            Application Number
+          </th>
+
+          <td mat-cell *matCellDef="let element">
+            {{ element.applicationNo }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="applicationType">
+          <th mat-header-cell *matHeaderCellDef class="!bg-blue-50 !text-blue-800 !font-semibold">
+            Application Type
+          </th>
+
+          <td mat-cell *matCellDef="let element">
+            {{ element.applicationType }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef class="!bg-blue-50 !text-blue-800 !font-semibold">
+            Date
+          </th>
+
+          <td mat-cell *matCellDef="let element">
+            {{ element.date }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef class="!bg-blue-50 !text-blue-800 !font-semibold">
+            Status
+          </th>
+
+          <td mat-cell *matCellDef="let element">
+            {{ element.status }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hover:bg-slate-50"></tr>
+      </table>
+    </div>
+  </mat-card>
+</section>

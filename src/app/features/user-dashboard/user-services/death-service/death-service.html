@@ -1,0 +1,453 @@
+<nav class="sticky top-0 z-50 bg-white shadow-sm border-b border-slate-200">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="/assets/images/logo.png" alt="Logo" class="h-14" />
+    </div>
+
+    <button matButton="filled" class="flex justify-end item-center" routerLink="/userDashboard">
+      Home
+    </button>
+  </div>
+</nav>
+
+<div class="w-full max-w-dvw mx-auto px-8 py-8">
+  <div class="text-center mb-8">
+    <h1 class="text-3xl font-bold text-slate-800">Death Certificate Application</h1>
+  </div>
+
+  <div class="w-full max-w-dvw mx-auto px-8 pb-10">
+    <mat-stepper [linear]="isLinear" #stepper>
+      <mat-step [stepControl]="firstFormGroup">
+        <form [formGroup]="firstFormGroup" (ngSubmit)="deathCertificate()">
+          <ng-template matStepLabel>Fill out Deceased Details</ng-template>
+
+          <div class="mb-5">
+            <label class="block text-2xl font-semibold text-slate-700 mt-8"
+              >Deceased Details:</label
+            >
+          </div>
+
+          <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
+            <app-aadhar-verification [aadharControl]="firstFormGroup.controls.deceasedAadharNumber">
+            </app-aadhar-verification>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Deceased Name</mat-label>
+                <input matInput type="text" formControlName="deceasedName" />
+                <mat-error>Enter Valid Name</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Place of Death</mat-label>
+                <input matInput type="text" formControlName="placeOfDeath" />
+                <mat-error>Enter place</mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label>select Date Of Death</mat-label>
+                <input
+                  matInput
+                  [min]="minDate"
+                  [max]="maxDate"
+                  [matDatepicker]="pickerOne"
+                  formControlName="dateOfDeath"
+                />
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="pickerOne"></mat-datepicker-toggle>
+                <mat-datepicker #pickerOne></mat-datepicker>
+                <mat-error>please select a Date Of Death</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+              <mat-form-field>
+                <mat-label>select Birth Date Of Deceased</mat-label>
+                <input
+                  matInput
+                  [min]="minDate"
+                  [max]="maxDate"
+                  [matDatepicker]="pickerTwo"
+                  formControlName="deceasedBirthDate"
+                />
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="pickerTwo"></mat-datepicker-toggle>
+                <mat-datepicker #pickerTwo></mat-datepicker>
+                <mat-error>please select a Date of birth</mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="w-full" appearance="fill">
+                <mat-label>Select Death District</mat-label>
+                <mat-select>
+                  @for (district of districts; track district) {
+                    <mat-option [value]="district.value">{{ district.viewValue }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label>Death Time</mat-label>
+                <input matInput [matTimepicker]="birthPickerThree" />
+                <mat-timepicker-toggle matIconSuffix [for]="birthPickerThree" />
+                <mat-timepicker #birthPickerThree />
+                <mat-error> please select Death time</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-radio-group aria-label="Gender" formControlName="deceasedGender">
+                <label class="text-sm font-semibold text-slate-700">Gender:</label>
+                <mat-radio-button value="1">Female</mat-radio-button>
+                <mat-radio-button value="2">Male</mat-radio-button>
+                <mat-radio-button value="3">Other</mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Deceased Father Name</mat-label>
+                <input matInput type="text" formControlName="deceasedFatherName" />
+                <mat-error>Enter Valid Name</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Deceased Mother Name</mat-label>
+                <input matInput type="text" formControlName="deceasedMotherName" />
+                <mat-error>Enter Valid Name</mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label>Death Type</mat-label>
+                <mat-select>
+                  @for (type of dType; track type) {
+                    <mat-option [value]="type.value">{{ type.viewValue }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="mb-3">
+              <label class="block text-lg font-semibold text-slate-700">Address:</label>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>street</mat-label>
+                <input matInput type="text" formControlName="deceasedStreet" />
+                <mat-error>Enter the street</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>City</mat-label>
+                <input matInput type="text" formControlName="deceasedCity" />
+                <mat-error>Enter the city</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Sub District</mat-label>
+                <input matInput type="text" formControlName="deceasedSubDistrict" />
+                <mat-error>Enter the Sub District</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>District</mat-label>
+                <input matInput type="text" formControlName="deceasedDistrict" />
+                <mat-error>Enter the District</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>State</mat-label>
+                <input matInput type="text" formControlName="deceasedState" />
+                <mat-error>Enter the state</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>PinCode</mat-label>
+                <input matInput type="text" formControlName="deceasedPinCode" />
+                <mat-error>Enter the Pincode</mat-error>
+              </mat-form-field>
+            </div>
+          </mat-card>
+
+          <div class="flex justify-end mt-6">
+            <button type="button" matButton="filled" matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="secondFormGroup">
+        <form [formGroup]="secondFormGroup" (ngSubmit)="deathCertificate()">
+          <ng-template matStepLabel>Fill out Spouse Details</ng-template>
+
+          <div class="mb-5">
+            <label class="block text-2xl font-semibold text-slate-700 mt-8">Spouse Details:</label>
+          </div>
+
+          <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
+            <app-aadhar-verification [aadharControl]="secondFormGroup.controls.spouseAadharNumber">
+            </app-aadhar-verification>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Spouse Name</mat-label>
+                <input matInput type="text" formControlName="spouseName" />
+                <mat-error>Enter Valid Name</mat-error>
+              </mat-form-field>
+
+              <app-email-field
+                [emailControl]="secondFormGroup.controls.spouseEmail"
+              ></app-email-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Mobile Number</mat-label>
+                <input matInput type="number" formControlName="spouseMobileNumber" />
+                <mat-error>Enter Valid Mobile Number</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+              <mat-form-field>
+                <mat-label>select Birth Date Of Deceased</mat-label>
+                <input
+                  matInput
+                  [min]="minDate"
+                  [max]="maxDate"
+                  [matDatepicker]="pickerThree"
+                  formControlName="spouseBirthDate"
+                />
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="pickerThree"></mat-datepicker-toggle>
+                <mat-datepicker #pickerThree></mat-datepicker>
+                <mat-error>please select a Date of birth</mat-error>
+              </mat-form-field>
+
+              <mat-radio-group aria-label="Gender" formControlName="spouseGender">
+                <label class="text-sm font-semibold text-slate-700">Gender:</label>
+                <mat-radio-button value="1">Female</mat-radio-button>
+                <mat-radio-button value="2">Male</mat-radio-button>
+                <mat-radio-button value="2">Other</mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+            <div class="mb-3">
+              <label class="block text-lg font-semibold text-slate-700">Address:</label>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>street</mat-label>
+                <input matInput type="text" formControlName="spouseStreet" />
+                <mat-error>Enter the street</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>City</mat-label>
+                <input matInput type="text" formControlName="spouseCity" />
+                <mat-error>Enter the city</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Sub District</mat-label>
+                <input matInput type="text" formControlName="spouseSubDistrict" />
+                <mat-error>Enter the Sub District</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>District</mat-label>
+                <input matInput type="text" formControlName="spouseDistrict" />
+                <mat-error>Enter the District</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>State</mat-label>
+                <input matInput type="text" formControlName="spouseState" />
+                <mat-error>Enter the state</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>PinCode</mat-label>
+                <input matInput type="text" formControlName="spousePinCode" />
+                <mat-error>Enter the Pincode</mat-error>
+              </mat-form-field>
+            </div>
+          </mat-card>
+
+          <div class="flex justify-between mt-6">
+            <button type="button" matButton="filled" matStepperPrevious>Back</button>
+            <button type="button" matButton="filled" color="primary" matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="thirdFormGroup">
+        <form [formGroup]="thirdFormGroup" (ngSubmit)="deathCertificate()">
+          <ng-template matStepLabel>Upload Document</ng-template>
+
+          <div class="mb-5">
+            <label class="block text-2xl font-semibold text-slate-700 mt-8"
+              >Upload Documents:</label
+            >
+          </div>
+
+          <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700">
+                  Deceased Aadhar Card:</label
+                >
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  class="border border-black p-2 rounded-md"
+                />
+              </div>
+              <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700">
+                  Spouse Aadhar Card:</label
+                >
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  class="border border-black p-2 rounded-md"
+                />
+              </div>
+              <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700">
+                  Deceased Ration Card:</label
+                >
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  class="border border-black p-2 rounded-md"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                  Deceased Photo:</label
+                >
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  class="border border-black p-2 rounded-md"
+                />
+              </div>
+              <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700"> Medical Report:</label>
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  class="border border-black p-2 rounded-md"
+                />
+              </div>
+
+              <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700"> PM Report:</label>
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  class="border border-black p-2 rounded-md"
+                />
+              </div>
+            </div>
+
+            <div class="mb-5">
+              <label class="block text-sm font-semibold text-slate-700"> FIR:</label>
+              <input
+                type="file"
+                (change)="onFileSelected($event)"
+                class="border border-black p-2 rounded-md"
+              />
+            </div>
+          </mat-card>
+
+          <div class="flex justify-between mt-6">
+            <button type="button" matButton="filled" matStepperPrevious>Back</button>
+            <button type="button" matButton="filled" color="primary" matStepperNext>Next</button>
+          </div>
+        </form>
+
+        <mat-step [stepControl]="fourthFormGroup" label="Slot Selection">
+          <form [formGroup]="fourthFormGroup" (ngSubmit)="deathCertificate()">
+            <ng-template>Slot Selection</ng-template>
+
+            <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
+              <span class="text-red-600 font-extrabold text-2xl">Instruction:</span>
+              <br />
+              <p class="text-red-600 font-medium">
+                * Please ensure that all information entered in the application matches the
+                supporting documents. Any mismatch may lead to delays or rejection of the
+                application.
+              </p>
+              <br />
+              <li>
+                <p class="font-medium text-lg">
+                  Select a convenient date and time slot for your verification appointment.
+                </p>
+              </li>
+              <li>
+                <p class="font-medium text-lg">
+                  Ensure all required documents are ready before joining the verification session.
+                </p>
+              </li>
+              <li>
+                <p class="font-medium text-lg">
+                  Attend the scheduled video call with the assigned clerk for identity and document
+                  verification.
+                </p>
+              </li>
+              <li>
+                <p class="font-medium text-lg">
+                  Successful verification is required for your application to proceed for approval
+                  and certificate issuance.
+                </p>
+              </li>
+              <br />
+
+              <h2 class="font-semibold text-lg text-blue-600">
+                Select a Date and an available time slot:
+              </h2>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-80 mt-10">
+                <mat-form-field>
+                  <mat-label>select a Date </mat-label>
+                  <input
+                    matInput
+                    [min]="slotMinDate"
+                    [max]="slotMaxDate"
+                    [matDatepicker]="pickerFour"
+                    formControlName="slotDate"
+                  />
+                  <mat-hint>MM/DD/YYYY</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="pickerFour"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerFour></mat-datepicker>
+                  <mat-error>please select a Date </mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                  <mat-label>Select Slot Time</mat-label>
+                  <input matInput [matTimepicker]="birthPickerTwo" />
+                  <mat-timepicker-toggle matIconSuffix [for]="birthPickerTwo" />
+                  <mat-timepicker #birthPickerTwo />
+                  <mat-error>Choose Slot Time</mat-error>
+                </mat-form-field>
+              </div>
+            </mat-card>
+
+            <div class="flex justify-center mt-12">
+              <button matButton="filled" class="w-64" routerLink="/userDashboard">Submit</button>
+            </div>
+
+            <div class="flex justify-between mt-6">
+              <button type="button" matButton="filled" matStepperPrevious>Back</button>
+            </div>
+          </form>
+        </mat-step>
+      </mat-step>
+    </mat-stepper>
+  </div>
+</div>

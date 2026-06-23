@@ -1,0 +1,615 @@
+<nav class="sticky top-0 z-50 bg-white shadow-sm border-b border-slate-200">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="/assets/images/logo.png" alt="Logo" class="h-14" />
+    </div>
+
+    <button mat-button class="flex justify-end items-center" routerLink="/userDashboard">
+      Home
+    </button>
+  </div>
+</nav>
+
+<div class="w-full max-w-dvw mx-auto px-8 py-8">
+  <div class="text-center mb-8">
+    <h1 class="text-3xl font-bold text-slate-800">Marriage Certificate Application</h1>
+  </div>
+
+  <div class="w-full max-w-dvw mx-auto px-8 pb-10">
+    <!-- bride details -->
+
+    <mat-stepper [linear]="isLinear" #stepper>
+      <mat-step [stepControl]="firstFormGroup">
+        <form [formGroup]="firstFormGroup" (ngSubmit)="marriageCertificate()">
+          <ng-template matStepLabel>Fill out Bride Details</ng-template>
+
+          <div class="mb-5">
+            <label class="text-xl font-semibold text-slate-800 mb-4">Bride Details:</label>
+          </div>
+          <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
+            <app-aadhar-verification [aadharControl]="firstFormGroup.controls.brideAadharNumber">
+            </app-aadhar-verification>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Bride Name</mat-label>
+                <input matInput type="text" formControlName="brideName" />
+                <mat-error>Enter Bride Name</mat-error>
+              </mat-form-field>
+
+              <app-email-field
+                [emailControl]="firstFormGroup.controls.brideEmail"
+              ></app-email-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Select Bride Date of Birth</mat-label>
+                <input
+                  matInput
+                  [min]="minDate"
+                  [max]="maxDate"
+                  [matDatepicker]="pickerOne"
+                  formControlName="brideBirthDate"
+                />
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="pickerOne"></mat-datepicker-toggle>
+                <mat-datepicker #pickerOne></mat-datepicker>
+                <mat-error>Please select a Date of Birth</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Father Name</mat-label>
+                <input matInput type="text" formControlName="brideFatherName" />
+                <mat-error>Enter Valid Name</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Mother Name</mat-label>
+                <input matInput type="text" formControlName="brideMotherName" />
+                <mat-error>Enter Valid Name</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Mobile Number</mat-label>
+                <input matInput type="text" formControlName="brideMobileNumber" />
+                <mat-error>Enter Valid Mobile Number</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-radio-group aria-label="Gender" formControlName="brideGender">
+                <label class="text-sm font-semibold text-slate-700">Gender:</label>
+                <mat-radio-button value="1">Female</mat-radio-button>
+                <mat-radio-button value="2">Male</mat-radio-button>
+                <mat-radio-button value="3">Other</mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+            <div class="mb-3 mt-4">
+              <label class="block text-lg font-semibold text-slate-700">Address:</label>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Street</mat-label>
+                <input matInput type="text" formControlName="brideStreet" />
+                <mat-error>Enter the street</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>City</mat-label>
+                <input matInput type="text" formControlName="brideCity" />
+                <mat-error>Enter the city</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Sub District</mat-label>
+                <input matInput type="text" formControlName="brideSubDistrict" />
+                <mat-error>Enter the Sub District</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>District</mat-label>
+                <input matInput type="text" formControlName="brideDistrict" />
+                <mat-error>Enter the District</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>State</mat-label>
+                <input matInput type="text" formControlName="brideState" />
+                <mat-error>Enter the state</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>PinCode</mat-label>
+                <input matInput type="text" formControlName="bridePinCode" />
+                <mat-error>Enter the Pincode</mat-error>
+              </mat-form-field>
+            </div>
+          </mat-card>
+
+          <div class="flex justify-end mt-6">
+            <button matButton="filled" matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="secondFormGroup">
+        <form [formGroup]="secondFormGroup" (ngSubmit)="marriageCertificate()">
+          <ng-template matStepLabel>Fill out Groom Details</ng-template>
+
+          <div class="mb-5">
+            <label class="text-xl font-semibold text-slate-800 mb-4">Groom Details:</label>
+          </div>
+
+          <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
+            <app-aadhar-verification [aadharControl]="secondFormGroup.controls.groomAadharNumber">
+            </app-aadhar-verification>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Groom Name</mat-label>
+                <input matInput type="text" formControlName="groomName" />
+                <mat-error>Enter Groom Name</mat-error>
+              </mat-form-field>
+
+              <app-email-field
+                [emailControl]="secondFormGroup.controls.groomEmail"
+              ></app-email-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Select Groom Date of Birth</mat-label>
+                <input
+                  matInput
+                  [min]="minDate"
+                  [max]="maxDate"
+                  [matDatepicker]="pickerTwo"
+                  formControlName="groomBirthDate"
+                />
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="pickerTwo"></mat-datepicker-toggle>
+                <mat-datepicker #pickerTwo></mat-datepicker>
+                <mat-error>Please select a Date of Birth</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Father Name</mat-label>
+                <input matInput type="text" formControlName="groomFatherName" />
+                <mat-error>Enter Valid Name</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Mother Name</mat-label>
+                <input matInput type="text" formControlName="groomMotherName" />
+                <mat-error>Enter Valid Name</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Mobile Number</mat-label>
+                <input matInput type="text" formControlName="groomMobileNumber" />
+                <mat-error>Enter Valid Mobile Number</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-radio-group aria-label="Gender" formControlName="groomGender">
+                <label class="text-sm font-semibold text-slate-700">Gender:</label>
+                <mat-radio-button value="1">Female</mat-radio-button>
+                <mat-radio-button value="2">Male</mat-radio-button>
+                <mat-radio-button value="3">Other</mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+            <div class="mb-3 mt-4">
+              <label class="block text-lg font-semibold text-slate-700">Address:</label>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Street</mat-label>
+                <input matInput type="text" formControlName="groomStreet" />
+                <mat-error>Enter the street</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>City</mat-label>
+                <input matInput type="text" formControlName="groomCity" />
+                <mat-error>Enter the city</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Sub District</mat-label>
+                <input matInput type="text" formControlName="groomSubDistrict" />
+                <mat-error>Enter the Sub District</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>District</mat-label>
+                <input matInput type="text" formControlName="groomDistrict" />
+                <mat-error>Enter the District</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>State</mat-label>
+                <input matInput type="text" formControlName="groomState" />
+                <mat-error>Enter the state</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>PinCode</mat-label>
+                <input matInput type="text" formControlName="groomPinCode" />
+                <mat-error>Enter the Pincode</mat-error>
+              </mat-form-field>
+            </div>
+          </mat-card>
+
+          <div class="flex justify-between mt-6">
+            <button type="button" matButton="filled" matStepperPrevious>Back</button>
+            <button type="button" matButton="filled" matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="thirdFormGroup">
+        <form [formGroup]="thirdFormGroup" (ngSubmit)="marriageCertificate()">
+          <ng-template matStepLabel>Fill out Marriage Details</ng-template>
+          <div class="mb-5">
+            <label class="text-xl font-semibold text-slate-800 mb-4"> Marriage Details:</label>
+          </div>
+          <mat-card
+            class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black mb-8"
+          >
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Select Marriage Date</mat-label>
+                <input
+                  matInput
+                  [min]="minDate"
+                  [max]="maxDate"
+                  [matDatepicker]="pickerThree"
+                  formControlName="marriageDate"
+                />
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="pickerThree"></mat-datepicker-toggle>
+                <mat-datepicker #pickerThree></mat-datepicker>
+                <mat-error>Please select a Marriage Date</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Marriage Place</mat-label>
+                <input matInput type="text" formControlName="marriagePlace" />
+                <mat-error>Enter the Marriage Place</mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="w-full" appearance="fill">
+                <mat-label>Districts</mat-label>
+                <mat-select>
+                  @for (district of districts; track district) {
+                    <mat-option [value]="district.value">{{ district.viewValue }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </mat-card>
+
+          <div class="flex justify-between mt-6">
+            <button type="button" matButton="filled" matStepperPrevious>Back</button>
+            <button type="button" matButton="filled" matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="fourthFormGroup">
+        <form [formGroup]="fourthFormGroup" (ngSubmit)="marriageCertificate()">
+          <ng-template matStepLabel>Fill out Witness Details</ng-template>
+
+          <div class="mb-5">
+            <label class="text-xl font-semibold text-slate-800 mb-4"> Witness Details:</label>
+          </div>
+          <mat-card
+            class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black mb-8"
+          >
+            <app-aadhar-verification [aadharControl]="fourthFormGroup.controls.witnessAadharNumber">
+            </app-aadhar-verification>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Name</mat-label>
+                <input matInput type="text" formControlName="witnessName" />
+                <mat-error>Enter Valid Name</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Mobile Number</mat-label>
+                <input matInput type="text" formControlName="witnessMobileNo" />
+                <mat-error>Enter Valid Mobile Number</mat-error>
+              </mat-form-field>
+              <app-email-field
+                [emailControl]="fourthFormGroup.controls.witnessEmail"
+              ></app-email-field>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Witness Relation</mat-label>
+                <input matInput type="text" formControlName="witnessRelation" />
+                <mat-error>Enter Relation</mat-error>
+              </mat-form-field>
+
+              <mat-radio-group aria-label="Gender" formControlName="witnessGender">
+                <label class="text-sm font-semibold text-slate-700">Gender:</label>
+                <mat-radio-button value="1">Female</mat-radio-button>
+                <mat-radio-button value="2">Male</mat-radio-button>
+                <mat-radio-button value="3">Other</mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+            <div class="mb-3 mt-4">
+              <label class="block text-lg font-semibold text-slate-700">Address:</label>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Street</mat-label>
+                <input matInput type="text" formControlName="witnessStreet" />
+                <mat-error>Enter the street</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>City</mat-label>
+                <input matInput type="text" formControlName="witnessCity" />
+                <mat-error>Enter the city</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Sub District</mat-label>
+                <input matInput type="text" formControlName="witnessSubDistrict" />
+                <mat-error>Enter the Sub District</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>District</mat-label>
+                <input matInput type="text" formControlName="witnessDistrict" />
+                <mat-error>Enter the District</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>State</mat-label>
+                <input matInput type="text" formControlName="witnessState" />
+                <mat-error>Enter the state</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>PinCode</mat-label>
+                <input matInput type="text" formControlName="witnessPinCode" />
+                <mat-error>Enter the Pincode</mat-error>
+              </mat-form-field>
+            </div>
+          </mat-card>
+
+          <div class="mb-5">
+            <label class="text-xl font-semibold text-slate-800 mb-4">Priest Details:</label>
+          </div>
+          <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
+            <app-aadhar-verification [aadharControl]="fourthFormGroup.controls.priestAadharNumber">
+            </app-aadhar-verification>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Name</mat-label>
+                <input matInput type="text" formControlName="priestName" />
+                <mat-error>Enter Valid Name</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Mobile Number</mat-label>
+                <input matInput type="text" formControlName="priestMobileNo" />
+                <mat-error>Enter Valid Mobile Number</mat-error>
+              </mat-form-field>
+            </div>
+          </mat-card>
+
+          <div class="flex justify-between mt-6">
+            <button type="button" matButton="filled" matStepperPrevious>Back</button>
+            <button type="button" matButton="filled" matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="fifthFormGroup" label="Upload Document">
+        <form [formGroup]="fifthFormGroup" (ngSubmit)="marriageCertificate()">
+          <ng-template>Upload Document</ng-template>
+
+          <div class="mb-5">
+            <label class="text-xl font-semibold text-slate-800 mb-4">Upload Document:</label>
+          </div>
+
+          <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                  Bride Aadhar Card:</label
+                >
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  class="border border-black p-2 rounded-md"
+                />
+              </div>
+              <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                  Groom Aadhar Card:</label
+                >
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  class="border border-black p-2 rounded-md"
+                />
+              </div>
+              <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                  Witness Aadhar Card:</label
+                >
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  class="border border-black p-2 rounded-md"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                  Priest Aadhar Card:</label
+                >
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  class="border border-black p-2 rounded-md"
+                />
+              </div>
+              <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                  Bride Ration Card:</label
+                >
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  class="border border-black p-2 rounded-md"
+                />
+              </div>
+
+              <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                  Groom Ration Card:</label
+                >
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  class="border border-black p-2 rounded-md"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700 mb-2"> Bride Photo:</label>
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  class="border border-black p-2 rounded-md"
+                />
+              </div>
+              <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700 mb-2"> Groom Photo:</label>
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  class="border border-black p-2 rounded-md"
+                />
+              </div>
+              <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                  Invitation Card:</label
+                >
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  class="border border-black p-2 rounded-md"
+                />
+              </div>
+            </div>
+          </mat-card>
+
+          <div class="flex justify-between mt-6">
+            <button type="button" matButton="filled" matStepperPrevious>Back</button>
+            <button type="button" matButton="filled" matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="sixthFormGroup" label="Slot Selection">
+        <form [formGroup]="sixthFormGroup" (ngSubmit)="marriageCertificate()">
+          <ng-template>Slot Selection</ng-template>
+
+          <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
+            <span class="text-red-600 font-extrabold text-2xl">Instruction:</span>
+            <br />
+            <p class="text-red-600 font-medium">
+              * Please ensure that all information entered in the application matches the supporting
+              documents. Any mismatch may lead to delays or rejection of the application.
+            </p>
+            <br />
+            <li>
+              <p class="font-medium text-lg">
+                Select a convenient date and time slot for your verification appointment.
+              </p>
+            </li>
+            <li>
+              <p class="font-medium text-lg">
+                Ensure all required documents are ready before joining the verification session.
+              </p>
+            </li>
+            <li>
+              <p class="font-medium text-lg">
+                Attend the scheduled video call with the assigned clerk for identity and document
+                verification.
+              </p>
+            </li>
+            <li>
+              <p class="font-medium text-lg">
+                Successful verification is required for your application to proceed for approval and
+                certificate issuance.
+              </p>
+            </li>
+            <br />
+
+            <h2 class="font-semibold text-lg text-blue-600">
+              Select a Date and an available time slot:
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-80 mt-10">
+              <mat-form-field>
+                <mat-label>select a Date </mat-label>
+                <input
+                  matInput
+                  [min]="slotMinDate"
+                  [max]="slotMaxDate"
+                  [matDatepicker]="pickerFour"
+                  formControlName="slotDate"
+                />
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="pickerFour"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFour></mat-datepicker>
+                <mat-error>please select a Date </mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label>Select Slot Time</mat-label>
+                <input matInput [matTimepicker]="birthPickerTwo" />
+                <mat-timepicker-toggle matIconSuffix [for]="birthPickerTwo" />
+                <mat-timepicker #birthPickerTwo />
+                <mat-error>Choose Slot Time</mat-error>
+              </mat-form-field>
+            </div>
+          </mat-card>
+
+          <div class="flex justify-center mt-12">
+            <button matButton="filled" class="w-64" routerLink="/userDashboard">Submit</button>
+          </div>
+          <div class="flex justify-between mt-6">
+            <button type="button" matButton="filled" matStepperPrevious>Back</button>
+          </div>
+        </form>
+      </mat-step>
+    </mat-stepper>
+  </div>
+</div>
