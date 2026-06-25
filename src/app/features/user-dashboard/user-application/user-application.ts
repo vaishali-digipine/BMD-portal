@@ -11,7 +11,6 @@ export interface PeriodicElement {
   applicationNo: number;
   applicationType: string;
   date: string;
-
   status: string;
 }
 

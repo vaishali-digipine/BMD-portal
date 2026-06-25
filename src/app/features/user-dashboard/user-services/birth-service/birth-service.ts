@@ -19,6 +19,10 @@ interface District {
   value: string;
   viewValue: string;
 }
+interface Gender {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-birth-service',
@@ -102,6 +106,12 @@ export class BirthService {
     { value: 'Dwarka-1', viewValue: 'Dwarka' },
     { value: 'rajkot-2', viewValue: 'Rajkot' },
   ];
+
+  genders: Gender[] = [
+  { value: 'male', viewValue: 'Male' },
+  { value: 'female', viewValue: 'Female' },
+  { value: 'other', viewValue: 'Other' },
+];
 
   birthCertificate() {}
 

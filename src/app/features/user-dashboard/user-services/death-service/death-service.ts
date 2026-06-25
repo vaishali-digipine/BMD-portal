@@ -15,6 +15,11 @@ import { RouterLink } from '@angular/router';
 import { AadharVerification } from '../../../../shared/aadhar-verification/aadhar-verification';
 import { EmailField } from '../../../../shared/email-field/email-field';
 
+interface Gender {
+  value: string;
+  viewValue: string;
+}
+
 interface deathType {
   value: string;
   viewValue: string;
@@ -108,6 +113,12 @@ export class DeathService {
     { value: 'Porbandar-0', viewValue: 'Porbandar' },
     { value: 'Dwarka-1', viewValue: 'Dwarka' },
     { value: 'rajkot-2', viewValue: 'Rajkot' },
+  ];
+
+  genders: Gender[] = [
+    { value: 'male', viewValue: 'Male' },
+    { value: 'female', viewValue: 'Female' },
+    { value: 'other', viewValue: 'Other' },
   ];
 
   private readonly _currentYear = new Date().getFullYear();

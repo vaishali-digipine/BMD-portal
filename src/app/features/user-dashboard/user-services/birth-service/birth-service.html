@@ -4,7 +4,7 @@
       <img src="/assets/images/logo.png" alt="Logo" class="h-14" />
     </div>
 
-    <button matButton="filled" class="flex justify-end item-center" routerLink="/userDashboard">
+    <button matButton="filled" class="flex justify-end item-center" routerLink="/user-dashboard">
       Home
     </button>
   </div>
@@ -34,7 +34,7 @@
               </mat-form-field>
 
               <mat-form-field>
-                <mat-label>Birth time</mat-label>
+                <mat-label>Birth Time</mat-label>
                 <input matInput [matTimepicker]="birthPickerOne" formControlName="birthTime" />
                 <mat-timepicker-toggle matIconSuffix [for]="birthPickerOne" />
                 <mat-timepicker #birthPickerOne />
@@ -42,9 +42,9 @@
               </mat-form-field>
 
               <mat-form-field appearance="fill" class="w-full">
-                <mat-label>Birth place</mat-label>
+                <mat-label>Birth Place</mat-label>
                 <input matInput type="text" formControlName="birthPlace" />
-                <mat-error>Enter valid Birth place</mat-error>
+                <mat-error>Enter valid Birth <Picture></Picture>lace</mat-error>
               </mat-form-field>
             </div>
 
@@ -52,11 +52,11 @@
               <mat-form-field appearance="fill" class="w-full">
                 <mat-label>Weight</mat-label>
                 <input matInput type="number" min="1" max="10" formControlName="birthPlace" />
-                <mat-error>Enter baby weight</mat-error>
+                <mat-error>Enter Baby Weight</mat-error>
               </mat-form-field>
 
               <mat-form-field>
-                <mat-label>select Date of Birth</mat-label>
+                <mat-label>Select Date of Birth</mat-label>
                 <input
                   matInput
                   [min]="minDate"
@@ -67,7 +67,7 @@
                 <mat-hint>MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="pickerOne"></mat-datepicker-toggle>
                 <mat-datepicker #pickerOne></mat-datepicker>
-                <mat-error>please select a Date of birth</mat-error>
+                <mat-error>Please select a Date of birth</mat-error>
               </mat-form-field>
 
               <mat-form-field class="w-full" appearance="fill">
@@ -83,9 +83,11 @@
             <div>
               <mat-radio-group aria-label="Gender" formControlName="gender">
                 <label class="text-sm font-semibold text-slate-700">Gender:</label>
-                <mat-radio-button value="1">Female</mat-radio-button>
-                <mat-radio-button value="2">Male</mat-radio-button>
-                <mat-radio-button value="3">Other</mat-radio-button>
+                 @for (gender of genders; track gender.value) {
+                  <mat-radio-button [value]="gender.value">
+                    {{ gender.viewValue }}
+                  </mat-radio-button>
+                }
               </mat-radio-group>
             </div>
           </mat-card>
@@ -122,7 +124,7 @@
               </mat-form-field>
 
               <mat-form-field appearance="fill" class="w-full">
-                <mat-label> contact Number</mat-label>
+                <mat-label> Contact Number</mat-label>
                 <input matInput type="text" formControlName="fatherContactNumber" />
                 <mat-error>Enter contact number</mat-error>
               </mat-form-field>
@@ -134,7 +136,7 @@
               ></app-email-field>
 
               <mat-form-field>
-                <mat-label>select Date of Birth</mat-label>
+                <mat-label>Select Date of Birth</mat-label>
                 <input
                   matInput
                   [min]="minDate"
@@ -154,7 +156,7 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
               <mat-form-field appearance="fill" class="w-full">
-                <mat-label>street</mat-label>
+                <mat-label>Street</mat-label>
                 <input matInput type="text" formControlName="fatherStreet" />
                 <mat-error>Enter the street</mat-error>
               </mat-form-field>
@@ -209,7 +211,7 @@
               </mat-form-field>
 
               <mat-form-field appearance="fill" class="w-full">
-                <mat-label> contact Number</mat-label>
+                <mat-label> Contact Number</mat-label>
                 <input matInput type="text" formControlName="motherContactNumber" />
                 <mat-error>Enter contact number</mat-error>
               </mat-form-field>
@@ -221,7 +223,7 @@
               ></app-email-field>
 
               <mat-form-field>
-                <mat-label>select Date of Birth</mat-label>
+                <mat-label>Select Date of Birth</mat-label>
                 <input
                   matInput
                   [min]="minDate"
@@ -232,7 +234,7 @@
                 <mat-hint>MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="pickerThree"></mat-datepicker-toggle>
                 <mat-datepicker #pickerThree></mat-datepicker>
-                <mat-error>please select a Date of birth</mat-error>
+                <mat-error>Please select a Date of birth</mat-error>
               </mat-form-field>
             </div>
 
@@ -241,7 +243,7 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
               <mat-form-field appearance="fill" class="w-full">
-                <mat-label>street</mat-label>
+                <mat-label>Street</mat-label>
                 <input matInput type="text" formControlName="motherStreet" />
                 <mat-error>Enter the street</mat-error>
               </mat-form-field>
@@ -287,7 +289,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
               <mat-form-field appearance="fill" class="w-full">
-                <mat-label>street</mat-label>
+                <mat-label>Street</mat-label>
                 <input matInput type="text" formControlName="PermanentStreet" />
                 <mat-error>Enter the street</mat-error>
               </mat-form-field>
@@ -388,7 +390,7 @@
               </div>
               <div class="mb-5">
                 <label class="block text-sm font-semibold text-slate-700 mb-2">
-                  Hospital Report as a proof:</label
+                  Hospital Report as a Proof:</label
                 >
                 <input
                   type="file"
@@ -448,7 +450,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-80 mt-10">
               <mat-form-field>
-                <mat-label>select a Date </mat-label>
+                <mat-label>Select a Date </mat-label>
                 <input
                   matInput
                   [min]="slotMinDate"
@@ -459,7 +461,7 @@
                 <mat-hint>MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="pickerFour"></mat-datepicker-toggle>
                 <mat-datepicker #pickerFour></mat-datepicker>
-                <mat-error>please select a Date </mat-error>
+                <mat-error>Please select a Date </mat-error>
               </mat-form-field>
 
               <mat-form-field>
@@ -473,7 +475,7 @@
           </mat-card>
 
           <div class="flex justify-center mt-12">
-            <button matButton="filled" class="w-64" routerLink="/userDashboard">Submit</button>
+            <button matButton="filled" class="w-64" routerLink="/user-dashboard">Submit</button>
           </div>
 
           <div class="flex justify-between mt-6">

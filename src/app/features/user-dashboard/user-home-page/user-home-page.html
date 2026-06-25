@@ -9,12 +9,12 @@
     </button>
 
     <mat-menu #profileMenu="matMenu">
-      <button mat-menu-item routerLink="/userProfile">
+      <button mat-menu-item routerLink="/user-profile">
         <mat-icon>account_box</mat-icon>
         <span>My Profile</span>
       </button>
 
-      <button mat-menu-item routerLink="/userApplication">
+      <button mat-menu-item routerLink="/user-application">
         <mat-icon>description</mat-icon>
         <span>My Applications</span>
       </button>
@@ -88,7 +88,7 @@
             <button
               matButton="filled"
               class="justify-center mt-5 !bg-blue-800"
-              routerLink="/birthService"
+              routerLink="/birth-service"
             >
               Apply Now
             </button>
@@ -120,7 +120,7 @@
             <button
               matButton="filled"
               class="justify-center mt-11 !bg-pink-600"
-              routerLink="/marriageService"
+              routerLink="/marriage-service"
             >
               Apply Now
             </button>
@@ -152,7 +152,7 @@
             <button
               matButton="filled"
               class="justify-center mt-5 !bg-purple-800"
-              routerLink="/deathService"
+              routerLink="/death-service"
             >
               Apply Now
             </button>
@@ -226,19 +226,4 @@
     </mat-card>
   </div>
 </section>
-
-<footer class="bg-blue-700 border-t border-t-neutral-950 text-white mt-20">
-  <div id="top"></div>
-  <div class="max-w-7xl mx-auto px-6 py-8">
-    <div class="text-center">
-      <h2 class="text-3xl font-bold mb-3">BMD Portal</h2>
-
-      <p class="text-lg text-white max-w-2xl mx-auto">
-        Birth, Marriage & Death Certificate Management Portal. Secure, Fast and Digital Services for
-        Citizens.
-      </p>
-    </div>
-
-    <div class="text-center text-sm text-white">© 2025 BMD Portal. All Rights Reserved.</div>
-  </div>
-</footer>
+<app-footer></app-footer>

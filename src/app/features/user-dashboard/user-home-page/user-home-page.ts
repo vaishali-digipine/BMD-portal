@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTab, MatTabGroup, MatTabsModule } from '@angular/material/tabs';
 import { RouterLink } from '@angular/router';
+import { Footer } from '../../../shared/footer/footer';
 
 @Component({
   selector: 'app-user-home-page',
@@ -20,6 +21,7 @@ import { RouterLink } from '@angular/router';
     MatTabGroup,
     MatTab,
     MatTabsModule,
+    Footer,
   ],
   templateUrl: './user-home-page.html',
   styleUrl: './user-home-page.css',

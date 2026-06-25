@@ -4,7 +4,7 @@
       <img src="/assets/images/logo.png" alt="Logo" class="h-14" />
     </div>
 
-    <button mat-button class="flex justify-end items-center" routerLink="/userDashboard">
+    <button mat-button class="flex justify-end items-center" routerLink="/user-dashboard">
       Home
     </button>
   </div>
@@ -16,12 +16,10 @@
   </div>
 
   <div class="w-full max-w-dvw mx-auto px-8 pb-10">
-    <!-- bride details -->
-
     <mat-stepper [linear]="isLinear" #stepper>
       <mat-step [stepControl]="firstFormGroup">
         <form [formGroup]="firstFormGroup" (ngSubmit)="marriageCertificate()">
-          <ng-template matStepLabel>Fill out Bride Details</ng-template>
+          <ng-template matStepLabel>Fill Out Bride Details</ng-template>
 
           <div class="mb-5">
             <label class="text-xl font-semibold text-slate-800 mb-4">Bride Details:</label>
@@ -80,9 +78,11 @@
             <div>
               <mat-radio-group aria-label="Gender" formControlName="brideGender">
                 <label class="text-sm font-semibold text-slate-700">Gender:</label>
-                <mat-radio-button value="1">Female</mat-radio-button>
-                <mat-radio-button value="2">Male</mat-radio-button>
-                <mat-radio-button value="3">Other</mat-radio-button>
+                 @for (gender of genders; track gender.value) {
+                  <mat-radio-button [value]="gender.value">
+                    {{ gender.viewValue }}
+                  </mat-radio-button>
+                }
               </mat-radio-group>
             </div>
 
@@ -199,9 +199,11 @@
             <div>
               <mat-radio-group aria-label="Gender" formControlName="groomGender">
                 <label class="text-sm font-semibold text-slate-700">Gender:</label>
-                <mat-radio-button value="1">Female</mat-radio-button>
-                <mat-radio-button value="2">Male</mat-radio-button>
-                <mat-radio-button value="3">Other</mat-radio-button>
+                 @for (gender of genders; track gender.value) {
+                  <mat-radio-button [value]="gender.value">
+                    {{ gender.viewValue }}
+                  </mat-radio-button>
+                }
               </mat-radio-group>
             </div>
 
@@ -308,7 +310,7 @@
 
       <mat-step [stepControl]="fourthFormGroup">
         <form [formGroup]="fourthFormGroup" (ngSubmit)="marriageCertificate()">
-          <ng-template matStepLabel>Fill out Witness Details</ng-template>
+          <ng-template matStepLabel>Fill Out Witness Details</ng-template>
 
           <div class="mb-5">
             <label class="text-xl font-semibold text-slate-800 mb-4"> Witness Details:</label>
@@ -344,9 +346,11 @@
 
               <mat-radio-group aria-label="Gender" formControlName="witnessGender">
                 <label class="text-sm font-semibold text-slate-700">Gender:</label>
-                <mat-radio-button value="1">Female</mat-radio-button>
-                <mat-radio-button value="2">Male</mat-radio-button>
-                <mat-radio-button value="3">Other</mat-radio-button>
+                 @for (gender of genders; track gender.value) {
+                  <mat-radio-button [value]="gender.value">
+                    {{ gender.viewValue }}
+                  </mat-radio-button>
+                }
               </mat-radio-group>
             </div>
 
@@ -578,7 +582,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-80 mt-10">
               <mat-form-field>
-                <mat-label>select a Date </mat-label>
+                <mat-label>Select a Date </mat-label>
                 <input
                   matInput
                   [min]="slotMinDate"
@@ -589,7 +593,7 @@
                 <mat-hint>MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="pickerFour"></mat-datepicker-toggle>
                 <mat-datepicker #pickerFour></mat-datepicker>
-                <mat-error>please select a Date </mat-error>
+                <mat-error>Please select a Date </mat-error>
               </mat-form-field>
 
               <mat-form-field>
@@ -603,7 +607,7 @@
           </mat-card>
 
           <div class="flex justify-center mt-12">
-            <button matButton="filled" class="w-64" routerLink="/userDashboard">Submit</button>
+            <button matButton="filled" class="w-64" routerLink="/user-dashboard">Submit</button>
           </div>
           <div class="flex justify-between mt-6">
             <button type="button" matButton="filled" matStepperPrevious>Back</button>

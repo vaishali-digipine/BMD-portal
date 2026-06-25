@@ -4,7 +4,7 @@
       <img src="/assets/images/logo.png" alt="Logo" class="h-14" />
     </div>
 
-    <button matButton="filled" class="flex justify-end item-center" routerLink="/userDashboard">
+    <button matButton="filled" class="flex justify-end item-center" routerLink="/user-dashboard">
       Home
     </button>
   </div>
@@ -45,7 +45,7 @@
               </mat-form-field>
 
               <mat-form-field>
-                <mat-label>select Date Of Death</mat-label>
+                <mat-label>Select Date Of Death</mat-label>
                 <input
                   matInput
                   [min]="minDate"
@@ -56,13 +56,13 @@
                 <mat-hint>MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="pickerOne"></mat-datepicker-toggle>
                 <mat-datepicker #pickerOne></mat-datepicker>
-                <mat-error>please select a Date Of Death</mat-error>
+                <mat-error>Please select a Date Of Death</mat-error>
               </mat-form-field>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
               <mat-form-field>
-                <mat-label>select Birth Date Of Deceased</mat-label>
+                <mat-label>Select Birth Date Of Deceased</mat-label>
                 <input
                   matInput
                   [min]="minDate"
@@ -73,7 +73,7 @@
                 <mat-hint>MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="pickerTwo"></mat-datepicker-toggle>
                 <mat-datepicker #pickerTwo></mat-datepicker>
-                <mat-error>please select a Date of birth</mat-error>
+                <mat-error>Please select a Date of birth</mat-error>
               </mat-form-field>
 
               <mat-form-field class="w-full" appearance="fill">
@@ -90,16 +90,18 @@
                 <input matInput [matTimepicker]="birthPickerThree" />
                 <mat-timepicker-toggle matIconSuffix [for]="birthPickerThree" />
                 <mat-timepicker #birthPickerThree />
-                <mat-error> please select Death time</mat-error>
+                <mat-error> Please select Death time</mat-error>
               </mat-form-field>
             </div>
 
             <div>
               <mat-radio-group aria-label="Gender" formControlName="deceasedGender">
                 <label class="text-sm font-semibold text-slate-700">Gender:</label>
-                <mat-radio-button value="1">Female</mat-radio-button>
-                <mat-radio-button value="2">Male</mat-radio-button>
-                <mat-radio-button value="3">Other</mat-radio-button>
+                @for (gender of genders; track gender.value) {
+                  <mat-radio-button [value]="gender.value">
+                    {{ gender.viewValue }}
+                  </mat-radio-button>
+                }
               </mat-radio-group>
             </div>
 
@@ -131,7 +133,7 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
               <mat-form-field appearance="fill" class="w-full">
-                <mat-label>street</mat-label>
+                <mat-label>Street</mat-label>
                 <input matInput type="text" formControlName="deceasedStreet" />
                 <mat-error>Enter the street</mat-error>
               </mat-form-field>
@@ -208,7 +210,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
               <mat-form-field>
-                <mat-label>select Birth Date Of Deceased</mat-label>
+                <mat-label>Select Birth Date Of Deceased</mat-label>
                 <input
                   matInput
                   [min]="minDate"
@@ -219,14 +221,16 @@
                 <mat-hint>MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="pickerThree"></mat-datepicker-toggle>
                 <mat-datepicker #pickerThree></mat-datepicker>
-                <mat-error>please select a Date of birth</mat-error>
+                <mat-error>Please select a Date of birth</mat-error>
               </mat-form-field>
 
               <mat-radio-group aria-label="Gender" formControlName="spouseGender">
                 <label class="text-sm font-semibold text-slate-700">Gender:</label>
-                <mat-radio-button value="1">Female</mat-radio-button>
-                <mat-radio-button value="2">Male</mat-radio-button>
-                <mat-radio-button value="2">Other</mat-radio-button>
+                @for (gender of genders; track gender.value) {
+                  <mat-radio-button [value]="gender.value">
+                    {{ gender.viewValue }}
+                  </mat-radio-button>
+                }
               </mat-radio-group>
             </div>
 
@@ -235,7 +239,7 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
               <mat-form-field appearance="fill" class="w-full">
-                <mat-label>street</mat-label>
+                <mat-label>Street</mat-label>
                 <input matInput type="text" formControlName="spouseStreet" />
                 <mat-error>Enter the street</mat-error>
               </mat-form-field>
@@ -414,7 +418,7 @@
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-80 mt-10">
                 <mat-form-field>
-                  <mat-label>select a Date </mat-label>
+                  <mat-label>Select a Date </mat-label>
                   <input
                     matInput
                     [min]="slotMinDate"
@@ -425,7 +429,7 @@
                   <mat-hint>MM/DD/YYYY</mat-hint>
                   <mat-datepicker-toggle matIconSuffix [for]="pickerFour"></mat-datepicker-toggle>
                   <mat-datepicker #pickerFour></mat-datepicker>
-                  <mat-error>please select a Date </mat-error>
+                  <mat-error>Please select a Date </mat-error>
                 </mat-form-field>
 
                 <mat-form-field>
@@ -439,7 +443,7 @@
             </mat-card>
 
             <div class="flex justify-center mt-12">
-              <button matButton="filled" class="w-64" routerLink="/userDashboard">Submit</button>
+              <button matButton="filled" class="w-64" routerLink="/user-dashboard">Submit</button>
             </div>
 
             <div class="flex justify-between mt-6">
