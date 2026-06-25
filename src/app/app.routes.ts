@@ -8,6 +8,12 @@ import { ResetPassword } from './features/auth/reset-password/reset-password';
 
 import { UserSignup } from './features/auth/user-signup/user-signup';
 import { ClerkSignup } from './features/auth/clerk-signup/clerk-signup';
+import { UserHomePage } from './features/user-dashboard/user-home-page/user-home-page';
+import { UserProfile } from './features/user-dashboard/user-profile/user-profile';
+import { UserApplication } from './features/user-dashboard/user-application/user-application';
+import { BirthService } from './features/user-dashboard/user-services/birth-service/birth-service';
+import { MarriageService } from './features/user-dashboard/user-services/marriage-service/marriage-service';
+import { DeathService } from './features/user-dashboard/user-services/death-service/death-service';
 
 export const routes: Routes = [
   {
@@ -19,19 +25,25 @@ export const routes: Routes = [
     component: SignIn,
   },
   {
-    path: 'forgotPassword',
+    path: 'forgot-password',
     component: ForgotPassword,
   },
   {
-    path: 'resetPassword',
+    path: 'reset-password',
     component: ResetPassword,
   },
   {
-    path: 'userSignup',
+    path: 'user-signup',
     component: UserSignup,
   },
   {
-    path: 'clerkSignup',
+    path: 'clerk-signup',
     component: ClerkSignup,
   },
+  { path: 'user-dashboard', component: UserHomePage },
+  { path: 'user-profile', component: UserProfile },
+  { path: 'user-application', component: UserApplication },
+  { path: 'birth-service', component: BirthService },
+  { path: 'marriage-service', component: MarriageService },
+  { path: 'death-service', component: DeathService },
 ];
