@@ -14,6 +14,15 @@ import { UserApplication } from './features/user-dashboard/user-application/user
 import { BirthService } from './features/user-dashboard/user-services/birth-service/birth-service';
 import { MarriageService } from './features/user-dashboard/user-services/marriage-service/marriage-service';
 import { DeathService } from './features/user-dashboard/user-services/death-service/death-service';
+import { ClerkHomepage } from './features/clerk-dashboard/clerk-homepage/clerk-homepage';
+import { ClerkProfile } from './features/clerk-dashboard/clerk-profile/clerk-profile';
+import { ClerkApplication } from './features/clerk-dashboard/clerk-application/clerk-application';
+import { BirthViewdetail } from './features/clerk-dashboard/clerk-application/action/view-details/birth-viewdetail/birth-viewdetail';
+import { MarriageViewdetail } from './features/clerk-dashboard/clerk-application/action/view-details/marriage-viewdetail/marriage-viewdetail';
+import { DeathViewdetail } from './features/clerk-dashboard/clerk-application/action/view-details/death-viewdetail/death-viewdetail';
+import { EditBirth } from './features/clerk-dashboard/clerk-application/action/edit/edit-birth/edit-birth';
+import { EditDeath } from './features/clerk-dashboard/clerk-application/action/edit/edit-death/edit-death';
+import { EditMarriage } from './features/clerk-dashboard/clerk-application/action/edit/edit-marriage/edit-marriage';
 
 export const routes: Routes = [
   {
@@ -46,4 +55,17 @@ export const routes: Routes = [
   { path: 'birth-service', component: BirthService },
   { path: 'marriage-service', component: MarriageService },
   { path: 'death-service', component: DeathService },
+
+  {
+    path: 'clerk-homepage',
+    component: ClerkHomepage,
+  },
+  { path: 'clerk-profile', component: ClerkProfile },
+  { path: 'clerk-application', component: ClerkApplication },
+  { path: 'birth-viewdetail', component: BirthViewdetail },
+  { path: 'marriage-viewdetail', component: MarriageViewdetail },
+  { path: 'death-viewdetail', component: DeathViewdetail },
+  { path: 'edit-birth', component: EditBirth },
+  { path: 'edit-death', component: EditDeath },
+  { path: 'edit-marriage', component: EditMarriage },
 ];

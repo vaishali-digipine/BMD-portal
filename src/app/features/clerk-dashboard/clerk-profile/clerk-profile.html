@@ -1,0 +1,279 @@
+<nav
+  class="fixed top-0 left-0 z-50 w-full flex items-center justify-between px-8 py-3 bg-white/90 backdrop-blur-md border-b border-slate-200"
+>
+  <div class="flex items-center">
+    <img src="/assets/images/logo.png" alt="BMD-portal Logo" class="h-20 w-auto object-contain" />
+  </div>
+
+  <button mat-button [matMenuTriggerFor]="profileMenu" class="flex items-center gap-2">
+    <mat-icon class="!text-3xl !w-7 !h-7">account_circle</mat-icon>
+  </button>
+
+  <mat-menu #profileMenu="matMenu">
+    <button mat-menu-item routerLink="/clerk-homepage">
+      <mat-icon>home</mat-icon>
+      <span>Dashboard</span>
+    </button>
+
+    <button mat-menu-item routerLink="/clerk-application">
+      <mat-icon>description</mat-icon>
+      <span>My Applications</span>
+    </button>
+
+    <button mat-menu-item>
+      <mat-icon>logout</mat-icon>
+      <span>Logout</span>
+    </button>
+  </mat-menu>
+</nav>
+
+<div class="p-6 bg-slate-50 min-h-screen mt-32">
+  <div class="mb-6 text-center">
+    <h1 class="text-3xl font-bold text-slate-800">Clerk Profile</h1>
+    <p class="text-slate-500 mt-1">View your profile information</p>
+  </div>
+
+  <div class="flex items-center justify-center">
+    <div
+      class="rounded-3xl shadow-sm mb-6 w-2xl flex items-center justify-center border border-black bg-gradient-to-r from-blue-500 to-cyan-500"
+    >
+      <div class="flex flex-col md:flex-row gap-6 p-6">
+        <img
+          src="/assets/images/Profile-image.png"
+          class="w-28 h-28 rounded-full border-4 border-blue-100"
+        />
+
+        <div class="flex-1">
+          <h2 class="text-2xl font-semibold text-slate-800">ABC</h2>
+
+          <div class="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-full bg-green-100">
+            <mat-icon class="!text-base mr-1"> check_circle </mat-icon>
+            <span class="text-green-700 text-sm font-medium"> Active </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="bg-white rounded-3xl shadow-md border border-blue-100 overflow-hidden">
+      <div class="bg-gradient-to-r from-blue-500 to-cyan-500 px-6 py-4">
+        <div class="flex items-center gap-3">
+          <img src="/assets/images/user.png" class="w-5 h-5" />
+          <h2 class="text-xl font-bold text-white">Personal Information</h2>
+        </div>
+      </div>
+
+      <div class="p-6 space-y-5">
+        <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+          <div class="flex items-center gap-3">
+            <img src="/assets/images/user.png" class="w-6 h-6" />
+            <span class="text-slate-600">Full Name</span>
+          </div>
+          <span class="font-semibold text-slate-800">Abc</span>
+        </div>
+
+        <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+          <div class="flex items-center gap-3">
+            <img src="/assets/images/calendar.png" class="w-5 h-5" />
+            <span class="text-slate-600">Date of Birth</span>
+          </div>
+          <span class="font-semibold text-slate-800">17/08/2010</span>
+        </div>
+
+        <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+          <div class="flex items-center gap-3">
+            <img src="/assets/images/gender.png" class="w-5 h-5" />
+            <span class="text-slate-600">Gender</span>
+          </div>
+          <span class="font-semibold text-slate-800">Female</span>
+        </div>
+
+        <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+          <div class="flex items-center gap-3">
+            <img src="/assets/images/phone-call.png" class="w-5 h-5" />
+            <span class="text-slate-600">Contact Number</span>
+          </div>
+          <span class="font-semibold text-slate-800">+91 9876543210</span>
+        </div>
+
+        <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+          <div class="flex items-center gap-3">
+            <img src="/assets/images/mail.png" class="w-5 h-5" />
+            <span class="text-slate-600">Email ID</span>
+          </div>
+          <span class="font-semibold text-slate-800">abc12@mail.in</span>
+        </div>
+
+        <div class="flex justify-between items-start">
+          <div class="flex items-center gap-3">
+            <img src="/assets/images/location.png" class="w-5 h-5" />
+            <span class="text-slate-600">Address</span>
+          </div>
+          <span class="font-semibold text-slate-800 text-right max-w-[220px]">
+            123 Patel Nagar, Mumbai
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-md border border-indigo-100 overflow-hidden">
+      <div class="bg-gradient-to-r from-blue-500 to-cyan-500 px-6 py-4">
+        <div class="flex items-center gap-3">
+          <img src="/assets/images/workInfo.png" class="w-6 h-6" />
+          <h2 class="text-xl font-bold text-white">Work Information</h2>
+        </div>
+      </div>
+
+      <div class="p-6 space-y-5">
+        <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+          <div class="flex items-center gap-3">
+            <img src="/assets/images/id-card.png" class="w-5 h-5" />
+            <span class="text-slate-600">Employee ID</span>
+          </div>
+          <span class="font-semibold text-slate-800">EMP1024</span>
+        </div>
+
+        <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+          <div class="flex items-center gap-3">
+            <img src="/assets/images/Designation.png" class="w-5 h-5" />
+            <span class="text-slate-600">Designation</span>
+          </div>
+          <span class="font-semibold text-slate-800">Clerk</span>
+        </div>
+
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <img src="/assets/images/id-card.png" class="w-5 h-5" />
+            <span class="text-slate-600">Aadhar Number</span>
+          </div>
+          <span class="font-semibold text-slate-800"> xxxx xxxx 4567 </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="rounded-3xl shadow-sm bg-blue-50">
+      <div class="p-6">
+        <div class="flex items-center gap-3 mb-6">
+          <img src="/assets/images/user.png" class="w-6 h-6" />
+
+          <h2 class="text-xl font-bold text-slate-800">Personal Information</h2>
+        </div>
+
+        <div class="space-y-4">
+          <div class="flex justify-between border-b pb-3">
+            <div class="flex items-center gap-3">
+              <img src="/assets/images/user.png" class="w-5 h-5" />
+              <span class="text-slate-600">Full Name</span>
+            </div>
+            <span>Abc</span>
+          </div>
+
+          <div class="flex justify-between border-b pb-3">
+            <div class="flex items-center gap-3">
+              <img src="/assets/images/calendar.png" class="w-5 h-5" />
+              <span class="text-slate-600">Date of Birth</span>
+            </div>
+            <span>17/08/2010</span>
+          </div>
+
+          <div class="flex justify-between border-b pb-3">
+            <div class="flex items-center gap-3">
+              <img src="/assets/images/gender.png" class="w-5 h-5" />
+              <span class="text-slate-600">Gender</span>
+            </div>
+            <span>Female</span>
+          </div>
+
+          <div class="flex justify-between border-b pb-3">
+            <div class="flex items-center gap-3">
+              <img src="/assets/images/phone-call.png" class="w-5 h-5" />
+              <span class="text-slate-600">Contact Number</span>
+            </div>
+            <span>+91 9876543210</span>
+          </div>
+
+          <div class="flex justify-between border-b pb-3">
+            <div class="flex items-center gap-3">
+              <img src="/assets/images/mail.png" class="w-5 h-5" />
+              <span class="text-slate-600">Email ID</span>
+            </div>
+            <span>abc12@mail.in</span>
+          </div>
+
+          <div class="flex justify-between">
+            <div class="flex items-center gap-3">
+              <img src="/assets/images/location.png" class="w-5 h-5" />
+              <span class="text-slate-600">Address</span>
+            </div>
+            <span class="text-right"> 123 Patel Nagar, Mumbai </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rounded-3xl shadow-sm bg-blue-50">
+      <div class="p-6">
+        <div class="flex items-center gap-3 mb-6">
+          <img src="/assets/images/workInfo.png" class="w-6 h-6" />
+
+          <h2 class="text-xl font-bold text-slate-800">Work Information</h2>
+        </div>
+
+        <div class="space-y-4">
+          <div class="flex justify-between border-b pb-3">
+            <div class="flex items-center gap-3">
+              <img src="/assets/images/id-card.png" class="w-5 h-5" />
+              <span class="text-slate-600">Employee ID</span>
+            </div>
+            <span>EMP1024</span>
+          </div>
+
+          <div class="flex justify-between border-b pb-3">
+            <div class="flex items-center gap-3">
+              <img src="/assets/images/Designation.png" class="w-5 h-5" />
+              <span class="text-slate-600">Designation</span>
+            </div>
+            <span>Clerk</span>
+          </div> -->
+
+  <!-- <div class="flex justify-between border-b pb-3">
+            <span class="text-slate-500">Department</span>
+            <span>Vital Records</span>
+          </div> -->
+
+  <!-- <div class="flex justify-between border-b pb-3">
+            <span class="text-slate-500">Office</span>
+            <span>SDM Office</span>
+          </div> -->
+  <!-- 
+          <div class="flex justify-between">
+            <div class="flex items-center gap-3">
+              <img src="/assets/images/id-card.png" class="w-5 h-5" />
+              <span class="text-slate-600">Aadhar Number</span>
+            </div>
+            <span>xxxx xxxx 4567</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <div
+    class="mt-12 rounded-2xl border border-blue-100 bg-gradient-to-r from-blue-50 to-cyan-50 p-6"
+  >
+    <div class="flex items-center gap-6">
+      <img src="/assets/images/Secure-image.png" class="w-16 h-16" />
+
+      <div>
+        <h3 class="text-lg font-semibold text-slate-800">Secure & Confidential</h3>
+
+        <p class="text-sm text-slate-600 mt-1">
+          Your personal and work information is securely stored and protected from unauthorized
+          access.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,63 @@
+<div class="min-h-screen flex justify-center items-center bg-slate-100 p-6">
+  <form [formGroup]="editDeathForm" class="w-full max-w-4xl">
+    <mat-card class="rounded-2xl shadow-xl p-8">
+      <h2 class="text-3xl font-bold text-center text-slate-800 mb-8">Edit Death Application</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Place of Death</mat-label>
+          <input matInput formControlName="placeOfDeath" />
+          <mat-error>Please enter Place of Death</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Date of Death</mat-label>
+
+          <input matInput [matDatepicker]="deathDate" formControlName="dateOfDeath" />
+
+          <mat-datepicker-toggle matIconSuffix [for]="deathDate"> </mat-datepicker-toggle>
+
+          <mat-datepicker #deathDate></mat-datepicker>
+
+          <mat-error>Please select Date of Death</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Death Type</mat-label>
+
+          <mat-select formControlName="deathType">
+            @for (type of dType; track type) {
+              <mat-option [value]="type.value">
+                {{ type.viewValue }}
+              </mat-option>
+            }
+          </mat-select>
+
+          <mat-error>Please select Death Type</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Deceased Father Name</mat-label>
+          <input matInput formControlName="deceasedFatherName" />
+          <mat-error>Please enter Father Name</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Deceased Mother Name</mat-label>
+          <input matInput formControlName="deceasedMotherName" />
+          <mat-error>Please enter Mother Name</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="flex justify-end gap-4 mt-8">
+        <button mat-stroked-button type="button">Cancel</button>
+
+        <button matButton="filled" type="submit" (click)="updateDeathApplication()">
+          Save Changes
+        </button>
+      </div>
+    </mat-card>
+  </form>
+</div>

@@ -1,0 +1,403 @@
+<nav
+  class="fixed top-0 left-0 z-50 w-full flex items-center justify-between px-8 py-3 bg-white/90 backdrop-blur-md border-b border-slate-200"
+>
+  <div class="flex items-center">
+    <img src="/assets/images/logo.png" alt="BMD-portal Logo" class="h-20 w-auto object-contain" />
+  </div>
+
+  <button matButton="filled" routerLink="/clerk-application">Back</button>
+</nav>
+
+<section class="bg-slate-100 min-h-screen mt-24 py-8">
+  <div class="w-full px-6">
+    <div class="flex justify-between items-center mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-slate-800">Birth Certificate Application</h1>
+
+        <p class="text-slate-500 mt-1">View complete application details</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+      <mat-card class="rounded-2xl shadow-md">
+        <mat-card-content>
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-xl bg-blue-100 flex justify-center items-center">
+              <mat-icon> badge </mat-icon>
+            </div>
+
+            <div>
+              <p class="text-gray-500 text-sm">Application ID</p>
+
+              <h2 class="text-xl font-bold">APP-2026-1234</h2>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="rounded-2xl shadow-md">
+        <mat-card-content>
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-xl bg-purple-100 flex justify-center items-center">
+              <mat-icon> description </mat-icon>
+            </div>
+
+            <div>
+              <p class="text-gray-500 text-sm">Service</p>
+
+              <h2 class="text-xl font-bold">Birth Certificate</h2>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="rounded-2xl shadow-md">
+        <mat-card-content>
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-xl bg-orange-100 flex justify-center items-center">
+              <mat-icon> calendar_month </mat-icon>
+            </div>
+
+            <div>
+              <p class="text-gray-500 text-sm">Submitted Date</p>
+
+              <h2 class="font-bold">12/06/2009</h2>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="rounded-2xl shadow-md">
+        <mat-card-content>
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-xl bg-green-100 flex justify-center items-center">
+              <mat-icon> verified </mat-icon>
+            </div>
+
+            <div>
+              <p class="text-gray-500 text-sm">Status</p>
+
+              <span
+                class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold"
+              >
+                Submitted
+              </span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <mat-card class="rounded-2xl shadow-lg mt-8 overflow-hidden">
+      <div class="bg-gradient-to-r from-blue-400 to-blue-300 px-6 py-4 flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full bg-white/20 flex justify-center items-center">
+          <mat-icon> child_care </mat-icon>
+        </div>
+
+        <div>
+          <h2 class="text-white text-xl font-semibold">Baby Details</h2>
+
+          <p class="text-pink-100 text-sm">Birth information</p>
+        </div>
+      </div>
+
+      <mat-card-content class="p-6">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 mt-2">
+          <div class="bg-slate-50 rounded-xl p-4">
+            <p class="text-gray-500 text-sm">Baby Name</p>
+
+            <h3 class="font-semibold text-lg">Nirav</h3>
+          </div>
+
+          <div class="bg-slate-50 rounded-xl p-4 mt-2">
+            <p class="text-gray-500 text-sm">Birth Date</p>
+
+            <h3 class="font-semibold text-lg">10/06/2009</h3>
+          </div>
+
+          <div class="bg-slate-50 rounded-xl p-4 mt-2">
+            <p class="text-gray-500 text-sm">Birth Time</p>
+
+            <h3 class="font-semibold text-lg">10:00 AM</h3>
+          </div>
+
+          <div class="bg-slate-50 rounded-xl p-4">
+            <p class="text-gray-500 text-sm">Birth Place</p>
+
+            <h3 class="font-semibold text-lg">Delhi</h3>
+          </div>
+
+          <div class="bg-slate-50 rounded-xl p-4">
+            <p class="text-gray-500 text-sm">Weight</p>
+
+            <h3 class="font-semibold text-lg">3.5 KG</h3>
+          </div>
+
+          <div class="bg-slate-50 rounded-xl p-4">
+            <p class="text-gray-500 text-sm">Gender</p>
+
+            <h3 class="font-semibold text-lg">Male</h3>
+          </div>
+
+          <div class="bg-slate-50 rounded-xl p-4 lg:col-span-3">
+            <p class="text-gray-500 text-sm">District</p>
+
+            <h3 class="font-semibold text-lg">North West Delhi</h3>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="grid lg:grid-cols-2 gap-6 mt-8">
+      <mat-card class="rounded-2xl shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-400 to-blue-300 px-6 py-4 flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-white/20 flex justify-center items-center">
+            <mat-icon> man </mat-icon>
+          </div>
+
+          <div>
+            <h2 class="text-xl font-semibold text-white">Father Details</h2>
+
+            <p class="text-blue-100 text-sm">Father's Information</p>
+          </div>
+        </div>
+
+        <mat-card-content class="p-6">
+          <div class="grid grid-cols-2 gap-5">
+            <div class="bg-slate-50 rounded-xl p-4 mt-2">
+              <p class="text-sm text-gray-500">Father Name</p>
+
+              <h3 class="font-semibold">ABC</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4 mt-2">
+              <p class="text-sm text-gray-500">Aadhaar Number</p>
+
+              <h3 class="font-semibold">XXXX XXXX 1234</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Contact Number</p>
+
+              <h3 class="font-semibold">9854726135</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Email</p>
+
+              <h3 class="font-semibold break-all">Abc12@gmail.com</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4 col-span-2">
+              <p class="text-sm text-gray-500">Date of Birth</p>
+
+              <h3 class="font-semibold">21/06/1979</h3>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="rounded-2xl shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-400 to-blue-300 px-6 py-4 flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-white/20 flex justify-center items-center">
+            <mat-icon> woman </mat-icon>
+          </div>
+
+          <div>
+            <h2 class="text-xl font-semibold text-white">Mother Details</h2>
+
+            <p class="text-pink-100 text-sm">Mother's Information</p>
+          </div>
+        </div>
+
+        <mat-card-content class="p-6">
+          <div class="grid grid-cols-2 gap-5">
+            <div class="bg-slate-50 rounded-xl p-4 mt-2">
+              <p class="text-sm text-gray-500">Mother Name</p>
+
+              <h3 class="font-semibold">DEF</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4 mt-2">
+              <p class="text-sm text-gray-500">Aadhaar Number</p>
+
+              <h3 class="font-semibold">xxxx xxxx 2356</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Contact Number</p>
+
+              <h3 class="font-semibold">7985163248</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Email</p>
+
+              <h3 class="font-semibold break-all">def31@gmail.com</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4 col-span-2">
+              <p class="text-sm text-gray-500">Date of Birth</p>
+
+              <h3 class="font-semibold">02/07/1982</h3>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-6 mt-8">
+      <mat-card class="rounded-2xl shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-400 to-blue-300 px-6 py-4 flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-white/20 flex justify-center items-center">
+            <mat-icon> location_on </mat-icon>
+          </div>
+
+          <div>
+            <h2 class="text-xl font-semibold text-white">Permanent Address</h2>
+
+            <p class="text-emerald-100 text-sm">Applicant Address Details</p>
+          </div>
+        </div>
+
+        <mat-card-content class="p-6">
+          <div class="grid grid-cols-2 gap-5">
+            <div class="bg-slate-50 rounded-xl p-4 mt-2">
+              <p class="text-sm text-gray-500">Street</p>
+
+              <h3 class="font-semibold">street 15</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4 mt-2">
+              <p class="text-sm text-gray-500">City</p>
+
+              <h3 class="font-semibold">Ghaffar Market</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Sub District</p>
+
+              <h3 class="font-semibold">Karol Bagh</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">District</p>
+
+              <h3 class="font-semibold">Central Delhi</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">State</p>
+
+              <h3 class="font-semibold">Delhi</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Pin Code</p>
+
+              <h3 class="font-semibold">110005</h3>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="rounded-2xl shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-400 to-blue-300 px-6 py-4 flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-white/20 flex justify-center items-center">
+            <mat-icon> folder </mat-icon>
+          </div>
+
+          <div>
+            <h2 class="text-xl font-semibold text-white">Uploaded Documents</h2>
+
+            <p class="text-indigo-100 text-sm">Supporting Documents</p>
+          </div>
+        </div>
+
+        <mat-card-content class="p-6">
+          <div class="space-y-4">
+            <div class="flex justify-between items-center bg-slate-50 rounded-xl p-4 mt-2">
+              <div class="flex items-center gap-4">
+                <mat-icon> picture_as_pdf </mat-icon>
+
+                <div>
+                  <h3 class="font-semibold">Father Aadhaar</h3>
+
+                  <p class="text-sm text-gray-500">PDF Document</p>
+                </div>
+              </div>
+
+              <button mat-icon-button color="primary">
+                <mat-icon> visibility </mat-icon>
+              </button>
+            </div>
+
+            <div class="flex justify-between items-center bg-slate-50 rounded-xl p-4">
+              <div class="flex items-center gap-4">
+                <mat-icon class="text-red-500"> picture_as_pdf </mat-icon>
+
+                <div>
+                  <h3 class="font-semibold">Mother Aadhaar</h3>
+
+                  <p class="text-sm text-gray-500">PDF Document</p>
+                </div>
+              </div>
+
+              <button mat-icon-button color="primary">
+                <mat-icon> visibility </mat-icon>
+              </button>
+            </div>
+
+            <div class="flex justify-between items-center bg-slate-50 rounded-xl p-4">
+              <div class="flex items-center gap-4">
+                <mat-icon> description </mat-icon>
+
+                <div>
+                  <h3 class="font-semibold">Marriage Certificate</h3>
+
+                  <p class="text-sm text-gray-500">Uploaded File</p>
+                </div>
+              </div>
+
+              <button mat-icon-button color="primary">
+                <mat-icon> visibility </mat-icon>
+              </button>
+            </div>
+
+            <div class="flex justify-between items-center bg-slate-50 rounded-xl p-4">
+              <div class="flex items-center gap-4">
+                <mat-icon> credit_card </mat-icon>
+
+                <div>
+                  <h3 class="font-semibold">Ration Card</h3>
+
+                  <p class="text-sm text-gray-500">Uploaded File</p>
+                </div>
+              </div>
+
+              <button mat-icon-button color="primary">
+                <mat-icon> visibility </mat-icon>
+              </button>
+            </div>
+
+            <div class="flex justify-between items-center bg-slate-50 rounded-xl p-4">
+              <div class="flex items-center gap-4">
+                <mat-icon> medical_information </mat-icon>
+
+                <div>
+                  <h3 class="font-semibold">Hospital Report</h3>
+
+                  <p class="text-sm text-gray-500">Uploaded File</p>
+                </div>
+              </div>
+
+              <button mat-icon-button color="primary">
+                <mat-icon> visibility </mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</section>

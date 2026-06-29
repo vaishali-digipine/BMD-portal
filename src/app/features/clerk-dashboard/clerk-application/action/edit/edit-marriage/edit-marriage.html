@@ -1,0 +1,150 @@
+<div class="min-h-screen flex justify-center bg-slate-100 py-10 px-4">
+  <form [formGroup]="editMarriageForm" class="w-full max-w-6xl">
+    <mat-card class="rounded-2xl shadow-xl p-8">
+      <h2 class="text-3xl font-bold text-center text-slate-800 mb-10">Edit Marriage Application</h2>
+
+      <h3 class="text-xl font-semibold mb-5 text-slate-800">Bride Details</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <mat-form-field appearance="fill">
+          <mat-label>Bride Email</mat-label>
+          <input matInput formControlName="brideEmail" />
+          <mat-error>Enter Bride Email</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Bride Mobile Number</mat-label>
+          <input matInput formControlName="brideMobileNumber" />
+          <mat-error>Enter Mobile Number</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-5">
+        <mat-form-field appearance="fill">
+          <mat-label>Bride Father Name</mat-label>
+          <input matInput formControlName="brideFatherName" />
+          <mat-error>Enter Father Name</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Bride Mother Name</mat-label>
+          <input matInput formControlName="brideMotherName" />
+          <mat-error>Enter Mother Name</mat-error>
+        </mat-form-field>
+      </div>
+
+      <h3 class="text-xl font-semibold mb-5 text-slate-800">Groom Details</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <mat-form-field appearance="fill">
+          <mat-label>Groom Email</mat-label>
+          <input matInput formControlName="groomEmail" />
+          <mat-error>Enter Groom Email</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Groom Mobile Number</mat-label>
+          <input matInput formControlName="groomMobileNumber" />
+          <mat-error>Enter Mobile Number</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-5">
+        <mat-form-field appearance="fill">
+          <mat-label>Groom Father Name</mat-label>
+          <input matInput formControlName="groomFatherName" />
+          <mat-error>Enter Father Name</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Groom Mother Name</mat-label>
+          <input matInput formControlName="groomMotherName" />
+          <mat-error>Enter Mother Name</mat-error>
+        </mat-form-field>
+      </div>
+
+      <h3 class="text-xl font-semibold mb-5 text-slate-800">Marriage Details</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <mat-form-field appearance="fill">
+          <mat-label>Marriage Date</mat-label>
+
+          <input matInput [matDatepicker]="marriagePicker" formControlName="marriageDate" />
+
+          <mat-datepicker-toggle matIconSuffix [for]="marriagePicker"> </mat-datepicker-toggle>
+
+          <mat-datepicker #marriagePicker></mat-datepicker>
+
+          <mat-error>Select Marriage Date</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Marriage Place</mat-label>
+          <input matInput formControlName="marriagePlace" />
+          <mat-error>Enter Marriage Place</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>District</mat-label>
+
+          <mat-select formControlName="district">
+            @for (district of districts; track district) {
+              <mat-option [value]="district.value">
+                {{ district.viewValue }}
+              </mat-option>
+            }
+          </mat-select>
+
+          <mat-error>Select District</mat-error>
+        </mat-form-field>
+      </div>
+
+      <h3 class="text-xl font-semibold mb-5 text-slate-800">Witness Details</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <mat-form-field appearance="fill">
+          <mat-label>Witness Email</mat-label>
+          <input matInput formControlName="witnessEmail" />
+          <mat-error>Enter Witness Email</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Witness Mobile Number</mat-label>
+          <input matInput formControlName="witnessMobileNo" />
+          <mat-error>Enter Mobile Number</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-5">
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Witness Relation</mat-label>
+          <input matInput formControlName="witnessRelation" />
+          <mat-error>Enter Witness Relation</mat-error>
+        </mat-form-field>
+      </div>
+
+      <h3 class="text-xl font-semibold mb-5 text-slate-800">Priest Details</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <mat-form-field appearance="fill">
+          <mat-label>Priest Mobile Number</mat-label>
+          <input matInput formControlName="priestMobileNo" />
+          <mat-error>Enter Priest Mobile Number</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="flex justify-end gap-4 mt-10">
+        <button mat-stroked-button type="button" routerLink="/clerk-application">Cancel</button>
+
+        <button
+          matButton="filled"
+          type="submit"
+          (click)="updateMarriageApplication()"
+          routerLink="/clerk-application"
+        >
+          Save Changes
+        </button>
+      </div>
+    </mat-card>
+  </form>
+</div>
