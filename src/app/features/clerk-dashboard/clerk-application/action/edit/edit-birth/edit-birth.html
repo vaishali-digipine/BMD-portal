@@ -1,0 +1,106 @@
+<div class="min-h-screen flex justify-center bg-slate-100 py-10 px-4">
+  <form [formGroup]="editBirthForm" class="w-full max-w-6xl">
+    <mat-card class="rounded-2xl shadow-xl p-8">
+      <h2 class="text-3xl font-bold text-center text-slate-800 mb-8">Edit Birth Application</h2>
+
+      <h3 class="text-xl font-semibold mb-5">Baby Details</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <mat-form-field appearance="fill">
+          <mat-label>Baby Name</mat-label>
+          <input matInput formControlName="babyName" />
+          <mat-error>Enter Baby Name</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Birth Time</mat-label>
+
+          <input matInput [matTimepicker]="birthPicker" formControlName="birthTime" />
+
+          <mat-timepicker-toggle matIconSuffix [for]="birthPicker"> </mat-timepicker-toggle>
+
+          <mat-timepicker #birthPicker></mat-timepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Birth Place</mat-label>
+          <input matInput formControlName="birthPlace" />
+          <mat-error>Enter Birth Place</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
+        <mat-form-field appearance="fill">
+          <mat-label>Weight (Kg)</mat-label>
+          <input matInput type="number" formControlName="weight" />
+          <mat-error>Enter Weight</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Date of Birth</mat-label>
+
+          <input matInput [matDatepicker]="picker" formControlName="birthDate" />
+
+          <mat-datepicker-toggle matIconSuffix [for]="picker"> </mat-datepicker-toggle>
+
+          <mat-datepicker #picker></mat-datepicker>
+
+          <mat-error>Select Birth Date</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>District</mat-label>
+
+          <mat-select formControlName="district">
+            @for (district of districts; track district) {
+              <mat-option [value]="district.value">
+                {{ district.viewValue }}
+              </mat-option>
+            }
+          </mat-select>
+
+          <mat-error>Select District</mat-error>
+        </mat-form-field>
+      </div>
+
+      <h3 class="text-xl font-semibold mt-10 mb-5">Father Details</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <mat-form-field appearance="fill">
+          <mat-label>Contact Number</mat-label>
+          <input matInput formControlName="fatherContactNumber" />
+          <mat-error>Enter Contact Number</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="fatherEmail" />
+          <mat-error>Enter Email</mat-error>
+        </mat-form-field>
+      </div>
+
+      <h3 class="text-xl font-semibold mt-10 mb-5">Mother Details</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <mat-form-field appearance="fill">
+          <mat-label>Contact Number</mat-label>
+          <input matInput formControlName="motherContactNumber" />
+          <mat-error>Enter Contact Number</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="motherEmail" />
+          <mat-error>Enter Email</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="flex justify-end gap-4 mt-8">
+        <button mat-stroked-button type="button">Cancel</button>
+
+        <button matButton="filled" type="submit" (click)="updateBirthApplication()">
+          Save Changes
+        </button>
+      </div>
+    </mat-card>
+  </form>
+</div>
