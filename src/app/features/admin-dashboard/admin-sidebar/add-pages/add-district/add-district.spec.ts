@@ -1,0 +1,22 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { AddDistrict } from './add-district';
+
+describe('AddDistrict', () => {
+  let component: AddDistrict;
+  let fixture: ComponentFixture<AddDistrict>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [AddDistrict],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(AddDistrict);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

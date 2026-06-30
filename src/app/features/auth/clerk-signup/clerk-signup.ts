@@ -28,6 +28,10 @@ interface Department {
   value: string;
   viewValue: string;
 }
+interface State {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-clerk-signup',
@@ -79,6 +83,8 @@ export class ClerkSignup {
   ];
 
   offices: Office[] = [{ value: 'office-0', viewValue: 'office' }];
+
+  states: State[] = [{ value: '1', viewValue: 'Gujarat' }];
 
   departments: Department[] = [
     { value: 'Porbandar-0', viewValue: 'Porbandar' },
