@@ -24,7 +24,7 @@ import { EditBirth } from './features/clerk-dashboard/clerk-application/action/e
 import { EditDeath } from './features/clerk-dashboard/clerk-application/action/edit/edit-death/edit-death';
 import { EditMarriage } from './features/clerk-dashboard/clerk-application/action/edit/edit-marriage/edit-marriage';
 import { AdminSidebar } from './features/admin-dashboard/admin-sidebar/admin-sidebar';
-import { Component } from '@angular/core';
+
 import { AdminHomepage } from './features/admin-dashboard/admin-homepage/admin-homepage';
 import { AdminProfile } from './features/admin-dashboard/admin-profile/admin-profile';
 import { ClerkPage } from './features/admin-dashboard/admin-sidebar/pages/clerk-page/clerk-page';

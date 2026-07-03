@@ -46,6 +46,20 @@
           </td>
         </ng-container>
 
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef class="!text-sm !font-bold text-black">
+            DESCRIPTION
+          </th>
+
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="py-5 whitespace-normal font-medium text-slate-700"
+          >
+            {{ element.description }}
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef class="!text-sm !font-bold text-black">DATE</th>
 

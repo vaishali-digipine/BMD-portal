@@ -12,6 +12,17 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Description</mat-label>
+
+          <textarea
+            matInput
+            formControlName="description"
+            rows="4"
+            placeholder="Enter description"
+          ></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
           <mat-label>Select Date of Holiday</mat-label>
           <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="pickerOne" />
           <mat-hint>MM/DD/YYYY</mat-hint>

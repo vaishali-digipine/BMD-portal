@@ -15,6 +15,8 @@ import { MatDialog } from '@angular/material/dialog';
 export interface PeriodicElement {
   serialNo: number;
   holidayName: string;
+  description: string;
+
   date: string;
   year: string;
   nationalHoliday: string;
@@ -26,6 +28,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
   {
     serialNo: 1,
     holidayName: 'Diwali',
+    description: 'Festival of Lights celebrated across India.',
     date: '20/10/2022',
     year: '2022',
     nationalHoliday: 'yes',
@@ -36,6 +39,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
   {
     serialNo: 2,
     holidayName: 'Diwali',
+    description: 'Festival of Lights celebrated across India.',
     date: '20/10/2022',
     year: '2022',
     nationalHoliday: 'yes',
@@ -45,6 +49,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
   {
     serialNo: 3,
     holidayName: 'Diwali',
+    description: 'Festival of Lights celebrated across India.',
     date: '20/10/2022',
     year: '2022',
     nationalHoliday: 'yes',
@@ -75,6 +80,7 @@ export class HolidayPage {
   displayedColumns: string[] = [
     'serialNo',
     'holidayName',
+    'description',
     'date',
     'year',
     'nationalHoliday',

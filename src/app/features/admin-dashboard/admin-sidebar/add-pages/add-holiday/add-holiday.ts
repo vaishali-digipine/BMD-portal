@@ -45,6 +45,7 @@ export class AddHoliday {
   addHoliday = new FormGroup({
     officeName: new FormControl('', [Validators.required]),
     holidayName: new FormControl('', [Validators.required]),
+    description: new FormControl('', [Validators.maxLength(250)]),
   });
 
   offices: Offices[] = [{ value: '1', viewValue: 'Porbandar' }];
