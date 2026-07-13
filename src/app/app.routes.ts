@@ -23,6 +23,22 @@ import { DeathViewdetail } from './features/clerk-dashboard/clerk-application/ac
 import { EditBirth } from './features/clerk-dashboard/clerk-application/action/edit/edit-birth/edit-birth';
 import { EditDeath } from './features/clerk-dashboard/clerk-application/action/edit/edit-death/edit-death';
 import { EditMarriage } from './features/clerk-dashboard/clerk-application/action/edit/edit-marriage/edit-marriage';
+import { AdminSidebar } from './features/admin-dashboard/admin-sidebar/admin-sidebar';
+
+import { AdminHomepage } from './features/admin-dashboard/admin-homepage/admin-homepage';
+import { AdminProfile } from './features/admin-dashboard/admin-profile/admin-profile';
+import { ClerkPage } from './features/admin-dashboard/admin-sidebar/pages/clerk-page/clerk-page';
+import { UserPage } from './features/admin-dashboard/admin-sidebar/pages/user-page/user-page';
+import { StatePage } from './features/admin-dashboard/admin-sidebar/pages/state-page/state-page';
+import { DistrictPage } from './features/admin-dashboard/admin-sidebar/pages/district-page/district-page';
+import { OfficePage } from './features/admin-dashboard/admin-sidebar/pages/office-page/office-page';
+import { DepartmentPage } from './features/admin-dashboard/admin-sidebar/pages/department-page/department-page';
+import { HolidayPage } from './features/admin-dashboard/admin-sidebar/pages/holiday-page/holiday-page';
+import { AddState } from './features/admin-dashboard/admin-sidebar/add-pages/add-state/add-state';
+import { AddDistrict } from './features/admin-dashboard/admin-sidebar/add-pages/add-district/add-district';
+import { AddOffice } from './features/admin-dashboard/admin-sidebar/add-pages/add-office/add-office';
+import { AddDepartment } from './features/admin-dashboard/admin-sidebar/add-pages/add-department/add-department';
+import { AddHoliday } from './features/admin-dashboard/admin-sidebar/add-pages/add-holiday/add-holiday';
 
 export const routes: Routes = [
   {
@@ -68,4 +84,28 @@ export const routes: Routes = [
   { path: 'edit-birth', component: EditBirth },
   { path: 'edit-death', component: EditDeath },
   { path: 'edit-marriage', component: EditMarriage },
+
+  {
+    path: '',
+    component: AdminSidebar,
+    children: [
+      {
+        path: 'admin-homepage',
+        component: AdminHomepage,
+      },
+      { path: 'admin-profile', component: AdminProfile },
+      { path: 'clerk-page', component: ClerkPage },
+      { path: 'user-page', component: UserPage },
+      { path: 'state-page', component: StatePage },
+      { path: 'district-page', component: DistrictPage },
+      { path: 'office-page', component: OfficePage },
+      { path: 'department-page', component: DepartmentPage },
+      { path: 'holiday-page', component: HolidayPage },
+    ],
+  },
+  { path: 'add-state', component: AddState },
+  { path: 'add-district', component: AddDistrict },
+  { path: 'add-office', component: AddOffice },
+  { path: 'add-department', component: AddDepartment },
+  { path: 'add-holiday', component: AddHoliday },
 ];

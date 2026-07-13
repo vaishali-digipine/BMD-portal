@@ -1,0 +1,51 @@
+<section>
+  <div class="flex justify-center items-center mt-15">
+    <div class="p-6 w-[500px]">
+      <div class="text-center mb-6">
+        <h1 class="text-3xl font-bold text-blue-700">Add Offices</h1>
+      </div>
+
+      <form [formGroup]="addOffice">
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>States</mat-label>
+          <mat-select>
+            @for (state of states; track state) {
+              <mat-option [value]="state.value">{{ state.viewvalue }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Districts</mat-label>
+          <mat-select>
+            @for (district of districts; track district) {
+              <mat-option [value]="district.value">{{ district.viewValue }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="!w-full">
+          <mat-label>Office</mat-label>
+          <input matInput type="text" formControlName="officeName" />
+          <mat-error>Enter the Valid Office</mat-error>
+        </mat-form-field>
+
+        <div class="flex justify-between mt-6">
+          <button
+            mat-raised-button
+            class="!px-6 !py-6 !rounded-xl !font-semibold !text-lg !border !border-blue-600 !text-white !bg-blue-600"
+            (click)="closeDialog()"
+          >
+            Add
+          </button>
+          <button
+            mat-raised-button
+            class="!px-6 !py-6 !rounded-xl !font-semibold !text-lg !border !border-red-600 !text-white !bg-red-600"
+            (click)="closeDialog()"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,70 @@
+<section>
+  <div class="flex justify-center items-center mt-15">
+    <div class="p-6 w-[500px]">
+      <div class="text-center mb-6">
+        <h1 class="text-3xl font-bold text-blue-700">Add Holidays</h1>
+      </div>
+
+      <form [formGroup]="addHoliday">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Holiday Name</mat-label>
+          <input matInput type="text" formControlName="holidayName" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Description</mat-label>
+
+          <textarea
+            matInput
+            formControlName="description"
+            rows="4"
+            placeholder="Enter description"
+          ></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Select Date of Holiday</mat-label>
+          <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="pickerOne" />
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="pickerOne"></mat-datepicker-toggle>
+          <mat-datepicker #pickerOne></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="w-full mt-2" appearance="outline">
+          <mat-label>National Holidays</mat-label>
+          <mat-select>
+            @for (holiday of holidays; track holiday) {
+              <mat-option [value]="holiday.value">{{ holiday.viewValue }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Office</mat-label>
+          <mat-select>
+            @for (office of offices; track office) {
+              <mat-option [value]="office.value">{{ office.viewValue }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <div class="flex justify-between mt-6">
+          <button
+            mat-raised-button
+            class="!px-6 !py-6 !rounded-xl !font-semibold !text-lg !border !border-blue-600 !text-white !bg-blue-600"
+            (click)="closeDialog()"
+          >
+            Add
+          </button>
+          <button
+            mat-raised-button
+            class="!px-6 !py-6 !rounded-xl !font-semibold !text-lg !border !border-red-600 !text-white !bg-red-600"
+            (click)="closeDialog()"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
