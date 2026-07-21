@@ -8,11 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
-
-interface State {
-  value: string;
-  viewValue: string;
-}
+import { StatesApi } from '../../../../../@api/states/states.api';
 
 @Component({
   selector: 'app-add-state',
@@ -32,12 +28,21 @@ interface State {
 })
 export class AddState {
   private router = inject(Router);
+  private stateApi = inject(StatesApi);
 
   addState = new FormGroup({
-    stateName: new FormControl('', [Validators.required, Validators.minLength(12)]),
+    name: new FormControl('', [Validators.required, Validators.minLength(12)]),
   });
 
-  states: State[] = [{ value: '1', viewValue: 'Gujarat' }];
+  saveState() {
+    if (this.addState.invalid) return;
+
+    this.stateApi.create({ name: this.addState.value.name! }).subscribe({
+      next: () => {
+        this.dialogRef.close(true);
+      },
+    });
+  }
 
   constructor(private dialogRef: MatDialogRef<AddState>) {}
 

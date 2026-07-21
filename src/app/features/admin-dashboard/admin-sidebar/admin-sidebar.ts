@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { AuthApi } from '../../../@api/auth/auth.api';
 
 @Component({
   selector: 'app-admin-sidebar',
@@ -10,4 +11,21 @@ import { RouterLink, RouterOutlet } from '@angular/router';
   templateUrl: './admin-sidebar.html',
   styleUrl: './admin-sidebar.css',
 })
-export class AdminSidebar {}
+export class AdminSidebar {
+  private authApi = inject(AuthApi);
+  private router = inject(Router);
+
+  logout() {
+    this.authApi.logout().subscribe({
+      next: (response) => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+
+        this.router.navigate(['/signIn']);
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
+}

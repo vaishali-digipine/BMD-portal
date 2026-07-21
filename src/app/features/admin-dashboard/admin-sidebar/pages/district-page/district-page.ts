@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatOptionModule } from '@angular/material/core';
@@ -6,40 +6,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { AddDistrict } from '../../add-pages/add-district/add-district';
 import { MatDialog } from '@angular/material/dialog';
-
-export interface PeriodicElement {
-  districtId: number;
-  districtName: string;
-  stateName: string;
-  action: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    districtId: 1,
-    districtName: 'abc',
-    stateName: 'gujarat',
-    action: '',
-  },
-
-  {
-    districtId: 1,
-    districtName: 'abc',
-    stateName: 'gujarat',
-    action: '',
-  },
-  {
-    districtId: 1,
-    districtName: 'abc',
-    stateName: 'gujarat',
-    action: '',
-  },
-];
+import { DistrictsApi } from '../../../../../@api/districts/districts.api';
+import { District } from '../../../../../@api/districts/districts.type';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-district-page',
@@ -55,28 +29,74 @@ const ELEMENT_DATA: PeriodicElement[] = [
     MatSelectModule,
     MatOptionModule,
     MatPaginator,
+    TitleCasePipe,
   ],
   templateUrl: './district-page.html',
   styleUrl: './district-page.css',
 })
 export class DistrictPage {
-  displayedColumns: string[] = ['districtId', 'districtName', 'stateName', 'action'];
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
+  private districtService = inject(DistrictsApi);
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
+  districts = signal<District.Base[]>([]);
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  page = 1;
+  limit = 10;
+  search = '';
+  total = 0;
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
+  displayedColumns: string[] = ['id', 'name', 'stateId', 'action'];
+  dataSource = new MatTableDataSource<District.Base>([]);
 
   dialog = inject(MatDialog);
 
   openDialog() {
-    this.dialog.open(AddDistrict, {});
+    const dialogRef = this.dialog.open(AddDistrict);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.getDistrict();
+      }
+    });
+  }
+
+  constructor() {
+    this.getDistrict();
+  }
+
+  getDistrict() {
+    this.districtService.list(this.page, this.limit, this.search).subscribe({
+      next: (response) => {
+        this.districts.set(response.data);
+
+        this.dataSource.data = response.data;
+        this.total = response.pagination.total;
+      },
+
+      error: (err: any) => {
+        console.log(err);
+      },
+    });
+  }
+
+  changePage(event: PageEvent) {
+    this.page = event.pageIndex + 1;
+    this.limit = event.pageSize;
+
+    this.getDistrict();
+  }
+
+  searchDistrict(event: Event) {
+    this.search = (event.target as HTMLInputElement).value;
+    this.page = 1;
+    this.getDistrict();
+  }
+
+  deleteDistrict(id: District.Id) {
+    if (id && confirm('Are you Sure you want to delete this?')) {
+      this.districtService.delete(id).subscribe({
+        next: () => {
+          this.getDistrict();
+        },
+      });
+    }
   }
 }

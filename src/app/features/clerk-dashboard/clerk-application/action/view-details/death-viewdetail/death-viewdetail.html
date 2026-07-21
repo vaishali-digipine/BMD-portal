@@ -18,50 +18,76 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
       <mat-card class="rounded-2xl shadow-md">
         <mat-card-content>
           <div class="flex items-center gap-4">
             <div class="w-14 h-14 rounded-xl bg-blue-100 flex justify-center items-center">
-              <mat-icon> badge </mat-icon>
+              <mat-icon class="text-blue-600"> badge </mat-icon>
             </div>
 
             <div>
               <p class="text-gray-500 text-sm">Application ID</p>
 
-              <h2 class="text-xl font-bold">APP-2026-1234</h2>
+              <h2 class="text-sm font-bold">
+                {{ application.applicationNumber }}
+              </h2>
             </div>
           </div>
         </mat-card-content>
       </mat-card>
 
+      <!-- Service -->
+
       <mat-card class="rounded-2xl shadow-md">
         <mat-card-content>
           <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-xl bg-purple-100 flex justify-center items-center">
-              <mat-icon> description </mat-icon>
+            <div class="w-14 h-14 rounded-xl bg-blue-100 flex justify-center items-center">
+              <mat-icon class="text-purple-600"> description </mat-icon>
             </div>
 
             <div>
               <p class="text-gray-500 text-sm">Service</p>
 
-              <h2 class="text-xl font-bold">Death Certificate</h2>
+              <h2 class="text-sm font-bold">{{ application.serviceType }}</h2>
             </div>
           </div>
         </mat-card-content>
       </mat-card>
 
+      <!-- Date -->
+
       <mat-card class="rounded-2xl shadow-md">
         <mat-card-content>
           <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-xl bg-orange-100 flex justify-center items-center">
-              <mat-icon> calendar_month </mat-icon>
+            <div class="w-14 h-14 rounded-xl bg-blue-100 flex justify-center items-center">
+              <mat-icon class="text-orange-500"> calendar_month </mat-icon>
             </div>
 
             <div>
               <p class="text-gray-500 text-sm">Submitted Date</p>
 
-              <h2 class="font-bold">12/06/2009</h2>
+              <h2 class="font-bold text-sm">{{ application.createdAt | date: 'dd/MM/yyyy' }}</h2>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Status -->
+
+      <mat-card class="rounded-2xl shadow-md">
+        <mat-card-content>
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-xl bg-blue-100 flex justify-center items-center">
+              <mat-icon class="text-green-600"> verified </mat-icon>
+            </div>
+
+            <div>
+              <p class="text-gray-500 text-sm">Status</p>
+
+              <span class="text-green-700 px-1 py-1 rounded-full text-sm font-semibold">
+                {{ application.status }}
+              </span>
             </div>
           </div>
         </mat-card-content>
@@ -70,18 +96,33 @@
       <mat-card class="rounded-2xl shadow-md">
         <mat-card-content>
           <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-xl bg-green-100 flex justify-center items-center">
-              <mat-icon> verified </mat-icon>
+            <div class="w-14 h-14 rounded-xl bg-blue-100 flex justify-center items-center">
+              <mat-icon class="text-blue-600"> calendar_month</mat-icon>
             </div>
 
             <div>
-              <p class="text-gray-500 text-sm">Status</p>
+              <p class="text-gray-500 text-sm">Appointment Date</p>
 
-              <span
-                class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold"
-              >
-                Submitted
-              </span>
+              <h2 class="text-sm font-bold">
+                {{ application.slotId.slotDate | date: 'dd/MM/yyyy' }}
+              </h2>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="rounded-2xl shadow-md">
+        <mat-card-content>
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-xl bg-blue-100 flex justify-center items-center">
+              <mat-icon class="text-blue-600"> schedule </mat-icon>
+            </div>
+
+            <div>
+              <p class="text-gray-500 text-sm">Slot Time</p>
+              <h2 class="text-sm font-bold">
+                {{ application.slotId.startTime }}
+              </h2>
             </div>
           </div>
         </mat-card-content>
@@ -106,12 +147,15 @@
           <div class="grid md:grid-cols-2 gap-4">
             <div class="bg-slate-50 rounded-xl p-4 mt-2">
               <p class="text-gray-500 text-sm">Name</p>
-              <h3 class="font-semibold">ABC XYZ</h3>
+              <h3 class="font-semibold">
+                {{ death.deceasedAadharId.firstName }} {{ death.deceasedAadharId.middleName }}
+                {{ death.deceasedAadharId.lastName }}
+              </h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4 mt-2">
               <p class="text-gray-500 text-sm">Aadhaar Number</p>
-              <h3 class="font-semibold">XXXX XXXX 4589</h3>
+              <h3 class="font-semibold">{{ death.deceasedAadharId.aadharNumber }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
@@ -121,42 +165,52 @@
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Date of Death</p>
-              <h3 class="font-semibold">10/06/2026</h3>
+              <h3 class="font-semibold">{{ death.deceasedAadharId.dob | date: 'dd/MM/yyyy' }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Time of Death</p>
-              <h3 class="font-semibold">08:30 PM</h3>
+              <h3 class="font-semibold">{{ death.deathDate | date: 'dd/MM/yyyy' }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Place of Death</p>
-              <h3 class="font-semibold">Civil Hospital</h3>
+              <h3 class="font-semibold">{{ death.deathTime }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Gender</p>
-              <h3 class="font-semibold">Male</h3>
+              <h3 class="font-semibold">{{ death.deceasedAadharId.gender }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Death Type</p>
-              <h3 class="font-semibold">Natural</h3>
+              <h3 class="font-semibold">{{ death.deathType }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Father Name</p>
-              <h3 class="font-semibold">XYZ</h3>
+              <h3 class="font-semibold">{{ death.deceasedFatherName }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Mother Name</p>
-              <h3 class="font-semibold">PQR</h3>
+              <h3 class="font-semibold">{{ death.deceasedMotherName }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4 md:col-span-2">
               <p class="text-gray-500 text-sm">Address</p>
-              <h3 class="font-semibold">Street, City, District, State - 380001</h3>
+              <h3 class="font-semibold">
+                {{ death.deceasedAadharId.address.street }} ,{{
+                  death.deceasedAadharId.address.city
+                }}
+                ,{{ death.deceasedAadharId.address.taluka }} ,{{
+                  death.deceasedAadharId.address.district
+                }}
+                ,{{ death.deceasedAadharId.address.state }} ,{{
+                  death.deceasedAadharId.address.pinCode
+                }}
+              </h3>
             </div>
           </div>
         </mat-card-content>
@@ -179,37 +233,47 @@
           <div class="grid md:grid-cols-2 gap-4">
             <div class="bg-slate-50 rounded-xl p-4 mt-2">
               <p class="text-gray-500 text-sm">Name</p>
-              <h3 class="font-semibold">DEF XYZ</h3>
+              <h3 class="font-semibold">
+                {{ death.spouseAadharId.firstName }} {{ death.spouseAadharId.middleName }}
+                {{ death.spouseAadharId.lastName }}
+              </h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4 mt-2">
               <p class="text-gray-500 text-sm">Aadhaar Number</p>
-              <h3 class="font-semibold">XXXX XXXX 1234</h3>
+              <h3 class="font-semibold">{{ death.spouseAadharId.aadharNumber }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Email</p>
-              <h3 class="font-semibold">abc@gmail.com</h3>
+              <h3 class="font-semibold">{{ death.spouseAadharId.email }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Mobile</p>
-              <h3 class="font-semibold">9876543210</h3>
+              <h3 class="font-semibold">{{ death.spouseAadharId.contact }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Birth Date</p>
-              <h3 class="font-semibold">12/03/1975</h3>
+              <h3 class="font-semibold">{{ death.spouseAadharId.dob | date: 'dd/mm/yyyy' }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Gender</p>
-              <h3 class="font-semibold">Female</h3>
+              <h3 class="font-semibold">{{ death.spouseAadharId.gender }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4 md:col-span-2">
               <p class="text-gray-500 text-sm">Address</p>
-              <h3 class="font-semibold">Street, City, District, State - 380001</h3>
+              <h3 class="font-semibold">
+                {{ death.spouseAadharId.address.street }} ,
+                {{ death.spouseAadharId.address.city }} ,
+                {{ death.spouseAadharId.address.taluka }} ,
+                {{ death.spouseAadharId.address.district }} ,
+                {{ death.spouseAadharId.address.state }} ,
+                {{ death.spouseAadharId.address.pinCode }}
+              </h3>
             </div>
           </div>
         </mat-card-content>
@@ -235,12 +299,13 @@
 
               <div>
                 <h3 class="font-semibold">Deceased Aadhaar Card</h3>
-                <p class="text-sm text-gray-500">PDF Document</p>
               </div>
             </div>
 
             <button mat-icon-button color="primary">
-              <mat-icon>visibility</mat-icon>
+              <a href="{{ death.deceasedAadharCard }}">
+                <mat-icon> visibility </mat-icon>
+              </a>
             </button>
           </div>
 
@@ -250,12 +315,13 @@
 
               <div>
                 <h3 class="font-semibold">Spouse Aadhaar Card</h3>
-                <p class="text-sm text-gray-500">PDF Document</p>
               </div>
             </div>
 
             <button mat-icon-button color="primary">
-              <mat-icon>visibility</mat-icon>
+              <a href="{{ death.spouseAadharCard }}">
+                <mat-icon> visibility </mat-icon>
+              </a>
             </button>
           </div>
 
@@ -265,12 +331,13 @@
 
               <div>
                 <h3 class="font-semibold">Deceased Ration Card</h3>
-                <p class="text-sm text-gray-500">Uploaded File</p>
               </div>
             </div>
 
             <button mat-icon-button color="primary">
-              <mat-icon>visibility</mat-icon>
+              <a href="{{ death.deceasedRationCard }}">
+                <mat-icon> visibility </mat-icon>
+              </a>
             </button>
           </div>
 
@@ -280,12 +347,13 @@
 
               <div>
                 <h3 class="font-semibold">Deceased Photo</h3>
-                <p class="text-sm text-gray-500">Image File</p>
               </div>
             </div>
 
             <button mat-icon-button color="primary">
-              <mat-icon>visibility</mat-icon>
+              <a href="{{ death.deceasedPhoto }}">
+                <mat-icon> visibility </mat-icon>
+              </a>
             </button>
           </div>
 
@@ -295,12 +363,13 @@
 
               <div>
                 <h3 class="font-semibold">Medical Report</h3>
-                <p class="text-sm text-gray-500">Uploaded File</p>
               </div>
             </div>
 
             <button mat-icon-button color="primary">
-              <mat-icon>visibility</mat-icon>
+              <a href="{{ death.deceasedMedicalCertificate }}">
+                <mat-icon> visibility </mat-icon>
+              </a>
             </button>
           </div>
 
@@ -310,12 +379,13 @@
 
               <div>
                 <h3 class="font-semibold">PM Report</h3>
-                <p class="text-sm text-gray-500">Uploaded File</p>
               </div>
             </div>
 
             <button mat-icon-button color="primary">
-              <mat-icon>visibility</mat-icon>
+              <a href="{{ death.pmReport }}">
+                <mat-icon> visibility </mat-icon>
+              </a>
             </button>
           </div>
 
@@ -325,12 +395,13 @@
 
               <div>
                 <h3 class="font-semibold">FIR Copy</h3>
-                <p class="text-sm text-gray-500">Uploaded File</p>
               </div>
             </div>
 
             <button mat-icon-button color="primary">
-              <mat-icon>visibility</mat-icon>
+              <a href="{{ death.fir }}">
+                <mat-icon> visibility </mat-icon>
+              </a>
             </button>
           </div>
         </div>

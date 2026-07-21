@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -9,29 +9,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { PasswordField } from '../../../shared/password-field/password-field';
 import { EmailField } from '../../../shared/email-field/email-field';
 import { AadharVerification } from '../../../shared/aadhar-verification/aadhar-verification';
-
-interface District {
-  value: string;
-  viewValue: string;
-}
-
-interface Office {
-  value: string;
-  viewValue: string;
-}
-
-interface Department {
-  value: string;
-  viewValue: string;
-}
-interface State {
-  value: string;
-  viewValue: string;
-}
+import { AuthApi } from '../../../@api/auth/auth.api';
+import { StatesApi } from '../../../@api/states/states.api';
+import { DepartmentsApi } from '../../../@api/departments/departments.api';
+import { DistrictsApi } from '../../../@api/districts/districts.api';
+import { State } from '../../../@api/states/states.type';
+import { District } from '../../../@api/districts/districts.type';
+import { Department } from '../../../@api/departments/departments.type';
+import { Office } from '../../../@api/offices/offices.type';
+import { OfficesApi } from '../../../@api/offices/offices.api';
+import { Auth } from '../../../@api/auth/auth.type';
 
 @Component({
   selector: 'app-clerk-signup',
@@ -45,13 +36,12 @@ interface State {
     MatButtonModule,
     MatOptionModule,
     MatSelectModule,
-    MatRadioGroup,
-    MatRadioButton,
+
     MatDatepickerModule,
     MatDatepickerToggle,
     MatHint,
     RouterLink,
-    PasswordField,
+
     EmailField,
     AadharVerification,
   ],
@@ -61,48 +51,206 @@ interface State {
 })
 export class ClerkSignup {
   hide = signal(true);
+
+  private router = inject(Router);
+  private authApi = inject(AuthApi);
+  private stateApi = inject(StatesApi);
+  private departmentApi = inject(DepartmentsApi);
+  private districtApi = inject(DistrictsApi);
+  private officeApi = inject(OfficesApi);
+
+  setPasswordToken = '';
+  aadharFile!: File;
+  signatureFile!: File;
+  employeeCardFile!: File;
+
   clerkSignUpForm = new FormGroup({
     aadharNumber: new FormControl('', [Validators.required, Validators.minLength(12)]),
-    otp: new FormControl('', [Validators.required]),
-    employeeID: new FormControl('', [Validators.required]),
-    clerkName: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required]),
-    mobileNo: new FormControl('', [Validators.required, Validators.minLength(10)]),
-    password: new FormControl('', [Validators.required, Validators.minLength(8)]),
-    confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
-    gender: new FormControl('', [Validators.required]),
-    dateOfBirth: new FormControl('', Validators.required),
-    aadharCard: new FormControl('', [Validators.required]),
-    employeeId: new FormControl('', [Validators.required]),
+    employeeId: new FormControl(''),
+    clerkName: new FormControl({ value: '', disabled: true }, [Validators.required]),
+    email: new FormControl({ value: '', disabled: true }, [Validators.required]),
+    mobileNo: new FormControl({ value: '', disabled: true }, [
+      Validators.required,
+      Validators.minLength(10),
+    ]),
+    gender: new FormControl({ value: '', disabled: true }, [Validators.required]),
+    dateOfBirth: new FormControl<Date | null>({ value: null, disabled: true }, Validators.required),
+    aadharCard: new FormControl<File | null>(null, Validators.required),
+    govEmployeeIdCard: new FormControl<File | null>(null, Validators.required),
+
+    signature: new FormControl<File | null>(null, Validators.required),
+    stateId: new FormControl('', Validators.required),
+
+    districtId: new FormControl('', Validators.required),
+
+    officeId: new FormControl('', Validators.required),
+
+    departmentId: new FormControl('', Validators.required),
   });
 
-  districts: District[] = [
-    { value: 'Porbandar-0', viewValue: 'Porbandar' },
-    { value: 'Dwarka-1', viewValue: 'Dwarka' },
-    { value: 'rajkot-2', viewValue: 'Rajkot' },
-  ];
+  states: State.Detail[] = [];
 
-  offices: Office[] = [{ value: 'office-0', viewValue: 'office' }];
+  districts: District.Base[] = [];
 
-  states: State[] = [{ value: '1', viewValue: 'Gujarat' }];
+  departments: Department.Detail[] = [];
 
-  departments: Department[] = [
-    { value: 'Porbandar-0', viewValue: 'Porbandar' },
-    { value: 'Dwarka-1', viewValue: 'Dwarka' },
-    { value: 'rajkot-2', viewValue: 'Rajkot' },
-  ];
+  offices: Office.Detail[] = [];
+  verificationToken = '';
 
   private readonly _currentYear = new Date().getFullYear();
   readonly minDate = new Date(this._currentYear - 79, 0, 1);
   readonly maxDate = new Date(this._currentYear + 0, 11, 31);
 
-  onClerkSignUp() {}
+  onClerkSignUp() {
+    if (this.clerkSignUpForm.invalid) {
+      this.clerkSignUpForm.markAllAsTouched();
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('verificationToken', this.verificationToken);
+
+    formData.append('stateId', this.clerkSignUpForm.value.stateId!);
+    formData.append('districtId', this.clerkSignUpForm.value.districtId!);
+    formData.append('officeId', this.clerkSignUpForm.value.officeId!);
+    formData.append('departmentId', this.clerkSignUpForm.value.departmentId!);
+
+    formData.append('aadharCard', this.aadharFile);
+    formData.append('signature', this.signatureFile);
+    formData.append('govEmployeeIdCard', this.employeeCardFile);
+
+    for (const pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+    this.authApi.registerClerk(formData).subscribe({
+      next: (response) => {
+        console.log(response);
+        alert('Clerk Registered Successfully');
+        this.router.navigate(['/clerk-homepage']);
+      },
+      error: (error) => {
+        alert(error.error.message);
+      },
+    });
+  }
+
+  onAadharVerified(event: Auth.Apis.VerifyOtpResponse) {
+    this.verificationToken = event.verificationToken;
+    console.log(event);
+    console.log(event.verificationToken);
+    this.clerkSignUpForm.patchValue({
+      clerkName: `${event.data.firstName} ${event.data.middleName ?? ''} ${event.data.lastName}`,
+
+      email: event.data.email,
+
+      mobileNo: event.data.contact,
+
+      gender: event.data.gender,
+
+      dateOfBirth: new Date(event.data.dob),
+    });
+  }
+
+  constructor() {
+    this.selectStates();
+
+    this.selectDepatments();
+  }
+
+  selectStates() {
+    this.stateApi.selectState().subscribe({
+      next: (response) => {
+        this.states = response.data;
+      },
+      error: (err) => console.log(err),
+    });
+  }
+
+  onStateChange(stateId: string) {
+    this.districts = [];
+
+    this.offices = [];
+
+    this.clerkSignUpForm.patchValue({
+      districtId: '',
+
+      officeId: '',
+    });
+
+    this.selectDistricts(stateId);
+  }
+
+  selectDistricts(stateId: string) {
+    this.districtApi.selectDistrict(stateId).subscribe({
+      next: (response) => {
+        this.districts = response.data;
+      },
+      error: (err) => console.log(err),
+    });
+  }
+
+  onDistrictChange(districtId: string) {
+    this.offices = [];
+
+    this.clerkSignUpForm.patchValue({
+      officeId: '',
+    });
+
+    this.selectoffices(districtId);
+  }
+
+  selectoffices(districtId: string) {
+    this.officeApi.selectOffice(districtId).subscribe({
+      next: (response) => {
+        this.offices = response.data;
+      },
+      error: (err) => console.log(err),
+    });
+  }
+
+  selectDepatments() {
+    this.departmentApi.selectDepartment().subscribe({
+      next: (response) => {
+        this.departments = response.data;
+      },
+    });
+  }
+  onFileSelected(event: any, type: string) {
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    switch (type) {
+      case 'aadhar':
+        this.aadharFile = file;
+
+        this.clerkSignUpForm.patchValue({
+          aadharCard: file,
+        });
+
+        break;
+
+      case 'employee':
+        this.employeeCardFile = file;
+
+        this.clerkSignUpForm.patchValue({
+          govEmployeeIdCard: file,
+        });
+
+        break;
+
+      case 'signature':
+        this.signatureFile = file;
+
+        this.clerkSignUpForm.patchValue({
+          signature: file,
+        });
+
+        break;
+    }
+  }
   clickEvent(event: MouseEvent) {
     this.hide.set(!this.hide());
     event.stopPropagation();
-  }
-
-  onFileSelected(event: Event) {
-    event.preventDefault;
   }
 }

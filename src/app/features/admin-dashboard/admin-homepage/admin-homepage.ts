@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,6 +6,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink } from '@angular/router';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { AuthApi } from '../../../@api/auth/auth.api';
+import { StatesApi } from '../../../@api/states/states.api';
+import { DistrictsApi } from '../../../@api/districts/districts.api';
+import { OfficesApi } from '../../../@api/offices/offices.api';
+import { DepartmentsApi } from '../../../@api/departments/departments.api';
 
 @Component({
   selector: 'app-admin-homepage',
@@ -26,6 +31,80 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 export class AdminHomepage {
   lineChartOptions: any;
   pieChartOptions: any;
+
+  private usersApi = inject(AuthApi);
+  private statesApi = inject(StatesApi);
+  private districtsApi = inject(DistrictsApi);
+  private officesApi = inject(OfficesApi);
+  private departmentsApi = inject(DepartmentsApi);
+  private clerksApi = inject(AuthApi);
+
+  totalUsers = 0;
+  totalClerks = 0;
+  totalStates = 0;
+  totalDistricts = 0;
+  totalOffices = 0;
+  totalDepartments = 0;
+  page = 1;
+  limit = 10;
+  search = '';
+
+  ngOnInit() {
+    this.getUsers();
+    this.getClerks();
+    this.getStates();
+    this.getDistricts();
+    this.getOffices();
+    this.getDepartments();
+  }
+
+  getUsers() {
+    this.usersApi.userList(this.page, this.limit, this.search).subscribe({
+      next: (response) => {
+        this.totalUsers = response.pagination.totalRecords;
+      },
+    });
+  }
+
+  getClerks() {
+    this.clerksApi.clerkList(this.page, this.limit, this.search).subscribe({
+      next: (res) => {
+        this.totalClerks = res.pagination.totalRecords;
+      },
+    });
+  }
+
+  getStates() {
+    this.statesApi.list(this.page, this.limit, this.search).subscribe({
+      next: (res) => {
+        this.totalStates = res.pagination.totalStates;
+      },
+    });
+  }
+
+  getDistricts() {
+    this.districtsApi.list(this.page, this.limit, this.search).subscribe({
+      next: (res) => {
+        this.totalDistricts = res.pagination.totalDistricts;
+      },
+    });
+  }
+
+  getOffices() {
+    this.officesApi.list(this.page, this.limit, this.search).subscribe({
+      next: (res) => {
+        this.totalOffices = res.pagination.totalOffices;
+      },
+    });
+  }
+
+  getDepartments() {
+    this.departmentsApi.list(this.page, this.limit, this.search).subscribe({
+      next: (response) => {
+        this.totalDepartments = response.pagination.totalDepartments;
+      },
+    });
+  }
 
   constructor() {
     this.lineChartOptions = {

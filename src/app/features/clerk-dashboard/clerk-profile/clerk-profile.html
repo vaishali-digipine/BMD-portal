@@ -20,7 +20,7 @@
       <span>My Applications</span>
     </button>
 
-    <button mat-menu-item>
+    <button mat-menu-item (click)="logout()">
       <mat-icon>logout</mat-icon>
       <span>Logout</span>
     </button>
@@ -39,12 +39,14 @@
     >
       <div class="flex flex-col md:flex-row gap-6 p-6">
         <img
-          src="/assets/images/Profile-image.png"
+          [src]="profile?.aadharId?.photo"
           class="w-28 h-28 rounded-full border-4 border-blue-100"
         />
 
         <div class="flex-1">
-          <h2 class="text-2xl font-semibold text-slate-800">ABC</h2>
+          <h2 class="text-2xl font-semibold text-slate-800">
+            {{ profile?.roleId?.slug | titlecase }}
+          </h2>
 
           <div class="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-full bg-green-100">
             <mat-icon class="!text-base mr-1"> check_circle </mat-icon>
@@ -70,7 +72,11 @@
             <img src="/assets/images/user.png" class="w-6 h-6" />
             <span class="text-slate-600">Full Name</span>
           </div>
-          <span class="font-semibold text-slate-800">Abc</span>
+          <span class="font-semibold text-slate-800">
+            {{ profile?.aadharId?.firstName }}
+            {{ profile?.aadharId?.middleName }}
+            {{ profile?.aadharId?.lastName }}</span
+          >
         </div>
 
         <div class="flex justify-between items-center border-b border-slate-200 pb-4">
@@ -78,7 +84,9 @@
             <img src="/assets/images/calendar.png" class="w-5 h-5" />
             <span class="text-slate-600">Date of Birth</span>
           </div>
-          <span class="font-semibold text-slate-800">17/08/2010</span>
+          <span class="font-semibold text-slate-800">
+            {{ profile?.aadharId?.dob | date: 'dd/MM/yyyy' }}</span
+          >
         </div>
 
         <div class="flex justify-between items-center border-b border-slate-200 pb-4">
@@ -86,7 +94,9 @@
             <img src="/assets/images/gender.png" class="w-5 h-5" />
             <span class="text-slate-600">Gender</span>
           </div>
-          <span class="font-semibold text-slate-800">Female</span>
+          <span class="font-semibold text-slate-800">{{
+            profile?.aadharId?.gender | titlecase
+          }}</span>
         </div>
 
         <div class="flex justify-between items-center border-b border-slate-200 pb-4">
@@ -94,7 +104,7 @@
             <img src="/assets/images/phone-call.png" class="w-5 h-5" />
             <span class="text-slate-600">Contact Number</span>
           </div>
-          <span class="font-semibold text-slate-800">+91 9876543210</span>
+          <span class="font-semibold text-slate-800">{{ profile?.aadharId?.contact }}</span>
         </div>
 
         <div class="flex justify-between items-center border-b border-slate-200 pb-4">
@@ -102,7 +112,7 @@
             <img src="/assets/images/mail.png" class="w-5 h-5" />
             <span class="text-slate-600">Email ID</span>
           </div>
-          <span class="font-semibold text-slate-800">abc12@mail.in</span>
+          <span class="font-semibold text-slate-800">{{ profile?.aadharId?.email }}</span>
         </div>
 
         <div class="flex justify-between items-start">
@@ -111,7 +121,8 @@
             <span class="text-slate-600">Address</span>
           </div>
           <span class="font-semibold text-slate-800 text-right max-w-[220px]">
-            123 Patel Nagar, Mumbai
+            {{ profile?.aadharId?.address?.street }}, {{ profile?.aadharId?.address?.city }},
+            {{ profile?.aadharId?.address?.district }}, {{ profile?.aadharId?.address?.state }}
           </span>
         </div>
       </div>
@@ -131,135 +142,60 @@
             <img src="/assets/images/id-card.png" class="w-5 h-5" />
             <span class="text-slate-600">Employee ID</span>
           </div>
-          <span class="font-semibold text-slate-800">EMP1024</span>
+          <span class="font-semibold text-slate-800">{{ profile?.employeeId }}</span>
         </div>
 
         <div class="flex justify-between items-center border-b border-slate-200 pb-4">
           <div class="flex items-center gap-3">
-            <img src="/assets/images/Designation.png" class="w-5 h-5" />
-            <span class="text-slate-600">Designation</span>
-          </div>
-          <span class="font-semibold text-slate-800">Clerk</span>
-        </div>
-
-        <div class="flex justify-between items-center">
-          <div class="flex items-center gap-3">
             <img src="/assets/images/id-card.png" class="w-5 h-5" />
             <span class="text-slate-600">Aadhar Number</span>
           </div>
-          <span class="font-semibold text-slate-800"> xxxx xxxx 4567 </span>
+          <span class="font-semibold text-slate-800">{{ profile?.aadharId?.aadharNumber }}</span>
+        </div>
+
+        <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+          <div class="flex items-center gap-3">
+            <img src="/assets/images/location.png" class="w-5 h-5" />
+            <span class="text-slate-600">State</span>
+          </div>
+          <span class="font-semibold text-slate-800">{{
+            profile?.officeDepartmentId?.officeId?.districtId?.stateId?.name
+          }}</span>
+        </div>
+
+        <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+          <div class="flex items-center gap-3">
+            <img src="/assets/images/location.png" class="w-5 h-5" />
+            <span class="text-slate-600">District</span>
+          </div>
+          <span class="font-semibold text-slate-800">{{
+            profile?.officeDepartmentId?.officeId?.districtId?.name
+          }}</span>
+        </div>
+
+        <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+          <div class="flex items-center gap-3">
+            <img src="/assets/images/location.png" class="w-5 h-5" />
+            <span class="text-slate-600">Office</span>
+          </div>
+          <span class="font-semibold text-slate-800">{{
+            profile?.officeDepartmentId?.officeId?.name
+          }}</span>
+        </div>
+
+        <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+          <div class="flex items-center gap-3">
+            <img src="/assets/images/location.png" class="w-5 h-5" />
+            <span class="text-slate-600">Department</span>
+          </div>
+          <span class="font-semibold text-slate-800">{{
+            profile?.officeDepartmentId?.departmentId?.name
+          }}</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <div class="rounded-3xl shadow-sm bg-blue-50">
-      <div class="p-6">
-        <div class="flex items-center gap-3 mb-6">
-          <img src="/assets/images/user.png" class="w-6 h-6" />
-
-          <h2 class="text-xl font-bold text-slate-800">Personal Information</h2>
-        </div>
-
-        <div class="space-y-4">
-          <div class="flex justify-between border-b pb-3">
-            <div class="flex items-center gap-3">
-              <img src="/assets/images/user.png" class="w-5 h-5" />
-              <span class="text-slate-600">Full Name</span>
-            </div>
-            <span>Abc</span>
-          </div>
-
-          <div class="flex justify-between border-b pb-3">
-            <div class="flex items-center gap-3">
-              <img src="/assets/images/calendar.png" class="w-5 h-5" />
-              <span class="text-slate-600">Date of Birth</span>
-            </div>
-            <span>17/08/2010</span>
-          </div>
-
-          <div class="flex justify-between border-b pb-3">
-            <div class="flex items-center gap-3">
-              <img src="/assets/images/gender.png" class="w-5 h-5" />
-              <span class="text-slate-600">Gender</span>
-            </div>
-            <span>Female</span>
-          </div>
-
-          <div class="flex justify-between border-b pb-3">
-            <div class="flex items-center gap-3">
-              <img src="/assets/images/phone-call.png" class="w-5 h-5" />
-              <span class="text-slate-600">Contact Number</span>
-            </div>
-            <span>+91 9876543210</span>
-          </div>
-
-          <div class="flex justify-between border-b pb-3">
-            <div class="flex items-center gap-3">
-              <img src="/assets/images/mail.png" class="w-5 h-5" />
-              <span class="text-slate-600">Email ID</span>
-            </div>
-            <span>abc12@mail.in</span>
-          </div>
-
-          <div class="flex justify-between">
-            <div class="flex items-center gap-3">
-              <img src="/assets/images/location.png" class="w-5 h-5" />
-              <span class="text-slate-600">Address</span>
-            </div>
-            <span class="text-right"> 123 Patel Nagar, Mumbai </span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="rounded-3xl shadow-sm bg-blue-50">
-      <div class="p-6">
-        <div class="flex items-center gap-3 mb-6">
-          <img src="/assets/images/workInfo.png" class="w-6 h-6" />
-
-          <h2 class="text-xl font-bold text-slate-800">Work Information</h2>
-        </div>
-
-        <div class="space-y-4">
-          <div class="flex justify-between border-b pb-3">
-            <div class="flex items-center gap-3">
-              <img src="/assets/images/id-card.png" class="w-5 h-5" />
-              <span class="text-slate-600">Employee ID</span>
-            </div>
-            <span>EMP1024</span>
-          </div>
-
-          <div class="flex justify-between border-b pb-3">
-            <div class="flex items-center gap-3">
-              <img src="/assets/images/Designation.png" class="w-5 h-5" />
-              <span class="text-slate-600">Designation</span>
-            </div>
-            <span>Clerk</span>
-          </div> -->
-
-  <!-- <div class="flex justify-between border-b pb-3">
-            <span class="text-slate-500">Department</span>
-            <span>Vital Records</span>
-          </div> -->
-
-  <!-- <div class="flex justify-between border-b pb-3">
-            <span class="text-slate-500">Office</span>
-            <span>SDM Office</span>
-          </div> -->
-  <!-- 
-          <div class="flex justify-between">
-            <div class="flex items-center gap-3">
-              <img src="/assets/images/id-card.png" class="w-5 h-5" />
-              <span class="text-slate-600">Aadhar Number</span>
-            </div>
-            <span>xxxx xxxx 4567</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
   <div
     class="mt-12 rounded-2xl border border-blue-100 bg-gradient-to-r from-blue-50 to-cyan-50 p-6"
   >

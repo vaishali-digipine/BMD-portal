@@ -8,7 +8,12 @@
   </mat-form-field>
 
   <div class="flex items-start">
-    <button matButton="filled" class="!bg-success !text-white !px-6 !py-6" type="button">
+    <button
+      matButton="filled"
+      class="!bg-success !text-white !px-6 !py-6"
+      type="button"
+      (click)="sendOtp()"
+    >
       Send
     </button>
   </div>
@@ -18,32 +23,19 @@
 
 <div class="flex items-center gap-3 mb-4">
   <div class="flex justify-center items-center mb-3">
-    <mat-form-field appearance="outline" class="w-20 h-16 text-extrabold text-center p-4">
-      <input matInput type="text" maxlength="1" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="w-20 h-16 text-extrabold text-center p-4">
-      <input matInput type="text" maxlength="1" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="w-20 h-16 text-extrabold text-center p-4">
-      <input matInput type="text" maxlength="1" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="w-20 h-16 text-extrabold text-center p-4">
-      <input matInput type="text" maxlength="1" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="w-20 h-16 text-extrabold text-center p-4">
-      <input matInput type="text" maxlength="1" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="w-20 h-16 text-extrabold text-center p-4">
-      <input matInput type="text" maxlength="1" />
-    </mat-form-field>
+    @for (control of otpControls; track $index) {
+      <mat-form-field appearance="outline" class="w-16 h-16 text-extrabold text-center p-1">
+        <input matInput maxlength="1" [formControl]="control" class="text-center" />
+      </mat-form-field>
+    }
   </div>
 
-  <button matButton="filled" class="!bg-success !text-white !px-6 !py-6" type="button">
+  <button
+    matButton="filled"
+    class="!bg-success !text-white !px-6 !py-6"
+    type="button"
+    (click)="verifyOtp()"
+  >
     Verify
   </button>
 </div>
@@ -53,6 +45,7 @@
 
   <a
     class="inline-block mt-2 font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors mb-4"
+    (click)="resendOtp()"
   >
     Resend it
   </a>

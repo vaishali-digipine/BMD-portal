@@ -19,7 +19,7 @@
         <span>My Applications</span>
       </button>
 
-      <button mat-menu-item>
+      <button mat-menu-item (click)="logout()">
         <mat-icon>logout</mat-icon>
         <span>Logout</span>
       </button>
@@ -33,9 +33,13 @@
       <div
         class="text-center border-b border-slate-200 pb-8 mb-8 rounded-3xl p-8 text-center text-white bg-gradient-to-r from-violet-600 to-sky-500"
       >
-        <img src="/assets/images/Profile-image.png" class="w-28 h-28 mx-auto rounded-full" />
+        <img [src]="profile?.aadharId?.photo" class="w-28 h-28 mx-auto rounded-full" />
 
-        <h1 class="mt-4 text-3xl font-bold text-slate-800">John Doe</h1>
+        <h1 class="mt-4 text-3xl font-bold text-slate-800">
+          {{ profile?.aadharId?.firstName }}
+
+          {{ profile?.aadharId?.lastName }}
+        </h1>
 
         <div class="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-full bg-green-50">
           <img src="/assets/images/verified.png" class="w-4 h-4" />
@@ -58,7 +62,11 @@
               <span class="text-slate-600">Full Name</span>
             </div>
 
-            <span class="font-medium text-slate-800"> John Doe </span>
+            <span class="font-medium text-slate-800">
+              {{ profile?.aadharId?.firstName }}
+              {{ profile?.aadharId?.middleName }}
+              {{ profile?.aadharId?.lastName }}
+            </span>
           </div>
 
           <div class="grid md:grid-cols-2 items-center py-5 px-6 border-b border-slate-100">
@@ -67,7 +75,9 @@
               <span class="text-slate-600">Date of Birth</span>
             </div>
 
-            <span class="font-medium text-slate-800"> 15/2/1985 </span>
+            <span class="font-medium text-slate-800">
+              {{ profile?.aadharId?.dob | date: 'dd/MM/yyyy' }}
+            </span>
           </div>
 
           <div class="grid md:grid-cols-2 items-center py-5 px-6 border-b border-slate-100">
@@ -76,7 +86,9 @@
               <span class="text-slate-600">Gender</span>
             </div>
 
-            <span class="font-medium text-slate-800"> Female </span>
+            <span class="font-medium text-slate-800">
+              {{ profile?.aadharId?.gender | titlecase }}
+            </span>
           </div>
 
           <div class="grid md:grid-cols-2 items-center py-5 px-6 border-b border-slate-100">
@@ -85,7 +97,10 @@
               <span class="text-slate-600">Address</span>
             </div>
 
-            <span class="font-medium text-slate-800"> 123 green Park,Delhi </span>
+            <span class="font-medium text-slate-800">
+              {{ profile?.aadharId?.address?.street }}, {{ profile?.aadharId?.address?.city }},
+              {{ profile?.aadharId?.address?.district }}, {{ profile?.aadharId?.address?.state }}
+            </span>
           </div>
 
           <div class="grid md:grid-cols-2 items-center py-5 px-6 border-b border-slate-100">
@@ -94,7 +109,7 @@
               <span class="text-slate-600">Aadhar Number</span>
             </div>
 
-            <span class="font-medium text-slate-800"> xxxx xxxx 1234 </span>
+            <span class="font-medium text-slate-800"> {{ profile?.aadharId?.aadharNumber }} </span>
           </div>
         </div>
       </div>
@@ -118,7 +133,7 @@
               <div>
                 <p class="text-sm text-slate-500">Mobile Number</p>
 
-                <h3 class="font-semibold text-slate-800">+91 9812345457</h3>
+                <h3 class="font-semibold text-slate-800">{{ profile?.aadharId?.contact }}</h3>
               </div>
             </div>
           </mat-card>
@@ -134,7 +149,7 @@
               <div>
                 <p class="text-sm text-slate-500">Email Address</p>
 
-                <h3 class="font-semibold text-slate-800">abc@gmail.com</h3>
+                <h3 class="font-semibold text-slate-800">{{ profile?.aadharId?.email }}</h3>
               </div>
             </div>
           </mat-card>
