@@ -6,16 +6,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
-
-interface Districts {
-  value: string;
-  viewValue: string;
-}
-
-interface State {
-  value: string;
-  viewValue: string;
-}
+import { DistrictsApi } from '../../../../../@api/districts/districts.api';
+import { StatesApi } from '../../../../../@api/states/states.api';
+import { State } from '../../../../../@api/states/states.type';
 
 @Component({
   selector: 'app-add-district',
@@ -35,15 +28,42 @@ interface State {
 })
 export class AddDistrict {
   private router = inject(Router);
+  private districtApi = inject(DistrictsApi);
+  private stateApi = inject(StatesApi);
+
+  states: State.Detail[] = [];
 
   addDistrict = new FormGroup({
-    stateName: new FormControl('', [Validators.required]),
-    districtName: new FormControl('', [Validators.required]),
+    name: new FormControl('', [Validators.required]),
+    stateId: new FormControl('', [Validators.required]),
   });
 
-  districts: Districts[] = [{ value: '1', viewValue: 'Porbandar' }];
+  saveDistrict() {
+    if (this.addDistrict.invalid) {
+      this.addDistrict.markAllAsTouched();
+      return;
+    }
 
-  states: State[] = [{ value: '1', viewValue: 'Gujarat' }];
+    this.districtApi
+      .create({
+        name: this.addDistrict.value.name!,
+        stateId: this.addDistrict.value.stateId!,
+      })
+      .subscribe({
+        next: () => {
+          this.dialogRef.close(true);
+        },
+      });
+  }
+
+  selectStates() {
+    this.stateApi.selectState().subscribe({
+      next: (response) => {
+        this.states = response.data;
+      },
+      error: (err) => console.log(err),
+    });
+  }
 
   constructor(private dialogRef: MatDialogRef<AddDistrict>) {}
 

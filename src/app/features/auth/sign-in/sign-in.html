@@ -24,7 +24,12 @@
         <app-password-field label="Password" [passwordControl]="loginForm.controls.password">
         </app-password-field>
 
-        <button matButton="filled" class="w-full" routerLink="/user-dashboard">Sign In</button>
+        <button matButton="filled" class="w-full">Sign In</button>
+        @if (errorMessage) {
+          <p class="text-red-600 mt-3 text-center">
+            {{ errorMessage }}
+          </p>
+        }
 
         <div class="flex justify-end mt-3">
           <a
@@ -38,7 +43,7 @@
           <p class="text-gray-600">Don't have an account?</p>
 
           <a
-            routerLink="/userSignup"
+            routerLink="/user-signup"
             class="inline-block mt-2 font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors"
           >
             Create Account

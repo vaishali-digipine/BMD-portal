@@ -1,58 +1,100 @@
 <section>
-  <div class="flex justify-center items-center mt-15">
+  <div class="flex justify-center items-center">
     <div class="p-6 w-[500px]">
       <div class="text-center mb-6">
         <h1 class="text-3xl font-bold text-blue-700">Add Holidays</h1>
       </div>
 
-      <form [formGroup]="addHoliday">
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Holiday Name</mat-label>
-          <input matInput type="text" formControlName="holidayName" />
-        </mat-form-field>
+      <form [formGroup]="addHoliday" (ngSubmit)="saveHoliday()">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Holiday Name</mat-label>
+            <input matInput type="text" formControlName="title" />
+          </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Description</mat-label>
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Description</mat-label>
 
-          <textarea
-            matInput
-            formControlName="description"
-            rows="4"
-            placeholder="Enter description"
-          ></textarea>
-        </mat-form-field>
+            <textarea
+              matInput
+              formControlName="description"
+              rows="1"
+              placeholder="Enter description"
+              formControlName="description"
+            ></textarea>
+          </mat-form-field>
+        </div>
 
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Select Date of Holiday</mat-label>
-          <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="pickerOne" />
-          <mat-hint>MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle matIconSuffix [for]="pickerOne"></mat-datepicker-toggle>
-          <mat-datepicker #pickerOne></mat-datepicker>
-        </mat-form-field>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Select Date of Holiday</mat-label>
+            <input
+              matInput
+              [min]="minDate"
+              [matDatepicker]="pickerOne"
+              formControlName="holidayDate"
+            />
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="pickerOne"></mat-datepicker-toggle>
+            <mat-datepicker #pickerOne></mat-datepicker>
+          </mat-form-field>
 
-        <mat-form-field class="w-full mt-2" appearance="outline">
-          <mat-label>National Holidays</mat-label>
-          <mat-select>
-            @for (holiday of holidays; track holiday) {
-              <mat-option [value]="holiday.value">{{ holiday.viewValue }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Year</mat-label>
+            <input matInput type="text" formControlName="year" />
+          </mat-form-field>
 
-        <mat-form-field class="w-full" appearance="outline">
-          <mat-label>Office</mat-label>
-          <mat-select>
-            @for (office of offices; track office) {
-              <mat-option [value]="office.value">{{ office.viewValue }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>National Holiday</mat-label>
+
+            <mat-select
+              formControlName="isNationalHoliday"
+              (selectionChange)="onHolidayTypeChange($event.value)"
+            >
+              <mat-option [value]="true">Yes</mat-option>
+              <mat-option [value]="false">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        @if (addHoliday.controls.isNationalHoliday.value === false) {
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <mat-form-field class="w-full" appearance="outline">
+              <mat-label>States</mat-label>
+              <mat-select formControlName="stateId" (selectionChange)="onStateChange($event.value)">
+                @for (state of states; track state._id) {
+                  <mat-option [value]="state._id">{{ state.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="w-full" appearance="outline">
+              <mat-label>Districts</mat-label>
+              <mat-select
+                formControlName="districtId"
+                (selectionChange)="onDistrictChange($event.value)"
+              >
+                @for (district of districts; track district._id) {
+                  <mat-option [value]="district._id">{{ district.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="w-full" appearance="outline">
+              <mat-label>Office</mat-label>
+              <mat-select formControlName="officeId">
+                @for (office of offices; track office._id) {
+                  <mat-option [value]="office._id">{{ office.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        }
 
         <div class="flex justify-between mt-6">
           <button
             mat-raised-button
             class="!px-6 !py-6 !rounded-xl !font-semibold !text-lg !border !border-blue-600 !text-white !bg-blue-600"
-            (click)="closeDialog()"
           >
             Add
           </button>

@@ -5,7 +5,7 @@
     <div>
       <h1 class="text-3xl font-bold text-slate-800">Offices</h1>
 
-      <p class="mt-2 text-slate-500">Manage and view all offices in the system.</p>
+      <p class="mt-2 text-slate-500">Manage and view all districts in the system.</p>
     </div>
   </div>
 
@@ -67,7 +67,7 @@
 
       <input
         matInput
-        (keyup)="applyFilter($event)"
+        (keyup)="searchOffice($event)"
         placeholder="Search by District ID or Name"
         #input
       />
@@ -93,43 +93,37 @@
 
     <div class="overflow-x-auto">
       <table mat-table [dataSource]="dataSource" class="w-full !bg-white">
-        <ng-container matColumnDef="officeId">
+        <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef class="!text-sm !font-bold text-black">
             OFFICE ID
           </th>
 
-          <td mat-cell *matCellDef="let element" class="py-5 font-medium text-slate-700">
-            {{ element.officeId }}
+          <td
+            mat-cell
+            *matCellDef="let element; let i = index"
+            class="py-5 font-medium text-slate-700"
+          >
+            {{ (page - 1) * limit + i + 1 }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="officeName">
+        <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef class="!text-sm !font-bold text-black">
             OFFICE NAME
           </th>
 
           <td mat-cell *matCellDef="let element" class="py-5 font-medium text-slate-700">
-            {{ element.officeName }}
+            {{ element.name | titlecase }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="districtName">
+        <ng-container matColumnDef="districtId">
           <th mat-header-cell *matHeaderCellDef class="!text-sm !font-bold text-black">
             DISTRICT NAME
           </th>
 
           <td mat-cell *matCellDef="let element" class="py-5 font-medium text-slate-700">
-            {{ element.districtName }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="stateName">
-          <th mat-header-cell *matHeaderCellDef class="!text-sm !font-bold text-black">
-            STATE NAME
-          </th>
-
-          <td mat-cell *matCellDef="let element" class="py-5 font-medium text-slate-700">
-            {{ element.stateName }}
+            {{ element.districtId.name | titlecase }}
           </td>
         </ng-container>
 
@@ -142,7 +136,7 @@
             </button>
 
             <mat-menu #menu="matMenu">
-              <button mat-menu-item>
+              <button mat-menu-item (click)="deleteOffice(element._id)">
                 <mat-icon class="!text-red-500">delete</mat-icon>
                 <span>Delete</span>
               </button>
@@ -162,7 +156,10 @@
   </mat-card>
   <mat-paginator
     class="border-t border-slate-200 bg-white"
+    [pageSize]="limit"
+    [pageIndex]="page - 1"
     [pageSizeOptions]="[5, 10, 20]"
+    (page)="changePage($event)"
     showFirstLastButtons
   >
   </mat-paginator>

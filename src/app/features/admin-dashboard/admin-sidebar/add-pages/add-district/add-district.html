@@ -5,19 +5,19 @@
         <h1 class="text-3xl font-bold text-blue-700">Add Districts</h1>
       </div>
 
-      <form [formGroup]="addDistrict">
+      <form [formGroup]="addDistrict" (ngSubmit)="saveDistrict()">
         <mat-form-field class="w-full" appearance="outline">
           <mat-label>States</mat-label>
-          <mat-select>
-            @for (state of states; track state) {
-              <mat-option [value]="state.value">{{ state.viewValue }}</mat-option>
+          <mat-select formControlName="stateId" (selectionChange)="selectStates()">
+            @for (state of states; track state._id) {
+              <mat-option [value]="state._id">{{ state.name }}</mat-option>
             }
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="!w-full">
           <mat-label>District</mat-label>
-          <input matInput type="text" formControlName="districtName" />
+          <input matInput type="text" formControlName="name" />
           <mat-error>Enter the Valid District</mat-error>
         </mat-form-field>
 
@@ -25,7 +25,6 @@
           <button
             mat-raised-button
             class="!px-6 !py-6 !rounded-xl !font-semibold !text-lg !border !border-blue-600 !text-white !bg-blue-600"
-            (click)="closeDialog()"
           >
             Add
           </button>

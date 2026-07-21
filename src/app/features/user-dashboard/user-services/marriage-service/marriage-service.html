@@ -16,17 +16,33 @@
   </div>
 
   <div class="w-full max-w-dvw mx-auto px-8 pb-10">
-    <mat-stepper [linear]="isLinear" #stepper>
+    <mat-stepper linear #stepper>
       <mat-step [stepControl]="firstFormGroup">
-        <form [formGroup]="firstFormGroup" (ngSubmit)="marriageCertificate()">
-          <ng-template matStepLabel>Fill Out Bride Details</ng-template>
+        <form [formGroup]="firstFormGroup">
+          <ng-template matStepLabel>Fill out Bride Details</ng-template>
 
           <div class="mb-5">
             <label class="text-xl font-semibold text-slate-800 mb-4">Bride Details:</label>
           </div>
           <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
-            <app-aadhar-verification [aadharControl]="firstFormGroup.controls.brideAadharNumber">
-            </app-aadhar-verification>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Aadhar number</mat-label>
+                <input matInput type="text" formControlName="brideAadharNumber" />
+                <mat-error>Enter Valid Aadhar Number</mat-error>
+              </mat-form-field>
+
+              <div class="flexitems-start">
+                <button
+                  type="button"
+                  mat-raised-button
+                  class="!px-6 !py-6 !border !border-green-600 !text-white !bg-green-600"
+                  (click)="verifyBrideAadhar()"
+                >
+                  Verify
+                </button>
+              </div>
+            </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
               <mat-form-field appearance="fill" class="w-full">
@@ -35,9 +51,11 @@
                 <mat-error>Enter Bride Name</mat-error>
               </mat-form-field>
 
-              <app-email-field
-                [emailControl]="firstFormGroup.controls.brideEmail"
-              ></app-email-field>
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Email</mat-label>
+                <input matInput type="text" formControlName="brideEmail" />
+                <mat-error>Enter Valid Email</mat-error>
+              </mat-form-field>
 
               <mat-form-field appearance="fill" class="w-full">
                 <mat-label>Select Bride Date of Birth</mat-label>
@@ -75,15 +93,20 @@
               </mat-form-field>
             </div>
 
-            <div>
-              <mat-radio-group aria-label="Gender" formControlName="brideGender">
-                <label class="text-sm font-semibold text-slate-700">Gender:</label>
-                 @for (gender of genders; track gender.value) {
-                  <mat-radio-button [value]="gender.value">
-                    {{ gender.viewValue }}
-                  </mat-radio-button>
-                }
-              </mat-radio-group>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Gender</mat-label>
+
+                <mat-select formControlName="brideGender">
+                  <mat-option value="male">Male</mat-option>
+
+                  <mat-option value="female">Female</mat-option>
+
+                  <mat-option value="other">Other</mat-option>
+                </mat-select>
+
+                <mat-error>Please select gender</mat-error>
+              </mat-form-field>
             </div>
 
             <div class="mb-3 mt-4">
@@ -138,7 +161,7 @@
       </mat-step>
 
       <mat-step [stepControl]="secondFormGroup">
-        <form [formGroup]="secondFormGroup" (ngSubmit)="marriageCertificate()">
+        <form [formGroup]="secondFormGroup">
           <ng-template matStepLabel>Fill out Groom Details</ng-template>
 
           <div class="mb-5">
@@ -146,8 +169,24 @@
           </div>
 
           <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
-            <app-aadhar-verification [aadharControl]="secondFormGroup.controls.groomAadharNumber">
-            </app-aadhar-verification>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Aadhar number</mat-label>
+                <input matInput type="text" formControlName="groomAadharNumber" />
+                <mat-error>Enter Valid Aadhar Number</mat-error>
+              </mat-form-field>
+
+              <div class="flex items-start">
+                <button
+                  type="button"
+                  mat-raised-button
+                  class="!px-6 !py-6 !border !border-green-600 !text-white !bg-green-600"
+                  (click)="verifyGroomAadhar()"
+                >
+                  Verify
+                </button>
+              </div>
+            </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
               <mat-form-field appearance="fill" class="w-full">
@@ -156,9 +195,11 @@
                 <mat-error>Enter Groom Name</mat-error>
               </mat-form-field>
 
-              <app-email-field
-                [emailControl]="secondFormGroup.controls.groomEmail"
-              ></app-email-field>
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Email</mat-label>
+                <input matInput type="text" formControlName="groomEmail" />
+                <mat-error>Enter Valid Email</mat-error>
+              </mat-form-field>
 
               <mat-form-field appearance="fill" class="w-full">
                 <mat-label>Select Groom Date of Birth</mat-label>
@@ -196,15 +237,20 @@
               </mat-form-field>
             </div>
 
-            <div>
-              <mat-radio-group aria-label="Gender" formControlName="groomGender">
-                <label class="text-sm font-semibold text-slate-700">Gender:</label>
-                 @for (gender of genders; track gender.value) {
-                  <mat-radio-button [value]="gender.value">
-                    {{ gender.viewValue }}
-                  </mat-radio-button>
-                }
-              </mat-radio-group>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Gender</mat-label>
+
+                <mat-select formControlName="groomGender">
+                  <mat-option value="male">Male</mat-option>
+
+                  <mat-option value="female">Female</mat-option>
+
+                  <mat-option value="other">Other</mat-option>
+                </mat-select>
+
+                <mat-error>Please select gender</mat-error>
+              </mat-form-field>
             </div>
 
             <div class="mb-3 mt-4">
@@ -260,7 +306,7 @@
       </mat-step>
 
       <mat-step [stepControl]="thirdFormGroup">
-        <form [formGroup]="thirdFormGroup" (ngSubmit)="marriageCertificate()">
+        <form [formGroup]="thirdFormGroup">
           <ng-template matStepLabel>Fill out Marriage Details</ng-template>
           <div class="mb-5">
             <label class="text-xl font-semibold text-slate-800 mb-4"> Marriage Details:</label>
@@ -292,9 +338,9 @@
 
               <mat-form-field class="w-full" appearance="fill">
                 <mat-label>Districts</mat-label>
-                <mat-select>
-                  @for (district of districts; track district) {
-                    <mat-option [value]="district.value">{{ district.viewValue }}</mat-option>
+                <mat-select formControlName="districtId" (selectionChange)="selectDistricts()">
+                  @for (district of districts; track district._id) {
+                    <mat-option [value]="district._id">{{ district.name }}</mat-option>
                   }
                 </mat-select>
               </mat-form-field>
@@ -309,8 +355,8 @@
       </mat-step>
 
       <mat-step [stepControl]="fourthFormGroup">
-        <form [formGroup]="fourthFormGroup" (ngSubmit)="marriageCertificate()">
-          <ng-template matStepLabel>Fill Out Witness Details</ng-template>
+        <form [formGroup]="fourthFormGroup">
+          <ng-template matStepLabel>Fill out Witness Details</ng-template>
 
           <div class="mb-5">
             <label class="text-xl font-semibold text-slate-800 mb-4"> Witness Details:</label>
@@ -318,8 +364,23 @@
           <mat-card
             class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black mb-8"
           >
-            <app-aadhar-verification [aadharControl]="fourthFormGroup.controls.witnessAadharNumber">
-            </app-aadhar-verification>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Aadhar number</mat-label>
+                <input matInput type="text" formControlName="witnessAadharNumber" />
+                <mat-error>Enter Valid Aadhar Number</mat-error>
+              </mat-form-field>
+              <div class="flex items-start">
+                <button
+                  type="button"
+                  mat-raised-button
+                  class="!px-6 !py-6 !border !border-green-600 !text-white !bg-green-600"
+                  (click)="verifyWitnessAadhar()"
+                >
+                  Verify
+                </button>
+              </div>
+            </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <mat-form-field appearance="fill" class="w-full">
@@ -329,12 +390,14 @@
               </mat-form-field>
               <mat-form-field appearance="fill" class="w-full">
                 <mat-label>Mobile Number</mat-label>
-                <input matInput type="text" formControlName="witnessMobileNo" />
+                <input matInput type="text" formControlName="witnessMobileNumber" />
                 <mat-error>Enter Valid Mobile Number</mat-error>
               </mat-form-field>
-              <app-email-field
-                [emailControl]="fourthFormGroup.controls.witnessEmail"
-              ></app-email-field>
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Email</mat-label>
+                <input matInput type="text" formControlName="witnessEmail" />
+                <mat-error>Enter Valid Email</mat-error>
+              </mat-form-field>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -344,14 +407,19 @@
                 <mat-error>Enter Relation</mat-error>
               </mat-form-field>
 
-              <mat-radio-group aria-label="Gender" formControlName="witnessGender">
-                <label class="text-sm font-semibold text-slate-700">Gender:</label>
-                 @for (gender of genders; track gender.value) {
-                  <mat-radio-button [value]="gender.value">
-                    {{ gender.viewValue }}
-                  </mat-radio-button>
-                }
-              </mat-radio-group>
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Gender</mat-label>
+
+                <mat-select formControlName="witnessGender">
+                  <mat-option value="male">Male</mat-option>
+
+                  <mat-option value="female">Female</mat-option>
+
+                  <mat-option value="other">Other</mat-option>
+                </mat-select>
+
+                <mat-error>Please select gender</mat-error>
+              </mat-form-field>
             </div>
 
             <div class="mb-3 mt-4">
@@ -403,18 +471,33 @@
             <label class="text-xl font-semibold text-slate-800 mb-4">Priest Details:</label>
           </div>
           <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
-            <app-aadhar-verification [aadharControl]="fourthFormGroup.controls.priestAadharNumber">
-            </app-aadhar-verification>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Aadhar number</mat-label>
+                <input matInput type="text" formControlName="brahmanAadharNumber" />
+                <mat-error>Enter Valid Aadhar Number</mat-error>
+              </mat-form-field>
+              <div class="flex items-start">
+                <button
+                  type="button"
+                  mat-raised-button
+                  class="!px-6 !py-6 !border !border-green-600 !text-white !bg-green-600"
+                  (click)="verifyBrahmanAadhar()"
+                >
+                  Verify
+                </button>
+              </div>
+            </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <mat-form-field appearance="fill" class="w-full">
                 <mat-label>Name</mat-label>
-                <input matInput type="text" formControlName="priestName" />
+                <input matInput type="text" formControlName="brahmanName" />
                 <mat-error>Enter Valid Name</mat-error>
               </mat-form-field>
               <mat-form-field appearance="fill" class="w-full">
                 <mat-label>Mobile Number</mat-label>
-                <input matInput type="text" formControlName="priestMobileNo" />
+                <input matInput type="text" formControlName="brahmanMobileNo" />
                 <mat-error>Enter Valid Mobile Number</mat-error>
               </mat-form-field>
             </div>
@@ -428,7 +511,7 @@
       </mat-step>
 
       <mat-step [stepControl]="fifthFormGroup" label="Upload Document">
-        <form [formGroup]="fifthFormGroup" (ngSubmit)="marriageCertificate()">
+        <form [formGroup]="fifthFormGroup">
           <ng-template>Upload Document</ng-template>
 
           <div class="mb-5">
@@ -443,7 +526,7 @@
                 >
                 <input
                   type="file"
-                  (change)="onFileSelected($event)"
+                  (change)="onFileSelected($event, 'bride')"
                   class="border border-black p-2 rounded-md"
                 />
               </div>
@@ -453,7 +536,7 @@
                 >
                 <input
                   type="file"
-                  (change)="onFileSelected($event)"
+                  (change)="onFileSelected($event, 'groom')"
                   class="border border-black p-2 rounded-md"
                 />
               </div>
@@ -463,7 +546,7 @@
                 >
                 <input
                   type="file"
-                  (change)="onFileSelected($event)"
+                  (change)="onFileSelected($event, 'witness')"
                   class="border border-black p-2 rounded-md"
                 />
               </div>
@@ -476,7 +559,7 @@
                 >
                 <input
                   type="file"
-                  (change)="onFileSelected($event)"
+                  (change)="onFileSelected($event, 'brahman')"
                   class="border border-black p-2 rounded-md"
                 />
               </div>
@@ -486,7 +569,7 @@
                 >
                 <input
                   type="file"
-                  (change)="onFileSelected($event)"
+                  (change)="onFileSelected($event, 'brideRation')"
                   class="border border-black p-2 rounded-md"
                 />
               </div>
@@ -497,7 +580,7 @@
                 >
                 <input
                   type="file"
-                  (change)="onFileSelected($event)"
+                  (change)="onFileSelected($event, 'groomRation')"
                   class="border border-black p-2 rounded-md"
                 />
               </div>
@@ -508,7 +591,7 @@
                 <label class="block text-sm font-semibold text-slate-700 mb-2"> Bride Photo:</label>
                 <input
                   type="file"
-                  (change)="onFileSelected($event)"
+                  (change)="onFileSelected($event, 'bridePhoto')"
                   class="border border-black p-2 rounded-md"
                 />
               </div>
@@ -516,7 +599,7 @@
                 <label class="block text-sm font-semibold text-slate-700 mb-2"> Groom Photo:</label>
                 <input
                   type="file"
-                  (change)="onFileSelected($event)"
+                  (change)="onFileSelected($event, 'groomPhoto')"
                   class="border border-black p-2 rounded-md"
                 />
               </div>
@@ -526,7 +609,7 @@
                 >
                 <input
                   type="file"
-                  (change)="onFileSelected($event)"
+                  (change)="onFileSelected($event, 'invitationCard')"
                   class="border border-black p-2 rounded-md"
                 />
               </div>
@@ -535,13 +618,20 @@
 
           <div class="flex justify-between mt-6">
             <button type="button" matButton="filled" matStepperPrevious>Back</button>
-            <button type="button" matButton="filled" matStepperNext>Next</button>
+            <button
+              type="submit"
+              matButton="filled"
+              color="primary"
+              (click)="marriageCertificate(stepper)"
+            >
+              Submit and Continue to Slot Selection > Next
+            </button>
           </div>
         </form>
       </mat-step>
 
       <mat-step [stepControl]="sixthFormGroup" label="Slot Selection">
-        <form [formGroup]="sixthFormGroup" (ngSubmit)="marriageCertificate()">
+        <form [formGroup]="sixthFormGroup">
           <ng-template>Slot Selection</ng-template>
 
           <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
@@ -580,34 +670,49 @@
               Select a Date and an available time slot:
             </h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-80 mt-10">
-              <mat-form-field>
-                <mat-label>Select a Date </mat-label>
-                <input
-                  matInput
-                  [min]="slotMinDate"
-                  [max]="slotMaxDate"
-                  [matDatepicker]="pickerFour"
-                  formControlName="slotDate"
-                />
-                <mat-hint>MM/DD/YYYY</mat-hint>
-                <mat-datepicker-toggle matIconSuffix [for]="pickerFour"></mat-datepicker-toggle>
-                <mat-datepicker #pickerFour></mat-datepicker>
-                <mat-error>Please select a Date </mat-error>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10">
+              <mat-form-field class="w-full" appearance="fill">
+                <mat-label>Offices</mat-label>
+                <mat-select
+                  formControlName="officeId"
+                  (selectionChange)="officeChanged($event.value)"
+                >
+                  @for (office of offices; track office._id) {
+                    <mat-option [value]="office._id">{{ office.name }}</mat-option>
+                  }
+                </mat-select>
               </mat-form-field>
 
               <mat-form-field>
-                <mat-label>Select Slot Time</mat-label>
-                <input matInput [matTimepicker]="birthPickerTwo" />
-                <mat-timepicker-toggle matIconSuffix [for]="birthPickerTwo" />
-                <mat-timepicker #birthPickerTwo />
-                <mat-error>Choose Slot Time</mat-error>
+                <mat-label>Select Date</mat-label>
+
+                <mat-select
+                  formControlName="slotDate"
+                  (selectionChange)="dateChanged($event.value)"
+                >
+                  @for (date of availableDates; track date) {
+                    <mat-option [value]="date">
+                      {{ date | date: 'dd MMM yyyy' }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Select Slot</mat-label>
+
+                <mat-select formControlName="slotTime">
+                  @for (slot of availableSlots; track slot._id) {
+                    <mat-option [value]="slot._id">
+                      {{ slot.startTime }} - {{ slot.endTime }}
+                    </mat-option>
+                  }
+                </mat-select>
               </mat-form-field>
             </div>
           </mat-card>
 
           <div class="flex justify-center mt-12">
-            <button matButton="filled" class="w-64" routerLink="/user-dashboard">Submit</button>
+            <button matButton="filled" class="w-64" (click)="submitApplication()">Submit</button>
           </div>
           <div class="flex justify-between mt-6">
             <button type="button" matButton="filled" matStepperPrevious>Back</button>

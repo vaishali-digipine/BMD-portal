@@ -8,18 +8,15 @@
       <form [formGroup]="addDepartment">
         <mat-form-field class="w-full" appearance="outline">
           <mat-label>Departments</mat-label>
-          <mat-select>
-            @for (department of departments; track department) {
-              <mat-option [value]="department.value">{{ department.viewValue }}</mat-option>
-            }
-          </mat-select>
+          <input matInput type="text" formControlName="departmentName" />
+          <mat-error>Enter the Valid State</mat-error>
         </mat-form-field>
 
         <div class="flex justify-between mt-6">
           <button
             mat-raised-button
             class="!px-6 !py-6 !rounded-xl !font-semibold !text-lg !border !border-blue-600 !text-white !bg-blue-600"
-            (click)="closeDialog()"
+            (click)="saveDepartment()"
           >
             Add
           </button>

@@ -23,7 +23,7 @@
         </div>
 
         <div>
-          <p class="text-2xl text-black font-bold">1</p>
+          <p class="text-2xl text-black font-bold">5</p>
 
           <h3 class="font-semibold text-slate-800">Total Applications</h3>
         </div>
@@ -39,7 +39,7 @@
         </div>
 
         <div>
-          <p class="text-2xl text-black font-bold">1</p>
+          <p class="text-2xl text-black font-bold">4</p>
 
           <h3 class="font-semibold text-slate-800">Pending</h3>
         </div>
@@ -55,7 +55,7 @@
         </div>
 
         <div>
-          <p class="text-2xl text-black font-bold">0</p>
+          <p class="text-2xl text-black font-bold">1</p>
 
           <h3 class="font-semibold text-slate-800">Accepted</h3>
         </div>
@@ -91,28 +91,28 @@
             Sr. No.
           </th>
 
-          <td mat-cell *matCellDef="let element">
-            {{ element.serialNo }}
+          <td mat-cell *matCellDef="let element; let i = index">
+            {{ i + 1 }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="applicationNo">
+        <ng-container matColumnDef="applicationNumber">
           <th mat-header-cell *matHeaderCellDef class="!bg-blue-50 !text-blue-800 !font-semibold">
             Application Number
           </th>
 
           <td mat-cell *matCellDef="let element">
-            {{ element.applicationNo }}
+            {{ element.applicationNumber }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="applicationType">
+        <ng-container matColumnDef="serviceType">
           <th mat-header-cell *matHeaderCellDef class="!bg-blue-50 !text-blue-800 !font-semibold">
             Application Type
           </th>
 
           <td mat-cell *matCellDef="let element">
-            {{ element.applicationType }}
+            {{ element.serviceType | titlecase }}
           </td>
         </ng-container>
 
@@ -122,7 +122,7 @@
           </th>
 
           <td mat-cell *matCellDef="let element">
-            {{ element.date }}
+            {{ element.createdAt | date: 'dd/MM/yyyy' }}
           </td>
         </ng-container>
 
@@ -130,11 +130,44 @@
           <th mat-header-cell *matHeaderCellDef class="!bg-blue-50 !text-blue-800 !font-semibold">
             Status
           </th>
-
           <td mat-cell *matCellDef="let element">
-            {{ element.status }}
+            @if (element.status === 'pending') {
+              <span
+                class="px-3 py-1 rounded-full text-sm font-semibold bg-yellow-100 text-yellow-700"
+              >
+                Pending
+              </span>
+            } @else if (element.status === 'accepted') {
+              <span
+                class="px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700"
+              >
+                Accepted
+              </span>
+            } @else if (element.status === 'rejected') {
+              <span class="px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-700">
+                Rejected
+              </span>
+            }
           </td>
         </ng-container>
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef class="!bg-blue-50 !text-blue-800 !font-semibold">
+            Action
+          </th>
+
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Row action menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item [disabled]="element.status !== 'pending'">
+                <mat-icon>videocam</mat-icon>
+                <span>Video Call</span>
+              </button>
+            </mat-menu>
+          </td></ng-container
+        >
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 

@@ -43,57 +43,48 @@
 
     <div class="overflow-x-auto">
       <table mat-table [dataSource]="dataSource" class="w-full !bg-white">
-        <ng-container matColumnDef="empId">
+        <ng-container matColumnDef="employeeId">
           <th mat-header-cell *matHeaderCellDef class="!text-sm !font-bold text-black">
             EMPLOYEE ID
           </th>
 
           <td mat-cell *matCellDef="let element" class="py-5 font-medium text-slate-700">
-            {{ element.empId }}
+            {{ element.employeeId }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="empName">
+        <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef class="text-sm !font-bold text-black">NAME</th>
 
           <td mat-cell *matCellDef="let element" class="py-5 font-medium text-slate-700">
-            {{ element.empName }}
+            {{ element.aadharId.firstName }}
+            {{ element.aadharId.lastName }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="empEmail">
+        <ng-container matColumnDef="email">
           <th mat-header-cell *matHeaderCellDef class="text-sm !font-bold text-black">EMAIL</th>
 
           <td mat-cell *matCellDef="let element" class="py-5 font-medium text-slate-700">
-            {{ element.empEmail }}
+            {{ element.email }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="empContact">
+        <ng-container matColumnDef="contact">
           <th mat-header-cell *matHeaderCellDef class="text-sm !font-bold text-black">
             CONTACT NUMBER
           </th>
 
           <td mat-cell *matCellDef="let element" class="py-5 font-medium text-slate-700">
-            {{ element.empContact }}
+            {{ element.aadharId.contact }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef class="text-sm !font-bold text-black">STATUS</th>
 
-          <td mat-cell *matCellDef="let element" class="py-4">
-            <mat-form-field appearance="outline" class="w-40 mt-2">
-              <mat-label>Status</mat-label>
-
-              <mat-select>
-                @for (clerkStatus of status; track clerkStatus) {
-                  <mat-option [value]="clerkStatus.value">
-                    {{ clerkStatus.viewValue }}
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
+          <td mat-cell *matCellDef="let element">
+            {{ element.status | titlecase }}
           </td>
         </ng-container>
 
@@ -110,7 +101,7 @@
             </button>
 
             <mat-menu #menu="matMenu">
-              <button mat-menu-item>
+              <button mat-menu-item (click)="deleteClerk(element._id)">
                 <mat-icon class="!text-red-500"> delete </mat-icon>
 
                 <span>Delete</span>
@@ -119,7 +110,11 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-slate-50"></tr>
+        <tr
+          mat-header-row
+          *matHeaderRowDef="displayedColumns; sticky: true"
+          class="bg-slate-50"
+        ></tr>
 
         <tr
           mat-row

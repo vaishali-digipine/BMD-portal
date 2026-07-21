@@ -28,7 +28,11 @@
             <span class="font-bold text-lg text-slate-800">Full Name</span>
           </div>
 
-          <span class="font-bold text-lg text-slate-600"> John Doe </span>
+          <span class="font-bold text-lg text-slate-600">
+            {{ profile?.aadharId?.firstName }}
+            {{ profile?.aadharId?.middleName }}
+            {{ profile?.aadharId?.lastName }}
+          </span>
         </div>
 
         <div class="grid md:grid-cols-2 items-center py-5 px-6 border-b border-slate-100">
@@ -37,7 +41,9 @@
             <span class="font-bold text-lg text-slate-800">Date of Birth</span>
           </div>
 
-          <span class="font-bold text-lg text-slate-600"> 15/2/1985 </span>
+          <span class="font-bold text-lg text-slate-600">
+            {{ profile?.aadharId?.dob | date: 'dd/MM/yyyy' }}
+          </span>
         </div>
 
         <div class="grid md:grid-cols-2 items-center py-5 px-6 border-b border-slate-100">
@@ -46,7 +52,9 @@
             <span class="font-bold text-lg text-slate-800">Gender</span>
           </div>
 
-          <span class="font-bold text-lg text-slate-600"> Female </span>
+          <span class="font-bold text-lg text-slate-600">
+            {{ profile?.aadharId?.gender | titlecase }}
+          </span>
         </div>
 
         <div class="grid md:grid-cols-2 items-center py-5 px-6 border-b border-slate-100">
@@ -55,7 +63,10 @@
             <span class="font-bold text-lg text-slate-800">Address</span>
           </div>
 
-          <span class="font-bold text-lg text-slate-600"> 123 green Park,Delhi </span>
+          <span class="font-bold text-lg text-slate-600">
+            {{ profile?.aadharId?.address?.street }}, {{ profile?.aadharId?.address?.city }},
+            {{ profile?.aadharId?.address?.district }}, {{ profile?.aadharId?.address?.state }}
+          </span>
         </div>
 
         <div class="grid md:grid-cols-2 items-center py-5 px-6 border-b border-slate-100">
@@ -64,7 +75,9 @@
             <span class="font-bold text-lg text-slate-800">Aadhar Number</span>
           </div>
 
-          <span class="font-bold text-lg text-slate-600"> xxxx xxxx 1234 </span>
+          <span class="font-bold text-lg text-slate-600">
+            {{ profile?.aadharId?.aadharNumber }}
+          </span>
         </div>
       </div>
     </div>
@@ -88,7 +101,7 @@
             <div>
               <p class="text-lg font-bold text-slate-800">Mobile Number</p>
 
-              <h3 class="font-medium text-lg text-slate-800">+91 9812345457</h3>
+              <h3 class="font-medium text-lg text-slate-800">{{ profile?.aadharId?.contact }}</h3>
             </div>
           </div>
         </mat-card>
@@ -104,7 +117,7 @@
             <div>
               <p class="text-lg font-bold text-slate-800">Email Address</p>
 
-              <h3 class="font-medium text-lg text-slate-800">abc@gmail.com</h3>
+              <h3 class="font-medium text-lg text-slate-800">{{ profile?.aadharId?.email }}</h3>
             </div>
           </div>
         </mat-card>

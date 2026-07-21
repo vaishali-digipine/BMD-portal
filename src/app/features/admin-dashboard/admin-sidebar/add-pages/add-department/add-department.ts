@@ -1,35 +1,40 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-
-interface Departments {
-  value: string;
-  viewValue: string;
-}
+import { DepartmentsApi } from '../../../../../@api/departments/departments.api';
 
 @Component({
   selector: 'app-add-department',
   standalone: true,
-  imports: [ReactiveFormsModule, MatFormField, MatLabel, MatSelect, MatOption, MatButtonModule],
+  imports: [ReactiveFormsModule, MatFormField, MatLabel, MatButtonModule, MatError],
   templateUrl: './add-department.html',
   styleUrl: './add-department.css',
 })
 export class AddDepartment {
   private router = inject(Router);
+  private departmentApi = inject(DepartmentsApi);
 
   addDepartment = new FormGroup({
     departmentName: new FormControl('', [Validators.required]),
   });
+  accessToken = '';
 
-  departments: Departments[] = [
-    { value: '1', viewValue: 'Birth' },
-    { value: '2', viewValue: 'Marriage' },
-    { value: '3', viewValue: 'Death' },
-  ];
+  saveDepartment() {
+    if (this.addDepartment.invalid) return;
+
+    this.departmentApi.create({ name: this.addDepartment.value.departmentName! }).subscribe({
+      next: () => {
+        this.dialogRef.close(true);
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
 
   constructor(private dialogRef: MatDialogRef<AddDepartment>) {}
 

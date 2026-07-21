@@ -17,7 +17,10 @@
       </div>
 
       <form [formGroup]="userSignUpForm" (ngSubmit)="onUserSignUp()" class="space-y-4">
-        <app-aadhar-verification [aadharControl]="userSignUpForm.controls.aadharNumber">
+        <app-aadhar-verification
+          [aadharControl]="userSignUpForm.controls.aadharNumber"
+          (verified)="onAadharVerified($event)"
+        >
         </app-aadhar-verification>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -47,10 +50,16 @@
             label="Confirm Password"
             [passwordControl]="userSignUpForm.controls.confirmPassword"
           ></app-password-field>
+          @if (
+            userSignUpForm.hasError('passwordMismatch') &&
+            userSignUpForm.controls.confirmPassword.touched
+          ) {
+            <mat-error> Password and Confirm Password do not match. </mat-error>
+          }
         </div>
 
         <div class="flex justify-center mt-4">
-          <button matButton="filled" routerLink="/signIn" class="w-64">Sign Up</button>
+          <button matButton="filled" type="submit" class="w-64">Sign Up</button>
         </div>
 
         <div class="text-center">
