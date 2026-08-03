@@ -24,7 +24,14 @@
         <app-password-field label="Password" [passwordControl]="loginForm.controls.password">
         </app-password-field>
 
-        <button matButton="filled" class="w-full">Sign In</button>
+        <button matButton="filled" class="w-full" [disabled]="loading">
+          @if (loading) {
+            <mat-spinner diameter="20"></mat-spinner>
+            <span>Signing In...</span>
+          } @else {
+            <span>Sign In</span>
+          }
+        </button>
         @if (errorMessage) {
           <p class="text-red-600 mt-3 text-center">
             {{ errorMessage }}

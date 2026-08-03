@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatOptionModule } from '@angular/material/core';
@@ -10,7 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { Router, RouterLink } from '@angular/router';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { DatePipe, TitleCasePipe } from '@angular/common';
 import { ApplicationApi } from '../../../@api/applications/application.api';
 import {
@@ -18,6 +18,8 @@ import {
   EApplicationStatus,
   EServiceType,
 } from '../../../@api/applications/applications.type';
+import { MatDialog } from '@angular/material/dialog';
+import { RemarkDialogbox } from './remark-dialogbox/remark-dialogbox';
 
 @Component({
   selector: 'app-clerk-application',
@@ -45,12 +47,14 @@ import {
 export class ClerkApplication {
   private applicationApi = inject(ApplicationApi);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
+  private dialog = inject(MatDialog);
 
   displayedColumns = ['serialNo', 'applicationNumber', 'serviceType', 'date', 'status', 'action'];
   dataSource = new MatTableDataSource<Application.Detail>([]);
 
   page = 1;
-  limit = 10;
+  limit = 5;
   search = '';
   total = 0;
   totalApplications = 0;
@@ -66,15 +70,24 @@ export class ClerkApplication {
 
   constructor() {
     this.getApplications();
+    this.loadCards();
   }
 
   getApplications() {
     this.applicationApi.list(this.page, this.limit, this.search).subscribe({
       next: (response) => {
         this.dataSource.data = response.data;
+        this.total = response.pagination.totalDocuments;
       },
       error: console.error,
     });
+  }
+
+  changePage(event: PageEvent) {
+    this.page = event.pageIndex + 1;
+    this.limit = event.pageSize;
+
+    this.getApplications();
   }
 
   searchState(event: Event) {
@@ -93,6 +106,44 @@ export class ClerkApplication {
     }
   }
 
+  editApplication(application: Application.Detail) {
+    if (application.serviceType === EServiceType.birth) {
+      this.router.navigate(['/edit-birth', application.serviceId._id]);
+    } else if (application.serviceType === EServiceType.marriage) {
+      this.router.navigate(['/edit-marriage', application.serviceId._id]);
+    } else if (application.serviceType === EServiceType.death) {
+      this.router.navigate(['/edit-death', application.serviceId._id]);
+    }
+  }
+
+  // editApplication(application: Application.Detail) {
+  //   if (application.serviceType === EServiceType.birth) {
+  //     this.router.navigate(['/edit-birth', application._id]);
+  //   } else if (application.serviceType === EServiceType.marriage) {
+  //     this.router.navigate(['/edit-marriage', application._id]);
+  //   } else if (application.serviceType === EServiceType.death) {
+  //     this.router.navigate(['/edit-death', application._id]);
+  //   }
+  // }
+
+  loadCards() {
+    this.applicationApi.list(this.page, this.limit, '').subscribe((res) => {
+      this.totalApplications = res.pagination.totalDocuments;
+    });
+
+    this.applicationApi.getApplications(this.page, this.limit, '', 'pending').subscribe((res) => {
+      this.pending = res.pagination.totalDocuments;
+    });
+
+    this.applicationApi.getApplications(this.page, this.limit, '', 'accepted').subscribe((res) => {
+      this.accepted = res.pagination.totalDocuments;
+    });
+
+    this.applicationApi.getApplications(this.page, this.limit, '', 'rejected').subscribe((res) => {
+      this.rejected = res.pagination.totalDocuments;
+    });
+  }
+
   acceptApplication(application: Application.Detail) {
     this.applicationApi
       .update(application._id, {
@@ -100,43 +151,40 @@ export class ClerkApplication {
       })
       .subscribe({
         next: () => {
+          this.getApplications();
           application.status = EApplicationStatus.accepted;
+
+          this.cdr.detectChanges();
         },
         error: console.error,
       });
   }
 
   rejectApplication(application: Application.Detail) {
-    const remarks = prompt('Enter rejection remarks');
+    const dialogRef = this.dialog.open(RemarkDialogbox, {
+      width: '600px',
+      maxWidth: '95vw',
+      disableClose: true,
+    });
 
-    if (!remarks) {
-      return;
-    }
+    dialogRef.afterClosed().subscribe((remarks) => {
+      if (!remarks) return;
 
-    this.applicationApi
-      .update(application._id, {
-        status: EApplicationStatus.rejected,
-        remarks,
-      })
-      .subscribe({
-        next: () => {
-          application.status = EApplicationStatus.rejected;
-          application.remarks = remarks;
-        },
-        error: console.error,
-      });
-  }
+      this.applicationApi
+        .update(application._id, {
+          status: EApplicationStatus.rejected,
+          remarks,
+        })
+        .subscribe({
+          next: () => {
+            this.getApplications();
+            application.status = EApplicationStatus.rejected;
+            application.remarks = remarks;
+            this.loadCards();
+          },
 
-  pendingApplication(application: Application.Detail) {
-    this.applicationApi
-      .update(application._id, {
-        status: EApplicationStatus.pending,
-      })
-      .subscribe({
-        next: () => {
-          application.status = EApplicationStatus.pending;
-        },
-        error: console.error,
-      });
+          error: console.error,
+        });
+    });
   }
 }

@@ -23,6 +23,7 @@ import { Department } from '../../../@api/departments/departments.type';
 import { Office } from '../../../@api/offices/offices.type';
 import { OfficesApi } from '../../../@api/offices/offices.api';
 import { Auth } from '../../../@api/auth/auth.type';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-clerk-signup',
@@ -41,7 +42,7 @@ import { Auth } from '../../../@api/auth/auth.type';
     MatDatepickerToggle,
     MatHint,
     RouterLink,
-
+    MatProgressSpinnerModule,
     EmailField,
     AadharVerification,
   ],
@@ -51,6 +52,7 @@ import { Auth } from '../../../@api/auth/auth.type';
 })
 export class ClerkSignup {
   hide = signal(true);
+  isLoading = false;
 
   private router = inject(Router);
   private authApi = inject(AuthApi);
@@ -68,7 +70,7 @@ export class ClerkSignup {
     aadharNumber: new FormControl('', [Validators.required, Validators.minLength(12)]),
     employeeId: new FormControl(''),
     clerkName: new FormControl({ value: '', disabled: true }, [Validators.required]),
-    email: new FormControl({ value: '', disabled: true }, [Validators.required]),
+    email: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.email]),
     mobileNo: new FormControl({ value: '', disabled: true }, [
       Validators.required,
       Validators.minLength(10),
@@ -107,6 +109,7 @@ export class ClerkSignup {
       return;
     }
 
+    this.isLoading = true;
     const formData = new FormData();
     formData.append('verificationToken', this.verificationToken);
 
@@ -119,16 +122,14 @@ export class ClerkSignup {
     formData.append('signature', this.signatureFile);
     formData.append('govEmployeeIdCard', this.employeeCardFile);
 
-    for (const pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
     this.authApi.registerClerk(formData).subscribe({
       next: (response) => {
-        console.log(response);
+        this.isLoading = false;
         alert('Clerk Registered Successfully');
         this.router.navigate(['/clerk-homepage']);
       },
       error: (error) => {
+        this.isLoading = false;
         alert(error.error.message);
       },
     });

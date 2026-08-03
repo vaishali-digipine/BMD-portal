@@ -39,6 +39,11 @@ import { AddDistrict } from './features/admin-dashboard/admin-sidebar/add-pages/
 import { AddOffice } from './features/admin-dashboard/admin-sidebar/add-pages/add-office/add-office';
 import { AddDepartment } from './features/admin-dashboard/admin-sidebar/add-pages/add-department/add-department';
 import { AddHoliday } from './features/admin-dashboard/admin-sidebar/add-pages/add-holiday/add-holiday';
+import { ApplicationsPage } from './features/admin-dashboard/admin-sidebar/pages/applications-page/applications-page';
+import { SetPassword } from './features/auth/set-password/set-password';
+import { SlotPage } from './features/admin-dashboard/admin-sidebar/pages/slot-page/slot-page';
+import { MeetingPage } from './features/admin-dashboard/admin-sidebar/pages/meeting-page/meeting-page';
+import { Meeting } from './features/clerk-dashboard/meeting/meeting';
 
 export const routes: Routes = [
   {
@@ -57,6 +62,7 @@ export const routes: Routes = [
     path: 'reset-password',
     component: ResetPassword,
   },
+  { path: 'set-password', component: SetPassword },
   {
     path: 'user-signup',
     component: UserSignup,
@@ -81,9 +87,10 @@ export const routes: Routes = [
   { path: 'birth-viewdetail/:id', component: BirthViewdetail },
   { path: 'marriage-viewdetail/:id', component: MarriageViewdetail },
   { path: 'death-viewdetail/:id', component: DeathViewdetail },
-  { path: 'edit-birth', component: EditBirth },
-  { path: 'edit-death', component: EditDeath },
-  { path: 'edit-marriage', component: EditMarriage },
+  { path: 'edit-birth/:id', component: EditBirth },
+  { path: 'edit-death/:id', component: EditDeath },
+  { path: 'edit-marriage/:id', component: EditMarriage },
+  { path: 'meeting', component: Meeting },
 
   {
     path: '',
@@ -101,6 +108,9 @@ export const routes: Routes = [
       { path: 'office-page', component: OfficePage },
       { path: 'department-page', component: DepartmentPage },
       { path: 'holiday-page', component: HolidayPage },
+      { path: 'application-page', component: ApplicationsPage },
+      { path: 'slot-page', component: SlotPage },
+      { path: 'meeting-page', component: MeetingPage },
     ],
   },
   { path: 'add-state', component: AddState },

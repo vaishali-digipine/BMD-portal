@@ -8,7 +8,9 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApplicationApi } from '../../../../../../@api/applications/application.api';
 import { Application } from '../../../../../../@api/applications/applications.type';
 import { BirthService } from '../../../../../../@api/birthService/birthServices.type';
-import { DatePipe, TitleCasePipe } from '@angular/common';
+import { DatePipe, Location, TitleCasePipe } from '@angular/common';
+import { ImagePreview } from '../image-preview/image-preview';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-birth-viewdetail',
@@ -19,9 +21,9 @@ import { DatePipe, TitleCasePipe } from '@angular/common';
     MatCardModule,
     MatIconModule,
     DatePipe,
-
+    TitleCasePipe,
     MatInputModule,
-    RouterLink,
+
     MatButtonModule,
   ],
   templateUrl: './birth-viewdetail.html',
@@ -31,6 +33,8 @@ export class BirthViewdetail {
   private route = inject(ActivatedRoute);
   private applicationApi = inject(ApplicationApi);
   private cdr = inject(ChangeDetectorRef);
+  private dialog = inject(MatDialog);
+  private location = inject(Location);
 
   application!: Application.Detail;
   birth!: BirthService.Detail;
@@ -53,5 +57,20 @@ export class BirthViewdetail {
         this.cdr.detectChanges();
       },
     });
+  }
+
+  openImage(image: string, title: string) {
+    this.dialog.open(ImagePreview, {
+      width: '700px',
+      maxWidth: '90vw',
+      data: {
+        image,
+        title,
+      },
+    });
+  }
+
+  goBack() {
+    this.location.back();
   }
 }

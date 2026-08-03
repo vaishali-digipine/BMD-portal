@@ -1,0 +1,148 @@
+<section class="min-h-screen bg-slate-50 p-6">
+  <div
+    class="mb-6 flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+  >
+    <div>
+      <h1 class="text-3xl font-bold text-slate-800">Meetings</h1>
+
+      <p class="mt-2 text-slate-500">Manage and view all Meetings in the system.</p>
+    </div>
+  </div>
+
+  <div class="mb-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <mat-form-field appearance="outline" class="w-full md:w-[450px]">
+      <mat-label>Search Application</mat-label>
+
+      <mat-icon matPrefix>search</mat-icon>
+
+      <input matInput (keyup)="searchMeetings($event)" placeholder="Search Application" #input />
+    </mat-form-field>
+  </div>
+
+  <mat-card class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div class="flex items-center justify-between border-b border-slate-200 bg-gray-300 px-6 py-5">
+      <div>
+        <h2 class="text-xl font-bold text-slate-800">Meetings List</h2>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table mat-table [dataSource]="dataSource" class="w-full !bg-white">
+        <ng-container matColumnDef="serialNo">
+          <th mat-header-cell *matHeaderCellDef class="!text-sm !font-bold text-black">Sr. No.</th>
+
+          <td mat-cell *matCellDef="let element; let i = index">
+            {{ i + 1 }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="roomId">
+          <th mat-header-cell *matHeaderCellDef class="!text-sm !font-bold text-black">RoomId</th>
+
+          <td mat-cell *matCellDef="let element">
+            {{ element.roomId }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="meetingDate">
+          <th mat-header-cell *matHeaderCellDef class="!text-sm !font-bold text-black">
+            meetingDate
+          </th>
+
+          <td mat-cell *matCellDef="let element">
+            {{ element.applicationId?.slotId?.slotDate | date: 'dd/mm/yyyy' }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="meetingTime">
+          <th mat-header-cell *matHeaderCellDef class="!text-sm !font-bold text-black">
+            Meeting Time
+          </th>
+
+          <td mat-cell *matCellDef="let element">
+            {{ element.applicationId?.slotId?.startTime }} TO
+            {{ element.applicationId?.slotId?.endTime }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef class="!text-sm !font-bold text-black">Status</th>
+
+          <td mat-cell *matCellDef="let element">
+            @if (element.status === 'scheduled') {
+              <span class="px-3 py-1 rounded-full text-sm font-semibold bg-gray-100 text-gray-700">
+                Scheduled
+              </span>
+            } @else if (element.status === 'waiting') {
+              <span
+                class="px-3 py-1 rounded-full text-sm font-semibold bg-orange-100 text-orange-700"
+              >
+                Waiting
+              </span>
+            } @else if (element.status === 'in_progress') {
+              <span class="px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-700">
+                In_Progress
+              </span>
+            } @else if (element.status === 'completed') {
+              <span
+                class="px-6 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700"
+              >
+                Completed
+              </span>
+            } @else if (element.status === 'cancelled') {
+              <span class="px-6 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-700">
+                Cancelled
+              </span>
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef class="!text-sm !font-bold text-black">Action</th>
+
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Row action menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="viewDetails(element.applicationId)">
+                <mat-icon>description</mat-icon>
+                <span>View Details</span>
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-slate-50"></tr>
+
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="hover:bg-slate-50 transition"
+        ></tr>
+
+        <tr *matNoDataRow>
+          <td colspan="4" class="py-10 text-center text-slate-500">
+            <div class="flex flex-col items-center gap-3">
+              <mat-icon class="text-slate-300" style="width: 48px; height: 48px; font-size: 48px">
+                inbox
+              </mat-icon>
+
+              <span class="font-medium"> No application records found </span>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      class="border-t border-slate-200 bg-white"
+      [pageSizeOptions]="[5, 10, 20]"
+      [pageSize]="limit"
+      [length]="total"
+      [pageIndex]="page - 1"
+      (page)="changePage($event)"
+      showFirstLastButtons
+    >
+    </mat-paginator>
+  </mat-card>
+</section>

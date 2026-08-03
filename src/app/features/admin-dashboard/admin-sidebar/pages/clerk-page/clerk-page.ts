@@ -69,7 +69,7 @@ export class ClerkPage {
         console.log(response);
 
         this.dataSource.data = response.data;
-        this.total = response.pagination.total;
+        this.total = response.pagination.totalDocuments;
       },
       error: (err) => {
         console.log(err);

@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Application } from './applications.type';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Response } from '../../@common/types/ApiLayer.types';
+
 import { environment } from '../../@common/environments/environment';
 
 @Injectable({
@@ -14,43 +13,37 @@ export class ApplicationApi {
   private path = `${environment.apiUrl}/applications`;
 
   list(page: number, limit: number, search: string) {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
     return this.http.get<Application.Apis.ListResponse>(
       `${this.path}?page=${page}&limit=${limit}&search=${search}&sortBy=createdAt&sortOrder=desc`,
-      { headers },
     );
   }
 
   getById(id: Application.Id) {
-    const token = localStorage.getItem('accessToken');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
-    return this.http.get<Application.Apis.GetResponse>(`${this.path}/${id}`, { headers });
+    return this.http.get<Application.Apis.GetResponse>(`${this.path}/${id}`);
   }
 
   create(payload: Application.Apis.Create) {
-    const token = localStorage.getItem('accessToken');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.post<Application.Apis.CreateResponse>(this.path, payload, { headers });
+    return this.http.post<Application.Apis.CreateResponse>(this.path, payload);
   }
 
   update(id: string, payload: Application.Apis.Update) {
-    const token = localStorage.getItem('accessToken');
+    return this.http.patch<Application.Apis.UpdateResponse>(`${this.path}/${id}`, payload);
+  }
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.patch<Application.Apis.UpdateResponse>(`${this.path}/${id}`, payload, {
-      headers,
-    });
+  completeApplication(id: string, payload: Application.Apis.CompleteApplication) {
+    return this.http.patch<Application.Apis.CompleteApplicationResponse>(
+      `${this.path}/${id}/complete`,
+      payload,
+    );
+  }
+
+  getApplications(page: number, limit: number, search: string, status: string) {
+    return this.http.get<Application.Apis.ListResponse>(
+      `${this.path}?page=${page}&limit=${limit}&search=${search}&status=${status}&sortBy=createdAt&sortOrder=desc`,
+    );
+  }
+
+  resumeApplication(applicationId: string) {
+    return this.http.get<Application.Apis.GetResponse>(`${this.path}/${applicationId}/resume`);
   }
 }

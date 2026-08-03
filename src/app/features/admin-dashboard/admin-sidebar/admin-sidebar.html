@@ -22,6 +22,14 @@
           </a>
 
           <a
+            routerLink="user-page"
+            class="flex items-center !font-extrabold text-lg gap-4 h-11 px-4 rounded-xl text-slate-700 hover:bg-blue-50 transition"
+          >
+            <mat-icon>group</mat-icon>
+            <span>Users</span>
+          </a>
+
+          <a
             routerLink="clerk-page"
             class="flex items-center !font-extrabold text-lg gap-4 h-11 px-4 rounded-xl text-slate-700 hover:bg-blue-50 transition"
           >
@@ -30,11 +38,19 @@
           </a>
 
           <a
-            routerLink="user-page"
+            routerLink="application-page"
             class="flex items-center !font-extrabold text-lg gap-4 h-11 px-4 rounded-xl text-slate-700 hover:bg-blue-50 transition"
           >
-            <mat-icon>group</mat-icon>
-            <span>Users</span>
+            <mat-icon>layers</mat-icon>
+            <span>Application</span>
+          </a>
+
+          <a
+            routerLink="meeting-page"
+            class="flex items-center !font-extrabold text-lg gap-4 h-11 px-4 rounded-xl text-slate-700 hover:bg-blue-50 transition"
+          >
+            <mat-icon>groups</mat-icon>
+            <span>Meetings</span>
           </a>
 
           <a
@@ -76,10 +92,17 @@
             <mat-icon>celebration</mat-icon>
             <span>Holidays</span>
           </a>
+
+          <a
+            routerLink="slot-page"
+            class="flex items-center !font-extrabold text-lg gap-4 h-11 px-4 rounded-xl text-slate-700 hover:bg-blue-50 transition"
+          >
+            <mat-icon>schedule</mat-icon>
+            <span>Slots</span>
+          </a>
         </nav>
       </div>
 
-      <!-- Logout -->
       <div class="border-t border-slate-200 p-4">
         <button
           mat-raised-button

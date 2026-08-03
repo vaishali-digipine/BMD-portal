@@ -16,8 +16,8 @@
   </div>
 
   <div class="w-full max-w-dvw mx-auto px-8 pb-10">
-    <mat-stepper linear #stepper>
-      <mat-step [stepControl]="firstFormGroup">
+    <mat-stepper linear #stepper [selectedIndex]="stepIndex">
+      <mat-step [stepControl]="firstFormGroup" [completed]="isDraft || firstFormGroup.valid">
         <form [formGroup]="firstFormGroup">
           <ng-template matStepLabel>Fill out Deceased Details</ng-template>
 
@@ -28,24 +28,10 @@
           </div>
 
           <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <mat-form-field appearance="fill" class="w-full">
-                <mat-label>Aadhar number</mat-label>
-                <input matInput type="text" formControlName="deceasedAadharNumber" />
-
-                <mat-error>Enter Valid Aadhar Number</mat-error>
-              </mat-form-field>
-
-              <div class="flex items-start">
-                <button
-                  mat-raised-button
-                  class="!px-6 !py-6 !border !border-green-600 !text-white !bg-green-600"
-                  (click)="verifyDeceasedAadhar()"
-                >
-                  Verify
-                </button>
-              </div>
-            </div>
+            <app-aadhar-verification
+              [aadharControl]="firstFormGroup.controls.deceasedAadharNumber"
+              (verified)="onDeceasedAadharVerified($event)"
+            ></app-aadhar-verification>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
               <mat-form-field appearance="fill" class="w-full">
@@ -57,7 +43,7 @@
               <mat-form-field appearance="fill" class="w-full">
                 <mat-label>Place of Death</mat-label>
                 <input matInput type="text" formControlName="deathPlace" />
-                <mat-error>Enter place</mat-error>
+                <mat-error>Enter Death Place</mat-error>
               </mat-form-field>
 
               <mat-form-field>
@@ -94,7 +80,7 @@
 
               <mat-form-field class="w-full" appearance="fill">
                 <mat-label>Districts</mat-label>
-                <mat-select formControlName="districtId" (selectionChange)="selectDistricts()">
+                <mat-select formControlName="deathDistrict" (selectionChange)="selectDistricts()">
                   @for (district of districts; track district._id) {
                     <mat-option [value]="district._id">{{ district.name }}</mat-option>
                   }
@@ -103,20 +89,27 @@
 
               <mat-form-field>
                 <mat-label>Death Time</mat-label>
-                <input matInput [matTimepicker]="birthPickerThree" formControlName="deathTime" />
-                <mat-timepicker-toggle matIconSuffix [for]="birthPickerThree" />
-                <mat-timepicker #birthPickerThree />
-                <mat-error> please select Death time</mat-error>
+                <input matInput type="text" formControlName="deathTime" />
+                <!-- @if (firstFormGroup.controls.deathTime.hasError('pattern')) {
+                  <mat-error> Please enter a valid time. </mat-error>
+                } -->
               </mat-form-field>
             </div>
 
-            <div>
-              <mat-radio-group aria-label="Gender" formControlName="deceasedGender">
-                <label class="text-sm font-semibold text-slate-700">Gender:</label>
-                <mat-radio-button value="1">Female</mat-radio-button>
-                <mat-radio-button value="2">Male</mat-radio-button>
-                <mat-radio-button value="3">Other</mat-radio-button>
-              </mat-radio-group>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Gender</mat-label>
+
+                <mat-select formControlName="deceasedGender">
+                  <mat-option value="male">Male</mat-option>
+
+                  <mat-option value="female">Female</mat-option>
+
+                  <mat-option value="other">Other</mat-option>
+                </mat-select>
+
+                <mat-error>Please select gender</mat-error>
+              </mat-form-field>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
@@ -191,7 +184,7 @@
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="secondFormGroup">
+      <mat-step [stepControl]="secondFormGroup" [completed]="isDraft || secondFormGroup.valid">
         <form [formGroup]="secondFormGroup">
           <ng-template matStepLabel>Fill out Spouse Details</ng-template>
 
@@ -200,24 +193,15 @@
           </div>
 
           <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <mat-form-field appearance="fill" class="w-full">
-                <mat-label>Aadhar number</mat-label>
-                <input matInput type="text" formControlName="spouseAadharNumber" />
-
-                <mat-error>Enter Valid Aadhar Number</mat-error>
-              </mat-form-field>
-
-              <div class="flex items-start">
-                <button
-                  mat-raised-button
-                  class="!px-6 !py-6 !border !border-green-600 !text-white !bg-green-600"
-                  (click)="verifySpouseAadhar()"
-                >
-                  Verify
-                </button>
-              </div>
-            </div>
+            <app-aadhar-verification
+              [aadharControl]="secondFormGroup.controls.spouseAadharNumber"
+              (verified)="onSpouseAadharVerified($event)"
+            ></app-aadhar-verification>
+            @if (secondFormGroup.controls.spouseAadharNumber.hasError('sameAadhar')) {
+              <p class="text-red-600 text-sm mt-1">
+                Deceased and Spouse Aadhaar numbers cannot be the same.
+              </p>
+            }
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
               <mat-form-field appearance="fill" class="w-full">
@@ -255,12 +239,19 @@
                 <mat-error>please select a Date of birth</mat-error>
               </mat-form-field>
 
-              <mat-radio-group aria-label="Gender" formControlName="spouseGender">
-                <label class="text-sm font-semibold text-slate-700">Gender:</label>
-                <mat-radio-button value="1">Female</mat-radio-button>
-                <mat-radio-button value="2">Male</mat-radio-button>
-                <mat-radio-button value="3">Other</mat-radio-button>
-              </mat-radio-group>
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Gender</mat-label>
+
+                <mat-select formControlName="spouseGender">
+                  <mat-option value="male">Male</mat-option>
+
+                  <mat-option value="female">Female</mat-option>
+
+                  <mat-option value="other">Other</mat-option>
+                </mat-select>
+
+                <mat-error>Please select gender</mat-error>
+              </mat-form-field>
             </div>
 
             <div class="mb-3">
@@ -314,7 +305,7 @@
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="thirdFormGroup">
+      <mat-step [stepControl]="thirdFormGroup" [completed]="isDraft || thirdFormGroup.valid">
         <form [formGroup]="thirdFormGroup">
           <ng-template matStepLabel>Upload Document</ng-template>
 
@@ -373,133 +364,148 @@
                 <label class="block text-sm font-semibold text-slate-700"> Medical Report:</label>
                 <input
                   type="file"
-                  (change)="onFileSelected($event, 'medicalReport')"
+                  (change)="onFileSelected($event, 'medicalCertificate')"
                   class="border border-black p-2 rounded-md"
                 />
               </div>
             </div>
 
             @if (firstFormGroup.value.deathType === 'unnatural') {
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="mb-5">
-                  <label class="block text-sm font-semibold text-slate-700"> PM Report:</label>
-                  <input
-                    type="file"
-                    (change)="onFileSelected($event, 'pmReport')"
-                    class="border border-black p-2 rounded-md"
-                  />
-                </div>
+              <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700"> PM Report:</label>
+                <input
+                  type="file"
+                  (change)="onFileSelected($event, 'pmReport')"
+                  class="border border-black p-2 rounded-md"
+                />
+              </div>
 
-                <div class="mb-5">
-                  <label class="block text-sm font-semibold text-slate-700"> FIR:</label>
-                  <input
-                    type="file"
-                    (change)="onFileSelected($event, 'fir')"
-                    class="border border-black p-2 rounded-md"
-                  />
-                </div>
+              <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700"> FIR:</label>
+                <input
+                  type="file"
+                  (change)="onFileSelected($event, 'fir')"
+                  class="border border-black p-2 rounded-md"
+                />
               </div>
             }
           </mat-card>
 
           <div class="flex justify-between mt-6">
             <button type="button" matButton="filled" matStepperPrevious>Back</button>
-            <button type="button" matButton="filled" color="primary" matStepperNext>Next</button>
+            <button
+              type="submit"
+              matButton="filled"
+              color="primary"
+              (click)="deathCertificate(stepper)"
+            >
+              Submit and Continue to Slot Selection > Next
+            </button>
           </div>
         </form>
+      </mat-step>
 
-        <mat-step [stepControl]="fourthFormGroup" label="Slot Selection">
-          <form [formGroup]="fourthFormGroup">
-            <ng-template>Slot Selection</ng-template>
+      <mat-step [stepControl]="fourthFormGroup" label="Slot Selection">
+        <form [formGroup]="fourthFormGroup">
+          <ng-template>Slot Selection</ng-template>
 
-            <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
-              <span class="text-red-600 font-extrabold text-2xl">Instruction:</span>
-              <br />
-              <p class="text-red-600 font-medium">
-                * Please ensure that all information entered in the application matches the
-                supporting documents. Any mismatch may lead to delays or rejection of the
-                application.
+          <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
+            <span class="text-red-600 font-extrabold text-2xl">Instruction:</span>
+            <br />
+            <p class="text-red-600 font-medium">
+              * Please ensure that all information entered in the application matches the supporting
+              documents. Any mismatch may lead to delays or rejection of the application.
+            </p>
+            <br />
+            <li>
+              <p class="font-medium text-lg">
+                Select a convenient date and time slot for your verification appointment.
               </p>
-              <br />
-              <li>
-                <p class="font-medium text-lg">
-                  Select a convenient date and time slot for your verification appointment.
-                </p>
-              </li>
-              <li>
-                <p class="font-medium text-lg">
-                  Ensure all required documents are ready before joining the verification session.
-                </p>
-              </li>
-              <li>
-                <p class="font-medium text-lg">
-                  Attend the scheduled video call with the assigned clerk for identity and document
-                  verification.
-                </p>
-              </li>
-              <li>
-                <p class="font-medium text-lg">
-                  Successful verification is required for your application to proceed for approval
-                  and certificate issuance.
-                </p>
-              </li>
-              <br />
+            </li>
+            <li>
+              <p class="font-medium text-lg">
+                Ensure all required documents are ready before joining the verification session.
+              </p>
+            </li>
+            <li>
+              <p class="font-medium text-lg">
+                Attend the scheduled video call with the assigned clerk for identity and document
+                verification.
+              </p>
+            </li>
+            <li>
+              <p class="font-medium text-lg">
+                Successful verification is required for your application to proceed for approval and
+                certificate issuance.
+              </p>
+            </li>
+            <br />
 
-              <h2 class="font-semibold text-lg text-blue-600">
-                Select a Date and an available time slot:
-              </h2>
+            <h2 class="font-semibold text-lg text-blue-600">
+              Select a Date and an available time slot:
+            </h2>
 
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10">
-                <mat-form-field class="w-full" appearance="fill">
-                  <mat-label>Offices</mat-label>
-                  <mat-select
-                    formControlName="officeId"
-                    (selectionChange)="officeChanged($event.value)"
-                  >
-                    @for (office of offices; track office._id) {
-                      <mat-option [value]="office._id">{{ office.name }}</mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10">
+              <mat-form-field class="w-full" appearance="fill">
+                <mat-label>Offices</mat-label>
+                <mat-select
+                  formControlName="officeId"
+                  (selectionChange)="officeChanged($event.value)"
+                >
+                  @for (office of offices; track office._id) {
+                    <mat-option [value]="office._id">{{ office.name }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
 
-                <mat-form-field>
-                  <mat-label>Select Date</mat-label>
+              <mat-form-field>
+                <mat-label>Select Date</mat-label>
 
-                  <mat-select
-                    formControlName="slotDate"
-                    (selectionChange)="dateChanged($event.value)"
-                  >
-                    @for (date of availableDates; track date) {
-                      <mat-option [value]="date">
-                        {{ date | date: 'dd MMM yyyy' }}
-                      </mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field>
-                  <mat-label>Select Slot</mat-label>
+                <mat-select
+                  formControlName="slotDate"
+                  (selectionChange)="dateChanged($event.value)"
+                >
+                  @for (date of availableDates; track date) {
+                    <mat-option [value]="date">
+                      {{ date | date: 'dd MMM yyyy' }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Select Slot</mat-label>
 
-                  <mat-select formControlName="slotTime">
-                    @for (slot of availableSlots; track slot._id) {
-                      <mat-option [value]="slot._id">
-                        {{ slot.startTime }} - {{ slot.endTime }}
-                      </mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
-              </div>
-            </mat-card>
-            <div class="flex justify-center mt-12">
-              <button type="button" matButton="filled" class="w-64" (click)="submitApplication()">
+                <mat-select formControlName="slotTime">
+                  @for (slot of availableSlots; track slot._id) {
+                    <mat-option [value]="slot._id">
+                      {{ slot.startTime }} - {{ slot.endTime }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </mat-card>
+          <div class="flex justify-center mt-12">
+            <button
+              type="button"
+              matButton="filled"
+              class="w-64 flex items-center justify-center gap-2"
+              [disabled]="isApplicationSubmitting"
+              (click)="submitApplication()"
+            >
+              @if (isApplicationSubmitting) {
+                <mat-spinner diameter="20"></mat-spinner>
+                <span>Submitting...</span>
+              } @else {
                 Submit
-              </button>
-            </div>
+              }
+            </button>
+          </div>
 
-            <div class="flex justify-between mt-6">
-              <button type="button" matButton="filled" matStepperPrevious>Back</button>
-            </div>
-          </form>
-        </mat-step>
+          <div class="flex justify-between mt-6">
+            <button type="button" matButton="filled" matStepperPrevious>Back</button>
+          </div>
+        </form>
       </mat-step>
     </mat-stepper>
   </div>

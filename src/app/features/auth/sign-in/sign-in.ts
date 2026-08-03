@@ -9,6 +9,7 @@ import { Router, RouterLink } from '@angular/router';
 import { PasswordField } from '../../../shared/password-field/password-field';
 import { EmailField } from '../../../shared/email-field/email-field';
 import { AuthApi } from '../../../@api/auth/auth.api';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-sign-in',
@@ -19,6 +20,7 @@ import { AuthApi } from '../../../@api/auth/auth.api';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
     RouterLink,
     PasswordField,
     EmailField,
@@ -28,6 +30,7 @@ import { AuthApi } from '../../../@api/auth/auth.api';
 })
 export class SignIn {
   hide = signal(true);
+
   private authApi = inject(AuthApi);
   private router = inject(Router);
 
@@ -36,7 +39,11 @@ export class SignIn {
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6),
+      Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,20}$/),
+    ]),
   });
 
   onSubmit() {
@@ -54,8 +61,6 @@ export class SignIn {
       .subscribe({
         next: (response) => {
           this.loading = false;
-
-          // console.log(response);
 
           localStorage.setItem('accessToken', response.accessToken);
           localStorage.setItem('refreshToken', response.refreshToken);
@@ -76,7 +81,7 @@ export class SignIn {
         },
         error: (error) => {
           this.loading = false;
-          this.errorMessage = 'Account is not registered. Please register first.';
+          this.errorMessage = error.error?.message || 'Invalid email or password.';
         },
       });
   }

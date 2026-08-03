@@ -23,21 +23,13 @@
         </mat-form-field>
 
         <mat-form-field appearance="fill" class="w-full">
-          <mat-label>Death Type</mat-label>
-
-          <mat-select formControlName="deathType">
-            @for (type of dType; track type) {
-              <mat-option [value]="type.value">
-                {{ type.viewValue }}
-              </mat-option>
-            }
-          </mat-select>
-
-          <mat-error>Please select Death Type</mat-error>
+          <mat-label>Deceased Father Name</mat-label>
+          <input matInput formControlName="deathTime" />
+          <mat-error>Please enter Father Name</mat-error>
         </mat-form-field>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
         <mat-form-field appearance="fill" class="w-full">
           <mat-label>Deceased Father Name</mat-label>
           <input matInput formControlName="deceasedFatherName" />
@@ -48,6 +40,20 @@
           <mat-label>Deceased Mother Name</mat-label>
           <input matInput formControlName="deceasedMotherName" />
           <mat-error>Please enter Mother Name</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>District</mat-label>
+
+          <mat-select formControlName="district">
+            @for (district of districts; track district._id) {
+              <mat-option [value]="district._id">
+                {{ district.name }}
+              </mat-option>
+            }
+          </mat-select>
+
+          <mat-error>Select District</mat-error>
         </mat-form-field>
       </div>
 

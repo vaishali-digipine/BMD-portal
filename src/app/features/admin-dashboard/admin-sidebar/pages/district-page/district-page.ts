@@ -68,7 +68,7 @@ export class DistrictPage {
         this.districts.set(response.data);
 
         this.dataSource.data = response.data;
-        this.total = response.pagination.total;
+        this.total = response.pagination.totalDocuments;
       },
 
       error: (err: any) => {

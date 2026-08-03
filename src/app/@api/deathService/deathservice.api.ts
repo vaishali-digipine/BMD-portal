@@ -12,11 +12,14 @@ export class DeathserviceApi {
   private path = `${environment.apiUrl}/deaths`;
 
   create(payload: FormData) {
-    const token = localStorage.getItem('accessToken');
+    return this.http.post<DeathService.Apis.CreateResponse>(this.path, payload);
+  }
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.post<DeathService.Apis.CreateResponse>(this.path, payload, { headers });
+  getById(id: string) {
+    return this.http.get<DeathService.Apis.GetByIdResponse>(`${this.path}/${id}`, {});
+  }
+
+  update(id: string, payload: DeathService.Apis.Update) {
+    return this.http.patch<DeathService.Apis.UpdateResponse>(`${this.path}/${id}`, payload);
   }
 }

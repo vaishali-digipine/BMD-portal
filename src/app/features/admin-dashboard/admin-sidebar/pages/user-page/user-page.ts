@@ -66,7 +66,7 @@ export class UserPage {
       next: (response) => {
         this.users = response.data;
         this.dataSource.data = response.data;
-        this.total = response.pagination.total;
+        this.total = response.pagination.totalDocuments;
       },
       error: (err) => {
         console.log(err);

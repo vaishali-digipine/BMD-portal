@@ -63,7 +63,7 @@ export class OfficePage {
 
         this.dataSource.data = response.data;
 
-        this.total = response.pagination.total;
+        this.total = response.pagination.totalDocuments;
       },
 
       error: (err: any) => {

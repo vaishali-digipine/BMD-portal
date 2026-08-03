@@ -1,0 +1,52 @@
+<h2 mat-dialog-title class="flex items-center gap-3 text-3xl font-bold text-slate-800 pb-4">
+  <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+    <mat-icon color="warn">cancel</mat-icon>
+  </div>
+
+  Reject Application
+</h2>
+
+<mat-dialog-content class="pt-4">
+  <div class="flex gap-4 rounded-xl border border-red-200 bg-red-50 p-5 mb-6">
+    <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+      <mat-icon color="warn">warning</mat-icon>
+    </div>
+
+    <div>
+      <h3 class="font-semibold text-lg text-slate-800">Reject this application?</h3>
+
+      <p class="text-gray-600 text-sm">Provide a reason that will be shown to the applicant.</p>
+    </div>
+  </div>
+
+  <mat-form-field appearance="outline" class="w-full max-w-lg">
+    <mat-label>Remarks</mat-label>
+
+    <textarea
+      matInput
+      rows="4"
+      maxlength="300"
+      placeholder="Enter remarks..."
+      [formControl]="remarks"
+    >
+    </textarea>
+
+    <mat-hint align="end"> {{ remarks.value?.length || 0 }}/300 </mat-hint>
+
+    @if (remarks.hasError('required') && remarks.touched) {
+      <mat-error>Remarks are required.</mat-error>
+    }
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="pt-4">
+  <button mat-button (click)="cancel()">
+    <mat-icon>close</mat-icon>
+    Cancel
+  </button>
+
+  <button mat-flat-button color="warn" [disabled]="remarks.invalid" (click)="submit()">
+    <mat-icon>block</mat-icon>
+    Reject
+  </button>
+</mat-dialog-actions>

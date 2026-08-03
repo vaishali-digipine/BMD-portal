@@ -21,15 +21,8 @@ export class StatesApi {
   }
 
   list(page: number, limit: number, search: string) {
-    const token = localStorage.getItem('accessToken');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
     return this.http.get<State.Apis.ListResponse>(
       `${this.path}?page=${page}&limit=${limit}&search=${search}`,
-      { headers },
     );
   }
 
@@ -38,11 +31,6 @@ export class StatesApi {
   }
 
   delete(id: State.Id) {
-    const token = localStorage.getItem('accessToken');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.delete(`${this.path}/${id}`, { headers });
+    return this.http.delete(`${this.path}/${id}`);
   }
 }

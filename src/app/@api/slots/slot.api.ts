@@ -22,4 +22,8 @@ export class SlotApi {
       `${this.path}/available?officeDepartmentId=${officeDepartmentId}&slotDate=${slotDate}`,
     );
   }
+
+  getSlots(page: number, limit: number) {
+    return this.http.get<Slot.Apis.GetResponse>(`${this.path}?page=${page}&limit=${limit}`);
+  }
 }

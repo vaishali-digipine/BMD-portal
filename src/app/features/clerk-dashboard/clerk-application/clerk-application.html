@@ -33,7 +33,7 @@
         </div>
 
         <div>
-          <p class="text-2xl text-black font-bold">8</p>
+          <p class="text-2xl text-black font-bold">{{ totalApplications }}</p>
 
           <h3 class="font-semibold text-slate-800">Total Applications</h3>
         </div>
@@ -49,7 +49,7 @@
         </div>
 
         <div>
-          <p class="text-2xl text-black font-bold">12</p>
+          <p class="text-2xl text-black font-bold">{{ pending }}</p>
 
           <h3 class="font-semibold text-slate-800">Pending</h3>
         </div>
@@ -65,7 +65,7 @@
         </div>
 
         <div>
-          <p class="text-2xl text-black font-bold">3</p>
+          <p class="text-2xl text-black font-bold">{{ accepted }}</p>
 
           <h3 class="font-semibold text-slate-800">Accepted</h3>
         </div>
@@ -81,7 +81,7 @@
         </div>
 
         <div>
-          <p class="text-2xl text-black font-bold">1</p>
+          <p class="text-2xl text-black font-bold">{{ rejected }}</p>
 
           <h3 class="font-semibold text-slate-800">Rejected</h3>
         </div>
@@ -174,14 +174,23 @@
                 <span>View Details</span>
               </button>
 
-              <button mat-menu-item>
+              <button
+                mat-menu-item
+                (click)="editApplication(element)"
+                [disabled]="element.status !== 'pending'"
+              >
+                <mat-icon>description</mat-icon>
+                <span>Edit</span>
+              </button>
+
+              <button mat-menu-item [disabled]="element.status !== 'pending'">
                 <mat-icon>videocam</mat-icon>
                 <span>Video Call</span>
               </button>
               <button
                 mat-menu-item
                 (click)="acceptApplication(element)"
-                [disabled]="element.status === 'accepted'"
+                [disabled]="element.status !== 'pending'"
               >
                 <mat-icon>check_circle</mat-icon>
                 <span>Accept</span>
@@ -189,7 +198,7 @@
               <button
                 mat-menu-item
                 (click)="rejectApplication(element)"
-                [disabled]="element.status === 'rejected'"
+                [disabled]="element.status !== 'pending'"
               >
                 <mat-icon>cancel</mat-icon>
                 <span>Reject</span>
@@ -209,10 +218,13 @@
     </div>
 
     <mat-paginator
-      class="!text-lg !bg-white"
+      class="border-t border-slate-200 bg-white"
       [pageSizeOptions]="[5, 10, 20]"
+      [pageSize]="limit"
+      [length]="total"
+      [pageIndex]="page - 1"
+      (page)="changePage($event)"
       showFirstLastButtons
-      aria-label="Select page of periodic elements"
     >
     </mat-paginator>
   </mat-card>

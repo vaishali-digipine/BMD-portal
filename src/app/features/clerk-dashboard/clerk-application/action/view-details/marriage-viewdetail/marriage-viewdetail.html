@@ -5,7 +5,7 @@
     <img src="/assets/images/logo.png" alt="BMD-portal Logo" class="h-20 w-auto object-contain" />
   </div>
 
-  <button matButton="filled" routerLink="/clerk-application">Back</button>
+  <button matButton="filled" (click)="goBack()">Back</button>
 </nav>
 
 <section class="bg-slate-100 min-h-screen mt-24 py-8">
@@ -37,8 +37,6 @@
         </mat-card-content>
       </mat-card>
 
-      <!-- Service -->
-
       <mat-card class="rounded-2xl shadow-md">
         <mat-card-content>
           <div class="flex items-center gap-4">
@@ -49,13 +47,11 @@
             <div>
               <p class="text-gray-500 text-sm">Service</p>
 
-              <h2 class="text-sm font-bold">{{ application.serviceType }}</h2>
+              <h2 class="text-sm font-bold">{{ application.serviceType | titlecase }}</h2>
             </div>
           </div>
         </mat-card-content>
       </mat-card>
-
-      <!-- Date -->
 
       <mat-card class="rounded-2xl shadow-md">
         <mat-card-content>
@@ -73,8 +69,6 @@
         </mat-card-content>
       </mat-card>
 
-      <!-- Status -->
-
       <mat-card class="rounded-2xl shadow-md">
         <mat-card-content>
           <div class="flex items-center gap-4">
@@ -86,7 +80,7 @@
               <p class="text-gray-500 text-sm">Status</p>
 
               <span class="text-green-700 px-1 py-1 rounded-full text-sm font-semibold">
-                {{ application.status }}
+                {{ application.status | titlecase }}
               </span>
             </div>
           </div>
@@ -104,7 +98,11 @@
               <p class="text-gray-500 text-sm">Appointment Date</p>
 
               <h2 class="text-sm font-bold">
-                {{ application.slotId.slotDate | date: 'dd/MM/yyyy' }}
+                {{
+                  application.slotId === null
+                    ? '___'
+                    : `${(application.slotId.slotDate | date: 'dd/MM/yyyy')} `
+                }}
               </h2>
             </div>
           </div>
@@ -121,8 +119,114 @@
             <div>
               <p class="text-gray-500 text-sm">Slot Time</p>
               <h2 class="text-sm font-bold">
-                {{ application.slotId.startTime }}
+                {{ application.slotId === null ? '___' : `${application.slotId.startTime} ` }}
               </h2>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-6 mt-8">
+      <mat-card class="rounded-2xl shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-4 flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-white/20 flex justify-center items-center">
+            <mat-icon class="text-white"> man </mat-icon>
+          </div>
+
+          <div>
+            <h2 class="text-xl font-semibold text-white">Applicant Details</h2>
+
+            <p class="text-blue-100 text-sm">Applicant Information</p>
+          </div>
+        </div>
+
+        <mat-card-content class="p-6">
+          <div class="grid grid-cols-2 gap-5">
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Applicant Name</p>
+
+              <h3 class="font-semibold text-sm">
+                {{ application.userId.aadharId.firstName }}
+                {{ application.userId.aadharId.middleName }}
+                {{ application.userId.aadharId.lastName }}
+              </h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Aadhar Number</p>
+
+              <h3 class="font-semibold">{{ application.userId.aadharId.aadharNumber }}</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Contact Number</p>
+
+              <h3 class="font-semibold">{{ application.userId.aadharId.contact }}</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Email</p>
+
+              <h3 class="font-semibold break-all">{{ application.userId.aadharId.email }}</h3>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="rounded-2xl shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-400 to-blue-300 px-6 py-4 flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-white/20 flex justify-center items-center">
+            <mat-icon class="text-white"> man </mat-icon>
+          </div>
+
+          <div>
+            <h2 class="text-xl font-semibold text-white">Clerk Details</h2>
+
+            <p class="text-pink-100 text-sm">Clerk's Information</p>
+          </div>
+        </div>
+
+        <mat-card-content class="p-6">
+          <div class="grid grid-cols-2 gap-5">
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Clerk Name</p>
+
+              <h3 class="font-semibold">
+                {{
+                  application.slotId === null
+                    ? '___'
+                    : `${application.clerkId.aadharId.firstName} ${application.clerkId.aadharId.middleName} ${application.clerkId.aadharId.lastName}`
+                }}
+              </h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Aadhar Number</p>
+
+              <h3 class="font-semibold">
+                {{
+                  application.slotId === null
+                    ? '___'
+                    : `${application.clerkId.aadharId.aadharNumber} `
+                }}
+              </h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Contact Number</p>
+
+              <h3 class="font-semibold">
+                {{
+                  application.slotId === null ? '___' : `${application.clerkId.aadharId.contact} `
+                }}
+              </h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Email</p>
+
+              <h3 class="font-semibold break-all">{{ application.clerkId.aadharId.email }}</h3>
             </div>
           </div>
         </mat-card-content>
@@ -427,10 +531,12 @@
               </div>
             </div>
 
-            <button mat-icon-button color="primary">
-              <a href="{{ marriage.brideAadharcard }}">
-                <mat-icon> visibility </mat-icon>
-              </a>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openImage(marriage.brideAadharCard, 'Bride Aadhar card')"
+            >
+              <mat-icon> visibility </mat-icon>
             </button>
           </div>
 
@@ -445,10 +551,12 @@
               </div>
             </div>
 
-            <button mat-icon-button color="primary">
-              <a href="{{ marriage.groomAadharCard }}">
-                <mat-icon> visibility </mat-icon>
-              </a>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openImage(marriage.groomAadharCard, 'Groom Aadhar Card')"
+            >
+              <mat-icon> visibility </mat-icon>
             </button>
           </div>
 
@@ -463,10 +571,12 @@
               </div>
             </div>
 
-            <button mat-icon-button color="primary">
-              <a href="{{ marriage.witnessAadharCard }}">
-                <mat-icon> visibility </mat-icon>
-              </a>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openImage(marriage.witnessAadharCard, 'Witness Aadha Card')"
+            >
+              <mat-icon> visibility </mat-icon>
             </button>
           </div>
 
@@ -481,10 +591,12 @@
               </div>
             </div>
 
-            <button mat-icon-button color="primary">
-              <a href="{{ marriage.brahmanAadharCard }}">
-                <mat-icon> visibility </mat-icon>
-              </a>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openImage(marriage.brahmanAadharCard, 'Brahman Aadhar Card')"
+            >
+              <mat-icon> visibility </mat-icon>
             </button>
           </div>
 
@@ -499,10 +611,12 @@
               </div>
             </div>
 
-            <button mat-icon-button color="primary">
-              <a href="{{ marriage.brideRationCard }}">
-                <mat-icon> visibility </mat-icon>
-              </a>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openImage(marriage.brideRationCard, 'Groom Ration Card')"
+            >
+              <mat-icon> visibility </mat-icon>
             </button>
           </div>
 
@@ -517,10 +631,12 @@
               </div>
             </div>
 
-            <button mat-icon-button color="primary">
-              <a href="{{ marriage.groomRationCard }}">
-                <mat-icon> visibility </mat-icon>
-              </a>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openImage(marriage.groomRationCard, 'Groom Ration Card')"
+            >
+              <mat-icon> visibility </mat-icon>
             </button>
           </div>
 
@@ -535,10 +651,12 @@
               </div>
             </div>
 
-            <button mat-icon-button color="primary">
-              <a href="{{ marriage.bridePhoto }}">
-                <mat-icon> visibility </mat-icon>
-              </a>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openImage(marriage.bridePhoto, 'Groom Ration Card')"
+            >
+              <mat-icon> visibility </mat-icon>
             </button>
           </div>
 
@@ -553,10 +671,12 @@
               </div>
             </div>
 
-            <button mat-icon-button color="primary">
-              <a href="{{ marriage.groomPhoto }}">
-                <mat-icon> visibility </mat-icon>
-              </a>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openImage(marriage.groomPhoto, 'Groom Ration Card')"
+            >
+              <mat-icon> visibility </mat-icon>
             </button>
           </div>
 
@@ -571,10 +691,12 @@
               </div>
             </div>
 
-            <button mat-icon-button color="primary">
-              <a href="{{ marriage.invitationCard }}">
-                <mat-icon> visibility </mat-icon>
-              </a>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openImage(marriage.invitationCard, 'Groom Ration Card')"
+            >
+              <mat-icon> visibility </mat-icon>
             </button>
           </div>
         </div>

@@ -5,7 +5,7 @@
     <img src="/assets/images/logo.png" alt="BMD-portal Logo" class="h-20 w-auto object-contain" />
   </div>
 
-  <button matButton="filled" routerLink="/clerk-application">Back</button>
+  <button matButton="filled" (click)="goBack()">Back</button>
 </nav>
 
 <section class="bg-slate-100 min-h-screen mt-24 py-8">
@@ -37,8 +37,6 @@
         </mat-card-content>
       </mat-card>
 
-      <!-- Service -->
-
       <mat-card class="rounded-2xl shadow-md">
         <mat-card-content>
           <div class="flex items-center gap-4">
@@ -49,13 +47,11 @@
             <div>
               <p class="text-gray-500 text-sm">Service</p>
 
-              <h2 class="text-sm font-bold">{{ application.serviceType }}</h2>
+              <h2 class="text-sm font-bold">{{ application.serviceType | titlecase }}</h2>
             </div>
           </div>
         </mat-card-content>
       </mat-card>
-
-      <!-- Date -->
 
       <mat-card class="rounded-2xl shadow-md">
         <mat-card-content>
@@ -73,8 +69,6 @@
         </mat-card-content>
       </mat-card>
 
-      <!-- Status -->
-
       <mat-card class="rounded-2xl shadow-md">
         <mat-card-content>
           <div class="flex items-center gap-4">
@@ -86,7 +80,7 @@
               <p class="text-gray-500 text-sm">Status</p>
 
               <span class="text-green-700 px-1 py-1 rounded-full text-sm font-semibold">
-                {{ application.status }}
+                {{ application.status | titlecase }}
               </span>
             </div>
           </div>
@@ -104,7 +98,11 @@
               <p class="text-gray-500 text-sm">Appointment Date</p>
 
               <h2 class="text-sm font-bold">
-                {{ application.slotId.slotDate | date: 'dd/MM/yyyy' }}
+                {{
+                  application.slotId === null
+                    ? '___'
+                    : `${(application.slotId.slotDate | date: 'dd/MM/yyyy')} `
+                }}
               </h2>
             </div>
           </div>
@@ -121,8 +119,118 @@
             <div>
               <p class="text-gray-500 text-sm">Slot Time</p>
               <h2 class="text-sm font-bold">
-                {{ application.slotId.startTime }}
+                {{ application.slotId === null ? '___' : `${application.slotId.startTime} ` }}
               </h2>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-6 mt-8">
+      <mat-card class="rounded-2xl shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-4 flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-white/20 flex justify-center items-center">
+            <mat-icon class="text-white"> man </mat-icon>
+          </div>
+
+          <div>
+            <h2 class="text-xl font-semibold text-white">Applicant Details</h2>
+
+            <p class="text-blue-100 text-sm">Applicant Information</p>
+          </div>
+        </div>
+
+        <mat-card-content class="p-6">
+          <div class="grid grid-cols-2 gap-5">
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Applicant Name</p>
+
+              <h3 class="font-semibold text-sm">
+                {{ application.userId.aadharId.firstName }}
+                {{ application.userId.aadharId.middleName }}
+                {{ application.userId.aadharId.lastName }}
+              </h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Aadhar Number</p>
+
+              <h3 class="font-semibold">{{ application.userId.aadharId.aadharNumber }}</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Contact Number</p>
+
+              <h3 class="font-semibold">{{ application.userId.aadharId.contact }}</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Email</p>
+
+              <h3 class="font-semibold break-all">{{ application.userId.aadharId.email }}</h3>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="rounded-2xl shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-400 to-blue-300 px-6 py-4 flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-white/20 flex justify-center items-center">
+            <mat-icon class="text-white"> man </mat-icon>
+          </div>
+
+          <div>
+            <h2 class="text-xl font-semibold text-white">Clerk Details</h2>
+
+            <p class="text-pink-100 text-sm">Clerk's Information</p>
+          </div>
+        </div>
+
+        <mat-card-content class="p-6">
+          <div class="grid grid-cols-2 gap-5">
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Clerk Name</p>
+
+              <h3 class="font-semibold">
+                {{
+                  application.slotId === null
+                    ? '___'
+                    : `${application.clerkId.aadharId.firstName} ${application.clerkId.aadharId.middleName} ${application.clerkId.aadharId.lastName}`
+                }}
+              </h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Aadhar Number</p>
+
+              <h3 class="font-semibold">
+                {{
+                  application.slotId === null
+                    ? '___'
+                    : `${application.clerkId.aadharId.aadharNumber} `
+                }}
+              </h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Contact Number</p>
+
+              <h3 class="font-semibold">
+                {{
+                  application.slotId === null ? '___' : `${application.clerkId.aadharId.contact} `
+                }}
+              </h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Email</p>
+
+              <h3 class="font-semibold break-all">
+                {{
+                  application.slotId === null ? '___' : `${application.clerkId.aadharId.email} }`
+                }}
+              </h3>
             </div>
           </div>
         </mat-card-content>
@@ -160,32 +268,32 @@
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Date of Birth</p>
-              <h3 class="font-semibold">15/06/1970</h3>
-            </div>
-
-            <div class="bg-slate-50 rounded-xl p-4">
-              <p class="text-gray-500 text-sm">Date of Death</p>
               <h3 class="font-semibold">{{ death.deceasedAadharId.dob | date: 'dd/MM/yyyy' }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
-              <p class="text-gray-500 text-sm">Time of Death</p>
+              <p class="text-gray-500 text-sm">Date of Death</p>
               <h3 class="font-semibold">{{ death.deathDate | date: 'dd/MM/yyyy' }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
-              <p class="text-gray-500 text-sm">Place of Death</p>
+              <p class="text-gray-500 text-sm">Time of Death</p>
               <h3 class="font-semibold">{{ death.deathTime }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-gray-500 text-sm">Place of Death</p>
+              <h3 class="font-semibold">{{ death.deathPlace }}</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Gender</p>
-              <h3 class="font-semibold">{{ death.deceasedAadharId.gender }}</h3>
+              <h3 class="font-semibold">{{ death.deceasedAadharId.gender | titlecase }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Death Type</p>
-              <h3 class="font-semibold">{{ death.deathType }}</h3>
+              <h3 class="font-semibold">{{ death.deathType | titlecase }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
@@ -256,12 +364,12 @@
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Birth Date</p>
-              <h3 class="font-semibold">{{ death.spouseAadharId.dob | date: 'dd/mm/yyyy' }}</h3>
+              <h3 class="font-semibold">{{ death.spouseAadharId.dob | date: 'dd/MM/yyyy' }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Gender</p>
-              <h3 class="font-semibold">{{ death.spouseAadharId.gender }}</h3>
+              <h3 class="font-semibold">{{ death.spouseAadharId.gender | titlecase }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4 md:col-span-2">
@@ -302,10 +410,12 @@
               </div>
             </div>
 
-            <button mat-icon-button color="primary">
-              <a href="{{ death.deceasedAadharCard }}">
-                <mat-icon> visibility </mat-icon>
-              </a>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openImage(death.deceasedAadharCard, 'Deceased Aadhar Card')"
+            >
+              <mat-icon> visibility </mat-icon>
             </button>
           </div>
 
@@ -318,10 +428,12 @@
               </div>
             </div>
 
-            <button mat-icon-button color="primary">
-              <a href="{{ death.spouseAadharCard }}">
-                <mat-icon> visibility </mat-icon>
-              </a>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openImage(death.spouseAadharCard, 'Spouse Aadhar Card')"
+            >
+              <mat-icon> visibility </mat-icon>
             </button>
           </div>
 
@@ -334,10 +446,12 @@
               </div>
             </div>
 
-            <button mat-icon-button color="primary">
-              <a href="{{ death.deceasedRationCard }}">
-                <mat-icon> visibility </mat-icon>
-              </a>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openImage(death.deceasedRationCard, 'Deceased Ration Card')"
+            >
+              <mat-icon> visibility </mat-icon>
             </button>
           </div>
 
@@ -350,10 +464,12 @@
               </div>
             </div>
 
-            <button mat-icon-button color="primary">
-              <a href="{{ death.deceasedPhoto }}">
-                <mat-icon> visibility </mat-icon>
-              </a>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openImage(death.deceasedPhoto, 'Deceased Photo')"
+            >
+              <mat-icon> visibility </mat-icon>
             </button>
           </div>
 
@@ -366,44 +482,52 @@
               </div>
             </div>
 
-            <button mat-icon-button color="primary">
-              <a href="{{ death.deceasedMedicalCertificate }}">
-                <mat-icon> visibility </mat-icon>
-              </a>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openImage(death.deceasedMedicalCertificate, 'Medical Report')"
+            >
+              <mat-icon> visibility </mat-icon>
             </button>
           </div>
 
-          <div class="flex justify-between items-center bg-slate-50 rounded-xl p-4">
-            <div class="flex gap-4 items-center">
-              <mat-icon>description</mat-icon>
+          @if (death.deathType === 'unnatural') {
+            <div class="flex justify-between items-center bg-slate-50 rounded-xl p-4">
+              <div class="flex gap-4 items-center">
+                <mat-icon>description</mat-icon>
 
-              <div>
-                <h3 class="font-semibold">PM Report</h3>
+                <div>
+                  <h3 class="font-semibold">PM Report</h3>
+                </div>
               </div>
+
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="openImage(death.pmReport || '', 'PmReport')"
+              >
+                <mat-icon> visibility </mat-icon>
+              </button>
             </div>
 
-            <button mat-icon-button color="primary">
-              <a href="{{ death.pmReport }}">
-                <mat-icon> visibility </mat-icon>
-              </a>
-            </button>
-          </div>
+            <div class="grid md:grid-cols-2 gap-5">
+              <div
+                class="flex justify-between items-center bg-slate-50 rounded-xl p-4 md:col-span-2"
+              >
+                <div class="flex gap-4 items-center">
+                  <mat-icon>gavel</mat-icon>
 
-          <div class="flex justify-between items-center bg-slate-50 rounded-xl p-4 md:col-span-2">
-            <div class="flex gap-4 items-center">
-              <mat-icon>gavel</mat-icon>
+                  <div>
+                    <h3 class="font-semibold">FIR Copy</h3>
+                  </div>
+                </div>
 
-              <div>
-                <h3 class="font-semibold">FIR Copy</h3>
+                <button mat-icon-button color="primary" (click)="openImage(death.fir || '', 'FIR')">
+                  <mat-icon> visibility </mat-icon>
+                </button>
               </div>
             </div>
-
-            <button mat-icon-button color="primary">
-              <a href="{{ death.fir }}">
-                <mat-icon> visibility </mat-icon>
-              </a>
-            </button>
-          </div>
+          }
         </div>
       </mat-card-content>
     </mat-card>

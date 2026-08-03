@@ -11,7 +11,7 @@ import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatTimepickerModule } from '@angular/material/timepicker';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AadharVerification } from '../../../../shared/aadhar-verification/aadhar-verification';
 import { EmailField } from '../../../../shared/email-field/email-field';
 import { DeathserviceApi } from '../../../../@api/deathService/deathservice.api';
@@ -27,6 +27,8 @@ import { District } from '../../../../@api/districts/districts.type';
 import { Office } from '../../../../@api/offices/offices.type';
 import { Auth } from '../../../../@api/auth/auth.type';
 import { DatePipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { DeathService as DeathTypes } from '../../../../@api/deathService/deathService.type';
 
 @Component({
   selector: 'app-death-service',
@@ -41,13 +43,13 @@ import { DatePipe } from '@angular/common';
     MatOptionModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatRadioButton,
-    MatRadioGroup,
     RouterLink,
     MatHint,
     MatStepperModule,
     MatTimepickerModule,
     DatePipe,
+    AadharVerification,
+    MatProgressSpinner,
   ],
   templateUrl: './death-service.html',
   providers: [provideNativeDateAdapter()],
@@ -55,6 +57,7 @@ import { DatePipe } from '@angular/common';
 })
 export class DeathService {
   isLinear = true;
+  stepIndex = 0;
 
   private deathApi = inject(DeathserviceApi);
 
@@ -73,9 +76,13 @@ export class DeathService {
   private slotApi = inject(SlotApi);
 
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   firstFormGroup = new FormGroup({
-    deceasedAadharNumber: new FormControl('', [Validators.required]),
+    deceasedAadharNumber: new FormControl('', [
+      Validators.required,
+      Validators.pattern(/^\d{12}$/),
+    ]),
     deceasedAadharId: new FormControl('', [Validators.required]),
     deceasedName: new FormControl({ value: '', disabled: true }, [Validators.required]),
     deceasedBirthDate: new FormControl<Date | null>({ value: null, disabled: true }, [
@@ -83,22 +90,25 @@ export class DeathService {
     ]),
     deceasedGender: new FormControl({ value: '', disabled: true }, [Validators.required]),
     deathPlace: new FormControl('', [Validators.required]),
-    deathdate: new FormControl('', [Validators.required]),
+    deathDate: new FormControl<string | Date | null>(null, [Validators.required]),
     deceasedFatherName: new FormControl('', [Validators.required]),
     deceasedMotherName: new FormControl('', [Validators.required]),
     deathType: new FormControl('', [Validators.required]),
-    deathTime: new FormControl('', [Validators.required]),
+    deathTime: new FormControl('', [
+      Validators.required,
+      // Validators.pattern(/^([01]\d|2[0-3]):([0-5]\d)$/),
+    ]),
     deceasedStreet: new FormControl({ value: '', disabled: true }, [Validators.required]),
     deceasedCity: new FormControl({ value: '', disabled: true }, [Validators.required]),
     deceasedDistrict: new FormControl({ value: '', disabled: true }, [Validators.required]),
-    districtId: new FormControl('', [Validators.required]),
+    deathDistrict: new FormControl('', [Validators.required]),
     deceasedSubDistrict: new FormControl({ value: '', disabled: true }, [Validators.required]),
     deceasedState: new FormControl({ value: '', disabled: true }, [Validators.required]),
     deceasedPinCode: new FormControl({ value: '', disabled: true }, [Validators.required]),
   });
 
   secondFormGroup = new FormGroup({
-    spouseAadharNumber: new FormControl('', [Validators.required]),
+    spouseAadharNumber: new FormControl('', [Validators.required, Validators.pattern(/^\d{12}$/)]),
     spouseAadharId: new FormControl('', [Validators.required]),
     spouseName: new FormControl({ value: '', disabled: true }, [Validators.required]),
     spouseEmail: new FormControl({ value: '', disabled: true }, [Validators.required]),
@@ -142,6 +152,7 @@ export class DeathService {
   departmentId = '';
   officeDepartmentId = '';
   selectedSlotId = '';
+  applicationId = '';
 
   availableDates: string[] = [];
 
@@ -153,6 +164,8 @@ export class DeathService {
 
   deathServiceId = '';
   serviceType: any;
+  isApplicationSubmitting = false;
+  isDraft = false;
 
   constructor() {
     this.firstFormGroup.controls.deathType.valueChanges.subscribe((value) => {
@@ -171,6 +184,55 @@ export class DeathService {
       }
     });
     this.selectDistricts();
+
+    this.route.queryParams.subscribe((params) => {
+      if (params['applicationId']) {
+        this.isDraft = true;
+        this.loadDraft(params['applicationId']);
+      }
+    });
+  }
+
+  loadDraft(applicationId: string) {
+    this.applicationApi.getById(applicationId).subscribe({
+      next: (response) => {
+        const application = response.data;
+        const death = application.serviceId as DeathTypes.Detail;
+
+        this.applicationId = application._id;
+        this.deathServiceId = death._id;
+
+        this.firstFormGroup.patchValue({
+          deceasedAadharId: death.deceasedAadharId._id,
+          deceasedAadharNumber: death.deceasedAadharId.aadharNumber,
+          deathPlace: death.deathPlace,
+          deathDate: death.deathDate,
+          deceasedFatherName: death.deceasedFatherName,
+          deceasedMotherName: death.deceasedMotherName,
+          deathType: death.deathType,
+          deathTime: death.deathTime,
+          deathDistrict: death.deathDistrict._id,
+        });
+
+        this.secondFormGroup.patchValue({
+          spouseAadharId: death.spouseAadharId._id,
+          spouseAadharNumber: death.spouseAadharId.aadharNumber,
+        });
+
+        this.onDeceasedAadharVerified({
+          data: death.deceasedAadharId,
+        } as Auth.Apis.AadharDetailResponse);
+
+        this.onSpouseAadharVerified({
+          data: death.spouseAadharId,
+        } as Auth.Apis.AadharDetailResponse);
+
+        this.selectOffices(death.deathDistrict._id);
+
+        this.stepIndex = 3;
+      },
+      error: console.error,
+    });
   }
 
   selectDistricts() {
@@ -243,19 +305,25 @@ export class DeathService {
     if (
       this.firstFormGroup.invalid ||
       this.secondFormGroup.invalid ||
-      this.thirdFormGroup.invalid
+      (!this.isDraft && this.thirdFormGroup.invalid)
     ) {
+      return;
+    }
+    if (this.isDraft) {
+      stepper.next();
       return;
     }
 
     const formData = new FormData();
 
     formData.append('deceasedAadharId', this.firstFormGroup.value.deceasedAadharId!);
-    formData.append('placeofDate', this.firstFormGroup.value.deathPlace!);
-    formData.append('dateOfDeath', this.firstFormGroup.value.deathdate!);
+    formData.append('deathPlace', this.firstFormGroup.value.deathPlace!);
+    formData.append('deathDate', this.firstFormGroup.value.deathDate!.toString());
     formData.append('deceasedFatherName', this.firstFormGroup.value.deceasedFatherName!);
     formData.append('deceasedMotherName', this.firstFormGroup.value.deceasedMotherName!);
-    formData.append('deathType', this.firstFormGroup.value.deathType!);
+
+    formData.append('deathTime', this.firstFormGroup.value.deathTime!);
+    formData.append('deathDistrict', this.firstFormGroup.value.deathDistrict!);
 
     formData.append('spouseAadharId', this.secondFormGroup.value.spouseAadharId!);
 
@@ -271,40 +339,26 @@ export class DeathService {
       formData.append('fir', this.fir);
     }
 
+    this.isApplicationSubmitting = true;
+
     this.deathApi.create(formData).subscribe({
       next: (response) => {
-        console.log(formData);
-        console.log(response);
-        alert('Birth Certificate Applied Successfully');
+        this.isApplicationSubmitting = false;
+        alert('Death Certificate Applied Successfully');
+        const death = response.data.death;
+
+        this.deathServiceId = death._id;
+
+        this.selectOffices(death.deathDistrict);
+        this.applicationId = response.data.application._id;
+
         stepper.next();
-        this.selectOffices(response.data.deathdistrict);
-        this.deathServiceId = response.data._id;
       },
       error: (err) => {
+        this.isApplicationSubmitting = true;
         console.error(err);
       },
     });
-  }
-
-  verifyDeceasedAadhar() {
-    this.authApi
-      .aadharDetail({
-        aadharNumber: this.firstFormGroup.value.deceasedAadharNumber!,
-      })
-      .subscribe({
-        next: (response) => this.onDeceasedAadharVerified(response),
-
-        error: (err) => alert(err.error),
-      });
-  }
-
-  verifySpouseAadhar() {
-    this.authApi
-      .aadharDetail({ aadharNumber: this.secondFormGroup.value.spouseAadharNumber! })
-      .subscribe({
-        next: (response) => this.onSpouseAadharVerified(response),
-        error: (err) => alert(err.error),
-      });
   }
 
   onDeceasedAadharVerified(event: Auth.Apis.AadharDetailResponse) {
@@ -321,6 +375,18 @@ export class DeathService {
       deceasedState: event.data.address.state,
       deceasedPinCode: event.data.address.pinCode,
     });
+    if (
+      this.firstFormGroup.value.deceasedAadharNumber ===
+      this.secondFormGroup.value.spouseAadharNumber
+    ) {
+      this.firstFormGroup.controls.deceasedAadharNumber.setErrors({
+        sameAadhar: true,
+      });
+
+      this.secondFormGroup.controls.spouseAadharNumber.setErrors({
+        sameAadhar: true,
+      });
+    }
   }
 
   onSpouseAadharVerified(event: Auth.Apis.AadharDetailResponse) {
@@ -328,6 +394,7 @@ export class DeathService {
       spouseAadharId: event.data._id,
       spouseAadharNumber: event.data.aadharNumber,
       spouseName: `${event.data.firstName} ${event.data.middleName ?? ''} ${event.data.lastName}`,
+      spouseEmail: event.data.email,
       spouseBirthDate: new Date(event.data.dob),
       spouseGender: event.data.gender,
       spouseMobileNumber: event.data.contact,
@@ -338,6 +405,18 @@ export class DeathService {
       spouseState: event.data.address.state,
       spousePinCode: event.data.address.pinCode,
     });
+    if (
+      this.secondFormGroup.value.spouseAadharNumber ===
+      this.firstFormGroup.value.deceasedAadharNumber
+    ) {
+      this.secondFormGroup.controls.spouseAadharNumber.setErrors({
+        sameAadhar: true,
+      });
+
+      this.firstFormGroup.controls.deceasedAadharNumber.setErrors({
+        sameAadhar: true,
+      });
+    }
   }
 
   submitApplication() {
@@ -346,24 +425,22 @@ export class DeathService {
       return;
     }
 
+    this.isApplicationSubmitting = true;
     this.applicationApi
-      .create({
-        serviceId: this.deathServiceId,
-
+      .completeApplication(this.applicationId, {
         officeDepartmentId: this.officeDepartmentId,
-
         slotId: this.fourthFormGroup.value.slotTime!,
-
-        serviceType: this.serviceType,
       })
       .subscribe({
         next: () => {
+          this.isApplicationSubmitting = false;
           alert('Application Submitted Successfully');
 
           this.router.navigate(['/user-dashboard']);
         },
 
         error: (err) => {
+          this.isApplicationSubmitting = false;
           console.log(err);
         },
       });
@@ -425,7 +502,7 @@ export class DeathService {
 
   private readonly _currentYear = new Date().getFullYear();
   readonly minDate = new Date(this._currentYear - 79, 0, 1);
-  readonly maxDate = new Date(this._currentYear + 0, 11, 31);
+  readonly maxDate = new Date();
 
   readonly slotMinDate = new Date(this._currentYear - 0, 0, 1);
   readonly slotMaxDate = new Date(this._currentYear + 1, 11, 31);

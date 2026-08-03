@@ -36,8 +36,16 @@ export class ResetPassword {
   private verificationToken: string = '';
 
   resetPasswordForm = new FormGroup({
-    password: new FormControl('', [Validators.required, Validators.minLength(8)]),
-    confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+      Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,20}$/),
+    ]),
+    confirmPassword: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+      Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,20}$/),
+    ]),
   });
 
   ngOnInit() {
@@ -52,10 +60,10 @@ export class ResetPassword {
       return;
     }
 
-    if (this.resetPasswordForm.value.password !== this.resetPasswordForm.value.confirmPassword) {
-      alert('password do not match');
-      return;
-    }
+    // if (this.resetPasswordForm.value.password !== this.resetPasswordForm.value.confirmPassword) {
+    //   alert('password do not match');
+    //   return;
+    // }
 
     this.authApi
       .resetPassword({

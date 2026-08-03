@@ -11,6 +11,7 @@ import { EmailField } from '../../../shared/email-field/email-field';
 import { AadharVerification } from '../../../shared/aadhar-verification/aadhar-verification';
 import { AuthApi } from '../../../@api/auth/auth.api';
 import { Auth } from '../../../@api/auth/auth.type';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-user-signup',
@@ -25,12 +26,14 @@ import { Auth } from '../../../@api/auth/auth.type';
     PasswordField,
     EmailField,
     AadharVerification,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './user-signup.html',
   styleUrl: './user-signup.css',
 })
 export class UserSignup {
   hide = signal(true);
+  isLoading = false;
 
   private authApi = inject(AuthApi);
   private router = inject(Router);
@@ -41,7 +44,7 @@ export class UserSignup {
   userSignUpForm = new FormGroup({
     aadharNumber: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{12}$/)]),
     userName: new FormControl({ value: '', disabled: true }, [Validators.required]),
-    email: new FormControl({ value: '', disabled: true }, [Validators.required]),
+    email: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.email]),
     mobileNo: new FormControl({ value: '', disabled: true }, [
       Validators.required,
       Validators.minLength(10),
@@ -50,10 +53,13 @@ export class UserSignup {
       Validators.required,
       Validators.minLength(8),
       Validators.maxLength(20),
+      Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,20}$/),
     ]),
     confirmPassword: new FormControl({ value: '', disabled: true }, [
       Validators.required,
       Validators.minLength(8),
+      Validators.maxLength(20),
+      Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,20}$/),
     ]),
   });
 
@@ -66,6 +72,8 @@ export class UserSignup {
       this.userSignUpForm.markAllAsTouched();
       return;
     }
+    this.isLoading = true;
+
     this.authApi
       .register({
         verificationToken: this.verificationToken,
@@ -73,10 +81,13 @@ export class UserSignup {
       })
       .subscribe({
         next: (response) => {
-          console.log(response);
+          this.isLoading = false;
+
           alert('Registration Successful');
         },
         error: (error) => {
+          this.isLoading = false;
+
           alert(error.error.message);
         },
       });

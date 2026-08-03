@@ -11,19 +11,14 @@ export class BirthServicesApi {
   private path = `${environment.apiUrl}/births`;
 
   create(payload: FormData) {
-    const token = localStorage.getItem('accessToken');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.post<BirthService.Apis.CreateResponse>(this.path, payload, { headers });
+    return this.http.post<BirthService.Apis.CreateResponse>(this.path, payload);
   }
 
   getById(id: string) {
-    return this.http.get<BirthService.Base>(`${this.path}/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    });
+    return this.http.get<BirthService.Apis.GetByIdResponse>(`${this.path}/${id}`, {});
+  }
+
+  update(id: string, payload: BirthService.Apis.UpdatePayload) {
+    return this.http.patch<BirthService.Apis.UpdateResponse>(`${this.path}/${id}`, payload);
   }
 }

@@ -1,0 +1,17 @@
+<div class="p-6">
+  <h2 class="text-xl font-semibold text-slate-800 mb-4">
+    {{ data.title }}
+  </h2>
+
+  <div class="flex justify-center">
+    <img
+      [src]="data.image"
+      alt="Document Preview"
+      class="rounded-xl border shadow-lg max-h-[500px] object-contain"
+    />
+  </div>
+
+  <div class="flex justify-end mt-6">
+    <button mat-flat-button color="primary" (click)="close()">OK</button>
+  </div>
+</div>

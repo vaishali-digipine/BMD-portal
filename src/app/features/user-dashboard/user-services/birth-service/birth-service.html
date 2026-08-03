@@ -16,8 +16,8 @@
   </div>
 
   <div class="w-full max-w-dvw mx-auto px-8 pb-10">
-    <mat-stepper linear #stepper>
-      <mat-step [stepControl]="firstFormGroup">
+    <mat-stepper linear #stepper [selectedIndex]="stepIndex">
+      <mat-step [stepControl]="firstFormGroup" [completed]="isDraft || firstFormGroup.valid">
         <form [formGroup]="firstFormGroup">
           <ng-template matStepLabel>Fill out Baby Details</ng-template>
 
@@ -31,18 +31,15 @@
                 <mat-label>Baby Name</mat-label>
 
                 <input matInput type="text" formControlName="babyName" />
-                @if (
-                  firstFormGroup.controls.babyName.hasError('required') &&
-                  firstFormGroup.controls.babyName.touched
-                ) {
-                  <mat-error>Enter Valid Name</mat-error>
-                }
+
+                <mat-error>Enter Valid Name</mat-error>
               </mat-form-field>
 
               <mat-form-field>
                 <mat-label>Birth time</mat-label>
                 <input matInput type="text" formControlName="birthTime" />
-                <mat-error>Choose Birth Time</mat-error>
+
+                <mat-error> Please enter a valid time. </mat-error>
               </mat-form-field>
 
               <mat-form-field appearance="fill" class="w-full">
@@ -56,7 +53,16 @@
               <mat-form-field appearance="fill" class="w-full">
                 <mat-label>Weight</mat-label>
                 <input matInput type="number" min="1" max="10" formControlName="weight" />
-                <mat-error>Enter baby weight</mat-error>
+                @if (firstFormGroup.controls.weight.hasError('required')) {
+                  <mat-error> Weight is required</mat-error>
+                }
+                @if (firstFormGroup.controls.weight.hasError('min')) {
+                  <mat-error>Minimum weight is 0.1 Kg</mat-error>
+                }
+
+                @if (firstFormGroup.controls.weight.hasError('min')) {
+                  <mat-error>Maximum weight is 10 Kg</mat-error>
+                }
               </mat-form-field>
 
               <mat-form-field>
@@ -109,7 +115,7 @@
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="secondFormGroup">
+      <mat-step [stepControl]="secondFormGroup" [completed]="isDraft || secondFormGroup.valid">
         <form [formGroup]="secondFormGroup">
           <ng-template matStepLabel>Fill out Parents Details</ng-template>
 
@@ -124,24 +130,10 @@
               >
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <mat-form-field appearance="fill" class="w-full">
-                <mat-label>Aadhar number</mat-label>
-                <input matInput type="text" formControlName="fatherAadharNumber" />
-
-                <mat-error>Enter Valid Aadhar Number</mat-error>
-              </mat-form-field>
-
-              <div class="flex items-start">
-                <button
-                  mat-raised-button
-                  class="!px-6 !py-6 !border !border-green-600 !text-white !bg-green-600"
-                  (click)="verifyFatherAadhar()"
-                >
-                  Verify
-                </button>
-              </div>
-            </div>
+            <app-aadhar-verification
+              [aadharControl]="secondFormGroup.controls.fatherAadharNumber"
+              (verified)="onFatherAadharVerified($event)"
+            ></app-aadhar-verification>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
               <mat-form-field appearance="fill" class="w-full">
@@ -229,24 +221,10 @@
               >
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <mat-form-field appearance="fill" class="w-full">
-                <mat-label>Aadhar number</mat-label>
-                <input matInput type="text" formControlName="motherAadharNumber" />
-
-                <mat-error>Enter Valid Aadhar Number</mat-error>
-              </mat-form-field>
-
-              <div class="flex items-start">
-                <button
-                  mat-raised-button
-                  class="!px-6 !py-6 !border !border-green-600 !text-white !bg-green-600"
-                  (click)="verifyMotherAadhar()"
-                >
-                  Verify
-                </button>
-              </div>
-            </div>
+            <app-aadhar-verification
+              [aadharControl]="secondFormGroup.controls.motherAadharNumber"
+              (verified)="onMotherAadharVerified($event)"
+            ></app-aadhar-verification>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
               <mat-form-field appearance="fill" class="w-full">
@@ -382,85 +360,89 @@
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="thirdFormGroup">
-        <form [formGroup]="thirdFormGroup">
-          <ng-template matStepLabel>Upload Document</ng-template>
+      @if (!isDraft) {
+        <mat-step [stepControl]="thirdFormGroup" [completed]="isDraft || thirdFormGroup.valid">
+          <form [formGroup]="thirdFormGroup">
+            <ng-template matStepLabel>Upload Document</ng-template>
 
-          <div class="mb-5">
-            <label class="block text-2xl font-semibold text-slate-700 mt-8"
-              >Upload Documents:</label
-            >
-          </div>
-
-          <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="mb-5">
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                  Father Aadhar Card:</label
-                >
-                <input
-                  type="file"
-                  (change)="onFileSelected($event, 'father')"
-                  class="border border-black p-2 rounded-md"
-                />
-              </div>
-              <div class="mb-5">
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                  Mother Aadhar Card:</label
-                >
-                <input
-                  type="file"
-                  (change)="onFileSelected($event, 'mother')"
-                  class="border border-black p-2 rounded-md"
-                />
-              </div>
-              <div class="mb-5">
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                  Marriage Certificate:</label
-                >
-                <input
-                  type="file"
-                  (change)="onFileSelected($event, 'marriage')"
-                  class="border border-black p-2 rounded-md"
-                />
-              </div>
+            <div class="mb-5">
+              <label class="block text-2xl font-semibold text-slate-700 mt-8"
+                >Upload Documents:</label
+              >
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="mb-5">
-                <label class="block text-sm font-semibold text-slate-700 mb-2"> Ration Card:</label>
-                <input
-                  type="file"
-                  (change)="onFileSelected($event, 'ration')"
-                  class="border border-black p-2 rounded-md"
-                />
+            <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="mb-5">
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Father Aadhar Card:</label
+                  >
+                  <input
+                    type="file"
+                    (change)="onFileSelected($event, 'father')"
+                    class="border border-black p-2 rounded-md"
+                  />
+                </div>
+                <div class="mb-5">
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Mother Aadhar Card:</label
+                  >
+                  <input
+                    type="file"
+                    (change)="onFileSelected($event, 'mother')"
+                    class="border border-black p-2 rounded-md"
+                  />
+                </div>
+                <div class="mb-5">
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Marriage Certificate:</label
+                  >
+                  <input
+                    type="file"
+                    (change)="onFileSelected($event, 'marriage')"
+                    class="border border-black p-2 rounded-md"
+                  />
+                </div>
               </div>
-              <div class="mb-5">
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                  Hospital Report as a proof:</label
-                >
-                <input
-                  type="file"
-                  (change)="onFileSelected($event, 'hospital')"
-                  class="border border-black p-2 rounded-md"
-                />
-              </div>
-            </div>
-          </mat-card>
 
-          <div class="flex justify-between mt-6">
-            <button type="button" matButton="filled" matStepperPrevious>Back</button>
-            <button
-              type="submit"
-              matButton="filled"
-              color="primary"
-              (click)="birthCertificate(stepper)"
-            >
-              Submit and Continue to Slot Selection > Next
-            </button>
-          </div>
-        </form>
-      </mat-step>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="mb-5">
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Ration Card:</label
+                  >
+                  <input
+                    type="file"
+                    (change)="onFileSelected($event, 'ration')"
+                    class="border border-black p-2 rounded-md"
+                  />
+                </div>
+                <div class="mb-5">
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Hospital Report as a proof:</label
+                  >
+                  <input
+                    type="file"
+                    (change)="onFileSelected($event, 'hospital')"
+                    class="border border-black p-2 rounded-md"
+                  />
+                </div>
+              </div>
+            </mat-card>
+
+            <div class="flex justify-between mt-6">
+              <button type="button" matButton="filled" matStepperPrevious>Back</button>
+              <button
+                type="submit"
+                matButton="filled"
+                color="primary"
+                (click)="birthCertificate(stepper)"
+              >
+                Submit and Continue to Slot Selection > Next
+              </button>
+            </div>
+          </form>
+        </mat-step>
+      }
 
       <mat-step [stepControl]="fourthFormGroup" label="Slot Selection">
         <form [formGroup]="fourthFormGroup">
@@ -544,7 +526,19 @@
           </mat-card>
 
           <div class="flex justify-center mt-12">
-            <button matButton="filled" class="w-64" (click)="submitApplication()">Submit</button>
+            <button
+              matButton="filled"
+              class="w-64 flex items-center justify-center gap-2"
+              [disabled]="isApplicationSubmitting"
+              (click)="submitApplication()"
+            >
+              @if (isApplicationSubmitting) {
+                <mat-spinner diameter="20"></mat-spinner>
+                <span>Submitting...</span>
+              } @else {
+                Submit
+              }
+            </button>
           </div>
 
           <div class="flex justify-between mt-6">

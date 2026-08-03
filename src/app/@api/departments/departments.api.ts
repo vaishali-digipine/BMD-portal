@@ -11,11 +11,7 @@ export class DepartmentsApi {
   private path = `${environment.apiUrl}/departments`;
 
   create(payload: Department.Apis.CreatePayload) {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.post<Department.Apis.CreateResponse>(this.path, payload, { headers });
+    return this.http.post<Department.Apis.CreateResponse>(this.path, payload);
   }
 
   list(page: number, limit: number, search: string) {
@@ -33,10 +29,6 @@ export class DepartmentsApi {
   }
 
   delete(id: Department.Id) {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.delete<null>(`${this.path}/${id}`, { headers });
+    return this.http.delete<null>(`${this.path}/${id}`);
   }
 }

@@ -5,7 +5,7 @@
     <img src="/assets/images/logo.png" alt="BMD-portal Logo" class="h-20 w-auto object-contain" />
   </div>
 
-  <button matButton="filled" routerLink="/clerk-application">Back</button>
+  <button matButton="filled" (click)="goBack()">Back</button>
 </nav>
 
 <section class="bg-slate-100 min-h-screen mt-24 py-8">
@@ -45,7 +45,7 @@
             <div>
               <p class="text-gray-500 text-sm">Service</p>
 
-              <h2 class="text-xl font-bold">{{ application.serviceType }}</h2>
+              <h2 class="text-xl font-bold">{{ application.serviceType | titlecase }}</h2>
             </div>
           </div>
         </mat-card-content>
@@ -78,7 +78,7 @@
               <p class="text-gray-500 text-sm">Status</p>
 
               <span class="text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
-                Submitted
+                {{ application.status | titlecase }}
               </span>
             </div>
           </div>
@@ -96,7 +96,11 @@
               <p class="text-gray-500 text-sm">Appointment Date</p>
 
               <h2 class="text-sm font-bold">
-                {{ application.slotId.slotDate | date: 'dd/MM/yyyy' }}
+                {{
+                  application.slotId === null
+                    ? '___'
+                    : `${(application.slotId.slotDate | date: 'dd/MM/yyyy')} `
+                }}
               </h2>
             </div>
           </div>
@@ -113,8 +117,108 @@
             <div>
               <p class="text-gray-500 text-sm">Slot Time</p>
               <h2 class="text-sm font-bold">
-                {{ application.slotId.startTime }}
+                {{ application.slotId === null ? '___' : `${application.slotId.startTime} ` }}
               </h2>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-6 mt-8">
+      <mat-card class="rounded-2xl shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-4 flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-white/20 flex justify-center items-center">
+            <mat-icon class="text-white"> man </mat-icon>
+          </div>
+
+          <div>
+            <h2 class="text-xl font-semibold text-white">Applicant Details</h2>
+
+            <p class="text-blue-100 text-sm">Applicant Information</p>
+          </div>
+        </div>
+
+        <mat-card-content class="p-6">
+          <div class="grid grid-cols-2 gap-5">
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Applicant Name</p>
+
+              <h3 class="font-semibold text-sm">
+                {{ application.userId.aadharId.firstName }}
+                {{ application.userId.aadharId.middleName }}
+                {{ application.userId.aadharId.lastName }}
+              </h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Aadhar Number</p>
+
+              <h3 class="font-semibold">{{ application.userId.aadharId.aadharNumber }}</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Contact Number</p>
+
+              <h3 class="font-semibold">{{ application.userId.aadharId.contact }}</h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm text-gray-500">Email</p>
+
+              <h3 class="font-semibold break-all">{{ application.userId.aadharId.email }}</h3>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="rounded-2xl shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-400 to-blue-300 px-6 py-4 flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-white/20 flex justify-center items-center">
+            <mat-icon class="text-white"> man </mat-icon>
+          </div>
+
+          <div>
+            <h2 class="text-xl font-semibold text-white">Clerk Details</h2>
+
+            <p class="text-pink-100 text-sm">Clerk's Information</p>
+          </div>
+        </div>
+
+        <mat-card-content class="p-6">
+          <div class="grid grid-cols-2 gap-5">
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm font-bold">Clerk Name</p>
+
+              <h3 class="font-semibold">
+                {{
+                  application.slotId === null
+                    ? '___'
+                    : `${application.clerkId.aadharId.firstName} ${application.clerkId.aadharId.middleName} ${application.clerkId.aadharId.lastName}`
+                }}
+              </h3>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm font-bold">Aadhar Number</p>
+
+              {{
+                application.slotId === null
+                  ? '___'
+                  : `${application.clerkId.aadharId.aadharNumber} `
+              }}
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm font-bold">Contact Number</p>
+
+              {{ application.slotId === null ? '___' : `${application.clerkId.aadharId.contact} ` }}
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="text-sm font-bold">Email</p>
+
+              {{ application.slotId === null ? '___' : `${application.clerkId.aadharId.email} ` }}
             </div>
           </div>
         </mat-card-content>
@@ -139,43 +243,43 @@
           <div class="bg-slate-50 rounded-xl p-4">
             <p class="text-gray-500 text-sm">Baby Name</p>
 
-            <h3 class="font-semibold text-lg">{{ birth.birthName }}</h3>
+            <h3 class="text-sm font-bold">{{ birth.birthName }}</h3>
           </div>
 
           <div class="bg-slate-50 rounded-xl p-4 mt-2">
             <p class="text-gray-500 text-sm">Birth Date</p>
 
-            <h3 class="font-semibold text-lg">{{ birth.birthDate | date: 'dd/MM/yyyy' }}</h3>
+            <h3 class="text-sm font-bold">{{ birth.birthDate | date: 'dd/MM/yyyy' }}</h3>
           </div>
 
           <div class="bg-slate-50 rounded-xl p-4 mt-2">
             <p class="text-gray-500 text-sm">Birth Time</p>
 
-            <h3 class="font-semibold text-lg">{{ birth.birthTime }}</h3>
+            <h3 class="text-sm font-bold">{{ birth.birthTime }}</h3>
           </div>
 
           <div class="bg-slate-50 rounded-xl p-4">
             <p class="text-gray-500 text-sm">Birth Place</p>
 
-            <h3 class="font-semibold text-lg">{{ birth.birthPlace }}</h3>
+            <h3 class="text-sm font-bold">{{ birth.birthPlace }}</h3>
           </div>
 
           <div class="bg-slate-50 rounded-xl p-4">
             <p class="text-gray-500 text-sm">Weight</p>
 
-            <h3 class="font-semibold text-lg">{{ birth.birthWeight }} KG</h3>
+            <h3 class="text-sm font-bold">{{ birth.birthWeight }} KG</h3>
           </div>
 
           <div class="bg-slate-50 rounded-xl p-4">
             <p class="text-gray-500 text-sm">Gender</p>
 
-            <h3 class="font-semibold text-lg">{{ birth.birthGender }}</h3>
+            <h3 class="text-sm font-bold">{{ birth.birthGender | titlecase }}</h3>
           </div>
 
           <div class="bg-slate-50 rounded-xl p-4 lg:col-span-3">
             <p class="text-gray-500 text-sm">District</p>
 
-            <h3 class="font-semibold text-lg">{{ birth.birthDistrict.name }}</h3>
+            <h3 class="text-sm font-bold">{{ birth.birthDistrict.name }}</h3>
           </div>
         </div>
       </mat-card-content>
@@ -304,37 +408,37 @@
             <div class="bg-slate-50 rounded-xl p-4 mt-2">
               <p class="text-sm text-gray-500">Street</p>
 
-              <h3 class="font-semibold">{{ birth.fatherAadharId.address.street }}</h3>
+              <h3 class="font-semibold">{{ birth.fatherAadharId.address.street | titlecase }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4 mt-2">
               <p class="text-sm text-gray-500">City</p>
 
-              <h3 class="font-semibold">{{ birth.fatherAadharId.address.city }}</h3>
+              <h3 class="font-semibold">{{ birth.fatherAadharId.address.city | titlecase }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-sm text-gray-500">Sub District</p>
 
-              <h3 class="font-semibold">{{ birth.fatherAadharId.address.taluka }}</h3>
+              <h3 class="font-semibold">{{ birth.fatherAadharId.address.taluka | titlecase }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-sm text-gray-500">District</p>
 
-              <h3 class="font-semibold">{{ birth.fatherAadharId.address.district }}</h3>
+              <h3 class="font-semibold">{{ birth.fatherAadharId.address.district | titlecase }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-sm text-gray-500">State</p>
 
-              <h3 class="font-semibold">{{ birth.fatherAadharId.address.state }}</h3>
+              <h3 class="font-semibold">{{ birth.fatherAadharId.address.state | titlecase }}</h3>
             </div>
 
             <div class="bg-slate-50 rounded-xl p-4">
               <p class="text-sm text-gray-500">Pin Code</p>
 
-              <h3 class="font-semibold">{{ birth.fatherAadharId.address.pinCode }}</h3>
+              <h3 class="font-semibold">{{ birth.fatherAadharId.address.pinCode | titlecase }}</h3>
             </div>
           </div>
         </mat-card-content>
@@ -364,10 +468,12 @@
                 </div>
               </div>
 
-              <button mat-icon-button color="primary">
-                <a href="{{ birth.fatherAadharCard }}">
-                  <mat-icon> visibility </mat-icon>
-                </a>
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="openImage(birth.fatherAadharCard, 'Father Aadhar Card')"
+              >
+                <mat-icon> visibility </mat-icon>
               </button>
             </div>
 
@@ -380,10 +486,12 @@
                 </div>
               </div>
 
-              <button mat-icon-button color="primary">
-                <a href="{{ birth.motherAadharCard }}">
-                  <mat-icon> visibility </mat-icon>
-                </a>
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="openImage(birth.motherAadharCard, 'Mother Aadhar card')"
+              >
+                <mat-icon> visibility </mat-icon>
               </button>
             </div>
 
@@ -396,10 +504,12 @@
                 </div>
               </div>
 
-              <button mat-icon-button color="primary">
-                <a href="{{ birth.marriageCertificate }}">
-                  <mat-icon> visibility </mat-icon>
-                </a>
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="openImage(birth.marriageCertificate, 'Marriage Certificate')"
+              >
+                <mat-icon> visibility </mat-icon>
               </button>
             </div>
 
@@ -412,10 +522,12 @@
                 </div>
               </div>
 
-              <button mat-icon-button color="primary">
-                <a href="{{ birth.rationCard }}">
-                  <mat-icon> visibility </mat-icon>
-                </a>
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="openImage(birth.rationCard, 'Ration Card')"
+              >
+                <mat-icon> visibility </mat-icon>
               </button>
             </div>
 
@@ -428,10 +540,12 @@
                 </div>
               </div>
 
-              <button mat-icon-button color="primary">
-                <a href="{{ birth.birthHospitalReprot }}">
-                  <mat-icon> visibility </mat-icon>
-                </a>
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="openImage(birth.birthHospitalReport, 'Hospital Report')"
+              >
+                <mat-icon> visibility </mat-icon>
               </button>
             </div>
           </div>

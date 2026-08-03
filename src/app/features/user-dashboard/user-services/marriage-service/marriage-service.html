@@ -4,7 +4,7 @@
       <img src="/assets/images/logo.png" alt="Logo" class="h-14" />
     </div>
 
-    <button mat-button class="flex justify-end items-center" routerLink="/user-dashboard">
+    <button mat-button="filled" class="flex justify-end items-center" routerLink="/user-dashboard">
       Home
     </button>
   </div>
@@ -16,8 +16,8 @@
   </div>
 
   <div class="w-full max-w-dvw mx-auto px-8 pb-10">
-    <mat-stepper linear #stepper>
-      <mat-step [stepControl]="firstFormGroup">
+    <mat-stepper linear #stepper [selectedIndex]="stepIndex">
+      <mat-step [stepControl]="firstFormGroup" [completed]="isDraft || firstFormGroup.valid">
         <form [formGroup]="firstFormGroup">
           <ng-template matStepLabel>Fill out Bride Details</ng-template>
 
@@ -25,24 +25,10 @@
             <label class="text-xl font-semibold text-slate-800 mb-4">Bride Details:</label>
           </div>
           <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <mat-form-field appearance="fill" class="w-full">
-                <mat-label>Aadhar number</mat-label>
-                <input matInput type="text" formControlName="brideAadharNumber" />
-                <mat-error>Enter Valid Aadhar Number</mat-error>
-              </mat-form-field>
-
-              <div class="flexitems-start">
-                <button
-                  type="button"
-                  mat-raised-button
-                  class="!px-6 !py-6 !border !border-green-600 !text-white !bg-green-600"
-                  (click)="verifyBrideAadhar()"
-                >
-                  Verify
-                </button>
-              </div>
-            </div>
+            <app-aadhar-verification
+              [aadharControl]="firstFormGroup.controls.brideAadharNumber"
+              (verified)="onBrideAadharVerified($event)"
+            ></app-aadhar-verification>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
               <mat-form-field appearance="fill" class="w-full">
@@ -160,7 +146,7 @@
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="secondFormGroup">
+      <mat-step [stepControl]="secondFormGroup" [completed]="isDraft || secondFormGroup.valid">
         <form [formGroup]="secondFormGroup">
           <ng-template matStepLabel>Fill out Groom Details</ng-template>
 
@@ -169,24 +155,10 @@
           </div>
 
           <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <mat-form-field appearance="fill" class="w-full">
-                <mat-label>Aadhar number</mat-label>
-                <input matInput type="text" formControlName="groomAadharNumber" />
-                <mat-error>Enter Valid Aadhar Number</mat-error>
-              </mat-form-field>
-
-              <div class="flex items-start">
-                <button
-                  type="button"
-                  mat-raised-button
-                  class="!px-6 !py-6 !border !border-green-600 !text-white !bg-green-600"
-                  (click)="verifyGroomAadhar()"
-                >
-                  Verify
-                </button>
-              </div>
-            </div>
+            <app-aadhar-verification
+              [aadharControl]="secondFormGroup.controls.groomAadharNumber"
+              (verified)="onGroomAadharVerified($event)"
+            ></app-aadhar-verification>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
               <mat-form-field appearance="fill" class="w-full">
@@ -305,7 +277,7 @@
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="thirdFormGroup">
+      <mat-step [stepControl]="thirdFormGroup" [completed]="isDraft || thirdFormGroup.valid">
         <form [formGroup]="thirdFormGroup">
           <ng-template matStepLabel>Fill out Marriage Details</ng-template>
           <div class="mb-5">
@@ -354,7 +326,7 @@
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="fourthFormGroup">
+      <mat-step [stepControl]="fourthFormGroup" [completed]="isDraft || fourthFormGroup.valid">
         <form [formGroup]="fourthFormGroup">
           <ng-template matStepLabel>Fill out Witness Details</ng-template>
 
@@ -364,23 +336,10 @@
           <mat-card
             class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black mb-8"
           >
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <mat-form-field appearance="fill" class="w-full">
-                <mat-label>Aadhar number</mat-label>
-                <input matInput type="text" formControlName="witnessAadharNumber" />
-                <mat-error>Enter Valid Aadhar Number</mat-error>
-              </mat-form-field>
-              <div class="flex items-start">
-                <button
-                  type="button"
-                  mat-raised-button
-                  class="!px-6 !py-6 !border !border-green-600 !text-white !bg-green-600"
-                  (click)="verifyWitnessAadhar()"
-                >
-                  Verify
-                </button>
-              </div>
-            </div>
+            <app-aadhar-verification
+              [aadharControl]="fourthFormGroup.controls.witnessAadharNumber"
+              (verified)="onWitnessAadharVerified($event)"
+            ></app-aadhar-verification>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <mat-form-field appearance="fill" class="w-full">
@@ -471,23 +430,10 @@
             <label class="text-xl font-semibold text-slate-800 mb-4">Priest Details:</label>
           </div>
           <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <mat-form-field appearance="fill" class="w-full">
-                <mat-label>Aadhar number</mat-label>
-                <input matInput type="text" formControlName="brahmanAadharNumber" />
-                <mat-error>Enter Valid Aadhar Number</mat-error>
-              </mat-form-field>
-              <div class="flex items-start">
-                <button
-                  type="button"
-                  mat-raised-button
-                  class="!px-6 !py-6 !border !border-green-600 !text-white !bg-green-600"
-                  (click)="verifyBrahmanAadhar()"
-                >
-                  Verify
-                </button>
-              </div>
-            </div>
+            <app-aadhar-verification
+              [aadharControl]="fourthFormGroup.controls.brahmanAadharNumber"
+              (verified)="onBrahmanAadharVerified($event)"
+            ></app-aadhar-verification>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <mat-form-field appearance="fill" class="w-full">
@@ -510,125 +456,135 @@
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="fifthFormGroup" label="Upload Document">
-        <form [formGroup]="fifthFormGroup">
-          <ng-template>Upload Document</ng-template>
+      @if (!isDraft) {
+        <mat-step
+          [stepControl]="fifthFormGroup"
+          label="Upload Document"
+          [completed]="isDraft || fifthFormGroup.valid"
+        >
+          <form [formGroup]="fifthFormGroup">
+            <ng-template>Upload Document</ng-template>
 
-          <div class="mb-5">
-            <label class="text-xl font-semibold text-slate-800 mb-4">Upload Document:</label>
-          </div>
-
-          <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="mb-5">
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                  Bride Aadhar Card:</label
-                >
-                <input
-                  type="file"
-                  (change)="onFileSelected($event, 'bride')"
-                  class="border border-black p-2 rounded-md"
-                />
-              </div>
-              <div class="mb-5">
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                  Groom Aadhar Card:</label
-                >
-                <input
-                  type="file"
-                  (change)="onFileSelected($event, 'groom')"
-                  class="border border-black p-2 rounded-md"
-                />
-              </div>
-              <div class="mb-5">
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                  Witness Aadhar Card:</label
-                >
-                <input
-                  type="file"
-                  (change)="onFileSelected($event, 'witness')"
-                  class="border border-black p-2 rounded-md"
-                />
-              </div>
+            <div class="mb-5">
+              <label class="text-xl font-semibold text-slate-800 mb-4">Upload Document:</label>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="mb-5">
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                  Priest Aadhar Card:</label
-                >
-                <input
-                  type="file"
-                  (change)="onFileSelected($event, 'brahman')"
-                  class="border border-black p-2 rounded-md"
-                />
-              </div>
-              <div class="mb-5">
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                  Bride Ration Card:</label
-                >
-                <input
-                  type="file"
-                  (change)="onFileSelected($event, 'brideRation')"
-                  class="border border-black p-2 rounded-md"
-                />
+            <mat-card class="w-full rounded-2xl shadow-lg p-10 !border !border-solid !border-black">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="mb-5">
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Bride Aadhar Card:</label
+                  >
+                  <input
+                    type="file"
+                    (change)="onFileSelected($event, 'bride')"
+                    class="border border-black p-2 rounded-md"
+                  />
+                </div>
+                <div class="mb-5">
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Groom Aadhar Card:</label
+                  >
+                  <input
+                    type="file"
+                    (change)="onFileSelected($event, 'groom')"
+                    class="border border-black p-2 rounded-md"
+                  />
+                </div>
+                <div class="mb-5">
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Witness Aadhar Card:</label
+                  >
+                  <input
+                    type="file"
+                    (change)="onFileSelected($event, 'witness')"
+                    class="border border-black p-2 rounded-md"
+                  />
+                </div>
               </div>
 
-              <div class="mb-5">
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                  Groom Ration Card:</label
-                >
-                <input
-                  type="file"
-                  (change)="onFileSelected($event, 'groomRation')"
-                  class="border border-black p-2 rounded-md"
-                />
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="mb-5">
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Priest Aadhar Card:</label
+                  >
+                  <input
+                    type="file"
+                    (change)="onFileSelected($event, 'brahman')"
+                    class="border border-black p-2 rounded-md"
+                  />
+                </div>
+                <div class="mb-5">
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Bride Ration Card:</label
+                  >
+                  <input
+                    type="file"
+                    (change)="onFileSelected($event, 'brideRation')"
+                    class="border border-black p-2 rounded-md"
+                  />
+                </div>
+
+                <div class="mb-5">
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Groom Ration Card:</label
+                  >
+                  <input
+                    type="file"
+                    (change)="onFileSelected($event, 'groomRation')"
+                    class="border border-black p-2 rounded-md"
+                  />
+                </div>
               </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="mb-5">
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Bride Photo:</label
+                  >
+                  <input
+                    type="file"
+                    (change)="onFileSelected($event, 'bridePhoto')"
+                    class="border border-black p-2 rounded-md"
+                  />
+                </div>
+                <div class="mb-5">
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Groom Photo:</label
+                  >
+                  <input
+                    type="file"
+                    (change)="onFileSelected($event, 'groomPhoto')"
+                    class="border border-black p-2 rounded-md"
+                  />
+                </div>
+                <div class="mb-5">
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Invitation Card:</label
+                  >
+                  <input
+                    type="file"
+                    (change)="onFileSelected($event, 'invitationCard')"
+                    class="border border-black p-2 rounded-md"
+                  />
+                </div>
+              </div>
+            </mat-card>
+
+            <div class="flex justify-between mt-6">
+              <button type="button" matButton="filled" matStepperPrevious>Back</button>
+              <button
+                type="submit"
+                matButton="filled"
+                color="primary"
+                (click)="marriageCertificate(stepper)"
+              >
+                Submit and Continue to Slot Selection > Next
+              </button>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="mb-5">
-                <label class="block text-sm font-semibold text-slate-700 mb-2"> Bride Photo:</label>
-                <input
-                  type="file"
-                  (change)="onFileSelected($event, 'bridePhoto')"
-                  class="border border-black p-2 rounded-md"
-                />
-              </div>
-              <div class="mb-5">
-                <label class="block text-sm font-semibold text-slate-700 mb-2"> Groom Photo:</label>
-                <input
-                  type="file"
-                  (change)="onFileSelected($event, 'groomPhoto')"
-                  class="border border-black p-2 rounded-md"
-                />
-              </div>
-              <div class="mb-5">
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                  Invitation Card:</label
-                >
-                <input
-                  type="file"
-                  (change)="onFileSelected($event, 'invitationCard')"
-                  class="border border-black p-2 rounded-md"
-                />
-              </div>
-            </div>
-          </mat-card>
-
-          <div class="flex justify-between mt-6">
-            <button type="button" matButton="filled" matStepperPrevious>Back</button>
-            <button
-              type="submit"
-              matButton="filled"
-              color="primary"
-              (click)="marriageCertificate(stepper)"
-            >
-              Submit and Continue to Slot Selection > Next
-            </button>
-          </div>
-        </form>
-      </mat-step>
+          </form>
+        </mat-step>
+      }
 
       <mat-step [stepControl]="sixthFormGroup" label="Slot Selection">
         <form [formGroup]="sixthFormGroup">
@@ -712,7 +668,19 @@
           </mat-card>
 
           <div class="flex justify-center mt-12">
-            <button matButton="filled" class="w-64" (click)="submitApplication()">Submit</button>
+            <button
+              matButton="filled"
+              class="w-64"
+              [disabled]="isApplicationSubmitting"
+              (click)="submitApplication()"
+            >
+              @if (isApplicationSubmitting) {
+                <mat-spinner diameter="20"></mat-spinner>
+                <span>Submitting...</span>
+              } @else {
+                Submit
+              }
+            </button>
           </div>
           <div class="flex justify-between mt-6">
             <button type="button" matButton="filled" matStepperPrevious>Back</button>

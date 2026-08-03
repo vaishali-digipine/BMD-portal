@@ -11,31 +11,14 @@ export class HolidaysApi {
   private path = `${environment.apiUrl}/holidays`;
 
   create(payload: Holiday.Apis.CreatePayload) {
-    const token = localStorage.getItem('accessToken');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.post<Holiday.Apis.CreateResponse>(this.path, payload, { headers });
+    return this.http.post<Holiday.Apis.CreateResponse>(this.path, payload);
   }
 
   list(page: number, limit: number) {
-    const token = localStorage.getItem('accessToken');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
-    return this.http.get<Holiday.Apis.ListResponse>(`${this.path}?page=${page}&limit=${limit}`, {
-      headers,
-    });
+    return this.http.get<Holiday.Apis.ListResponse>(`${this.path}?page=${page}&limit=${limit}`);
   }
 
   delete(id: Holiday.Id) {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.delete<null>(`${this.path}/${id}`, { headers });
+    return this.http.delete<null>(`${this.path}/${id}`);
   }
 }

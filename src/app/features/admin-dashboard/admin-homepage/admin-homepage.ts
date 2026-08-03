@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -38,6 +38,7 @@ export class AdminHomepage {
   private officesApi = inject(OfficesApi);
   private departmentsApi = inject(DepartmentsApi);
   private clerksApi = inject(AuthApi);
+  private cdr = inject(ChangeDetectorRef);
 
   totalUsers = 0;
   totalClerks = 0;
@@ -50,6 +51,7 @@ export class AdminHomepage {
   search = '';
 
   ngOnInit() {
+    this.updateCharts();
     this.getUsers();
     this.getClerks();
     this.getStates();
@@ -61,7 +63,9 @@ export class AdminHomepage {
   getUsers() {
     this.usersApi.userList(this.page, this.limit, this.search).subscribe({
       next: (response) => {
-        this.totalUsers = response.pagination.totalRecords;
+        this.totalUsers = response.pagination.totalDocuments;
+        this.cdr.detectChanges();
+        this.updateCharts();
       },
     });
   }
@@ -69,7 +73,9 @@ export class AdminHomepage {
   getClerks() {
     this.clerksApi.clerkList(this.page, this.limit, this.search).subscribe({
       next: (res) => {
-        this.totalClerks = res.pagination.totalRecords;
+        this.totalClerks = res.pagination.totalDocuments;
+        this.cdr.detectChanges();
+        this.updateCharts();
       },
     });
   }
@@ -77,7 +83,9 @@ export class AdminHomepage {
   getStates() {
     this.statesApi.list(this.page, this.limit, this.search).subscribe({
       next: (res) => {
-        this.totalStates = res.pagination.totalStates;
+        this.totalStates = res.pagination.totalDocuments;
+        this.cdr.detectChanges();
+        this.updateCharts();
       },
     });
   }
@@ -85,7 +93,9 @@ export class AdminHomepage {
   getDistricts() {
     this.districtsApi.list(this.page, this.limit, this.search).subscribe({
       next: (res) => {
-        this.totalDistricts = res.pagination.totalDistricts;
+        this.totalDistricts = res.pagination.totalDocuments;
+        this.cdr.detectChanges();
+        this.updateCharts();
       },
     });
   }
@@ -93,7 +103,9 @@ export class AdminHomepage {
   getOffices() {
     this.officesApi.list(this.page, this.limit, this.search).subscribe({
       next: (res) => {
-        this.totalOffices = res.pagination.totalOffices;
+        this.totalOffices = res.pagination.totalDocuments;
+        this.cdr.detectChanges();
+        this.updateCharts();
       },
     });
   }
@@ -101,114 +113,196 @@ export class AdminHomepage {
   getDepartments() {
     this.departmentsApi.list(this.page, this.limit, this.search).subscribe({
       next: (response) => {
-        this.totalDepartments = response.pagination.totalDepartments;
+        this.totalDepartments = response.pagination.totalDocuments;
+        this.cdr.detectChanges();
+        this.updateCharts();
       },
     });
   }
 
-  constructor() {
+  loadLineChart() {
     this.lineChartOptions = {
       series: [
         {
-          name: 'Users',
-          data: [12, 23, 45, 67, 30, 45, 56, 78, 43, 23, 39, 40],
-        },
-        {
-          name: 'Clerks',
-          data: [4, 6, 10, 6, 79, 4, 7, 23, 20, 15, 35, 27],
-        },
-        {
-          name: 'Offices',
-          data: [33, 33, 32, 34, 10, 30, 40, 35, 34, 32, 45, 23],
-        },
-        {
-          name: 'Districts',
-          data: [33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33],
-        },
-        {
-          name: 'Departments',
-          data: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+          name: 'Count',
+          data: [
+            this.totalUsers,
+            this.totalClerks,
+            this.totalStates,
+            this.totalDistricts,
+            this.totalOffices,
+            this.totalDepartments,
+          ],
         },
       ],
-      chart: {
-        height: 450,
-        type: 'line',
-        zoom: {
-          enabled: false,
-        },
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      stroke: {
-        curve: 'straight',
-      },
-      title: {
-        text: 'Overview Analytics',
-        align: 'left',
-      },
-      colors: ['#0000FF', '#008000', '#800080', '#FFFF00', '#FFA500'],
-      xaxis: {
-        categories: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ],
-      },
-      yaxis: {
-        min: 0,
-        max: 80,
-      },
-    };
 
-    this.pieChartOptions = {
-      series: [25, 15, 3],
       chart: {
-        width: 350,
-        type: 'pie',
-      },
-      labels: ['Users', 'Clerks', 'Departments'],
-      theme: {
-        monochrome: {
-          enabled: true,
+        type: 'line',
+        height: 400,
+        toolbar: {
+          show: false,
         },
       },
-      plotOptions: {
-        pie: {
-          dataLabels: {
-            offset: -5,
-          },
-        },
+
+      stroke: {
+        curve: 'smooth',
+        width: 3,
       },
-      grid: {
-        padding: {
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-        },
+
+      markers: {
+        size: 5,
       },
+
       dataLabels: {
-        formatter(
-          val: number,
-          opts: { w: { globals: { labels: { [x: string]: any } } }; seriesIndex: string | number },
-        ) {
-          const name = opts.w.globals.labels[opts.seriesIndex];
-          return [name, val.toFixed(1) + '%'];
-        },
+        enabled: true,
       },
-      legend: {
-        show: false,
+
+      colors: ['#2563eb'],
+
+      xaxis: {
+        categories: ['Users', 'Clerks', 'States', 'Districts', 'Offices', 'Departments'],
+      },
+
+      title: {
+        text: 'System Overview',
+        align: 'left',
       },
     };
   }
+
+  loadPieChart() {
+    this.pieChartOptions = {
+      series: [
+        this.totalUsers,
+        this.totalClerks,
+        this.totalStates,
+        this.totalDistricts,
+        this.totalOffices,
+      ],
+
+      chart: {
+        type: 'pie',
+        height: 350,
+      },
+
+      labels: ['Users', 'Clerks', 'States', 'Districts', 'Offices'],
+
+      colors: ['#3b82f6', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6'],
+
+      legend: {
+        position: 'bottom',
+      },
+    };
+  }
+
+  updateCharts() {
+    this.loadLineChart();
+    this.loadPieChart();
+  }
+
+  // constructor() {
+  //   this.lineChartOptions = {
+  //     series: [
+  //       {
+  //         name: 'Users',
+  //         data: [12, 23, 45, 67, 30, 45, 56, 78, 43, 23, 39, 40],
+  //       },
+  //       {
+  //         name: 'Clerks',
+  //         data: [4, 6, 10, 6, 79, 4, 7, 23, 20, 15, 35, 27],
+  //       },
+  //       {
+  //         name: 'Offices',
+  //         data: [33, 33, 32, 34, 10, 30, 40, 35, 34, 32, 45, 23],
+  //       },
+  //       {
+  //         name: 'Districts',
+  //         data: [33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33],
+  //       },
+  //       {
+  //         name: 'Departments',
+  //         data: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+  //       },
+  //     ],
+  //     chart: {
+  //       height: 450,
+  //       type: 'line',
+  //       zoom: {
+  //         enabled: false,
+  //       },
+  //     },
+  //     dataLabels: {
+  //       enabled: false,
+  //     },
+  //     stroke: {
+  //       curve: 'straight',
+  //     },
+  //     title: {
+  //       text: 'Overview Analytics',
+  //       align: 'left',
+  //     },
+  //     colors: ['#0000FF', '#008000', '#800080', '#FFFF00', '#FFA500'],
+  //     xaxis: {
+  //       categories: [
+  //         'Jan',
+  //         'Feb',
+  //         'Mar',
+  //         'Apr',
+  //         'May',
+  //         'Jun',
+  //         'Jul',
+  //         'Aug',
+  //         'Sep',
+  //         'Oct',
+  //         'Nov',
+  //         'Dec',
+  //       ],
+  //     },
+  //     yaxis: {
+  //       min: 0,
+  //       max: 80,
+  //     },
+  //   };
+
+  //   this.pieChartOptions = {
+  //     series: [25, 15, 3],
+  //     chart: {
+  //       width: 350,
+  //       type: 'pie',
+  //     },
+  //     labels: ['Users', 'Clerks', 'Departments'],
+  //     theme: {
+  //       monochrome: {
+  //         enabled: true,
+  //       },
+  //     },
+  //     plotOptions: {
+  //       pie: {
+  //         dataLabels: {
+  //           offset: -5,
+  //         },
+  //       },
+  //     },
+  //     grid: {
+  //       padding: {
+  //         top: 0,
+  //         bottom: 0,
+  //         left: 0,
+  //         right: 0,
+  //       },
+  //     },
+  //     dataLabels: {
+  //       formatter(
+  //         val: number,
+  //         opts: { w: { globals: { labels: { [x: string]: any } } }; seriesIndex: string | number },
+  //       ) {
+  //         const name = opts.w.globals.labels[opts.seriesIndex];
+  //         return [name, val.toFixed(1) + '%'];
+  //       },
+  //     },
+  //     legend: {
+  //       show: false,
+  //     },
+  //   };
+  // }
 }

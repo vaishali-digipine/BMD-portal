@@ -8,26 +8,26 @@ export namespace MarriageService {
   export interface Base {
     _id: Id;
     brideAadharId: Aadhar.Id;
-    brideFatherName: String;
+    brideFatherName: string;
     brideMotherName: string;
     groomAadharId: Aadhar.Id;
     groomFatherName: string;
-    groomMotherName: String;
+    groomMotherName: string;
     witnessAadharId: Aadhar.Id;
     witnessRelation: string;
     brahmanAadharId: Aadhar.Id;
     marriageDate: Date;
-    marriageDistrict: string;
-    marriagePlace: String;
-    brideAadharcard: File;
-    groomAadharCard: File;
-    witnessAadharCard: File;
-    brahmanAadharCard: File;
-    brideRationCard: File;
-    groomRationCard: File;
-    bridePhoto: File;
-    groomPhoto: File;
-    invitationCard: File;
+    marriageDistrict: District.Id;
+    marriagePlace: string;
+    brideAadharCard: string;
+    groomAadharCard: string;
+    witnessAadharCard: string;
+    brahmanAadharCard: string;
+    brideRationCard: string;
+    groomRationCard: string;
+    bridePhoto: string;
+    groomPhoto: string;
+    invitationCard: string;
     createdId: string;
     updatedId: string;
   }
@@ -69,7 +69,38 @@ export namespace MarriageService {
         invitationCard: File;
       };
     }
+    export interface UpdatePayload {
+      brideFatherName?: String;
+      brideMotherName?: string;
+      groomFatherName?: string;
+      groomMotherName?: String;
+      marriagePlace?: String;
+      marriageDate?: Date;
+      districId?: string;
+      witnessRelation?: string;
+    }
 
-    export type CreateResponse = Response.Normal<Base>;
+    export interface CreateResponse {
+      message: string;
+      data: {
+        marriage: Base;
+        application: {
+          _id: string;
+          applicationNumber: string;
+          userId: string;
+          clerkId: string | null;
+          officeDepartmentId: string | null;
+          slotId: string | null;
+          serviceId: string;
+          serviceType: string;
+          status: string;
+          remarks: string | null;
+          createdAt: string;
+          updatedAt: string;
+        };
+      };
+    }
+    export type GetByIdResponse = Response.Normal<Detail>;
+    export type UpdateResponse = Response.Normal<Base>;
   }
 }

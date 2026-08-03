@@ -7,20 +7,20 @@ export namespace BirthService {
 
   export interface Base {
     _id: Id;
-    birthName: String;
+    birthName: string;
     birthDate: Date;
     birthTime: string;
-    birthDistrict: string;
-    birthPlace: String;
+    birthDistrict: District.Id;
+    birthPlace: string;
     birthGender: EGender;
     birthWeight: number;
     fatherAadharId: Aadhar.Id;
     motherAadharId: Aadhar.Id;
-    fatherAadharCard: File;
-    motherAadharCard: File;
-    marriageCertificate: File;
-    birthHospitalReprot: File;
-    rationCard: File;
+    fatherAadharCard: string;
+    motherAadharCard: string;
+    marriageCertificate: string;
+    birthHospitalReport: string;
+    rationCard: string;
     createdAt: string;
     updatedAt: string;
   }
@@ -34,7 +34,7 @@ export namespace BirthService {
   export namespace Apis {
     export interface CreatePayload {
       data: {
-        birthName: String;
+        birthName: string;
         birthDate: Date;
         birthTime: string;
         birthDistrict: string;
@@ -50,13 +50,43 @@ export namespace BirthService {
         rationCard: File;
       };
     }
+    export interface UpdatePayload {
+      birthName?: string;
+      birthDate?: Date;
+      birthTime?: string;
+      birthDistrict?: string;
+      birthPlace?: string;
+      birthWeight?: number;
+    }
 
-    export type CreateResponse = Response.Normal<Base>;
-  }
+    export interface CreateResponse {
+      message: string;
+      data: {
+        birth: Base;
+        application: {
+          _id: string;
+          applicationNumber: string;
+          userId: string;
+          clerkId: string | null;
+          officeDepartmentId: string | null;
+          slotId: string | null;
+          serviceId: string;
+          serviceType: string;
+          status: string;
+          remarks: string | null;
+          createdAt: string;
+          updatedAt: string;
+        };
+      };
+    }
 
-  export enum EGender {
-    male = 'male',
-    female = 'female',
-    other = 'other',
+    export type UpdateResponse = Response.Normal<Base>;
+    export type GetByIdResponse = Response.Normal<Detail>;
   }
+}
+
+export enum EGender {
+  male = 'male',
+  female = 'female',
+  other = 'other',
 }

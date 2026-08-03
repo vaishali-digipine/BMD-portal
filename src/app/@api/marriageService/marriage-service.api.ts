@@ -11,19 +11,14 @@ export class MarriageServiceApi {
   private path = `${environment.apiUrl}/marriages`;
 
   create(payload: FormData) {
-    const token = localStorage.getItem('accessToken');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.post<MarriageService.Apis.CreateResponse>(this.path, payload, { headers });
+    return this.http.post<MarriageService.Apis.CreateResponse>(this.path, payload);
   }
 
   getById(id: string) {
-    return this.http.get<MarriageService.Base>(`${this.path}/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    });
+    return this.http.get<MarriageService.Apis.GetByIdResponse>(`${this.path}/${id}`, {});
+  }
+
+  update(id: string, payload: MarriageService.Apis.UpdatePayload) {
+    return this.http.patch<MarriageService.Apis.UpdateResponse>(`${this.path}/${id}`, payload);
   }
 }

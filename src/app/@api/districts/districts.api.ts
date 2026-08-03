@@ -11,11 +11,7 @@ export class DistrictsApi {
   private path = `${environment.apiUrl}/districts`;
 
   create(payload: District.Apis.CreatePayload) {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.post<District.Apis.CreateResponse>(this.path, payload, { headers });
+    return this.http.post<District.Apis.CreateResponse>(this.path, payload);
   }
 
   list(page: number, limit: number, search: string) {
@@ -35,10 +31,6 @@ export class DistrictsApi {
   }
 
   delete(id: District.Id) {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.delete<null>(`${this.path}/${id}`, { headers });
+    return this.http.delete<null>(`${this.path}/${id}`);
   }
 }

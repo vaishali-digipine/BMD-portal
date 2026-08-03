@@ -126,6 +126,7 @@
       class="border-t border-slate-200 bg-white"
       [pageSizeOptions]="[5, 10, 20]"
       [pageSize]="limit"
+      [length]="total"
       [pageIndex]="page - 1"
       (page)="changePage($event)"
       showFirstLastButtons

@@ -11,7 +11,7 @@ import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatTimepickerModule } from '@angular/material/timepicker';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AadharVerification } from '../../../../shared/aadhar-verification/aadhar-verification';
 import { EmailField } from '../../../../shared/email-field/email-field';
 import { Slot } from '../../../../@api/slots/slots.type';
@@ -27,6 +27,8 @@ import { OfficeDepartmentsApi } from '../../../../@api/officeDepartments/office-
 import { SlotApi } from '../../../../@api/slots/slot.api';
 import { Auth } from '../../../../@api/auth/auth.type';
 import { DatePipe } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MarriageService as MarriageTypes } from '../../../../@api/marriageService/marriageService.type';
 
 @Component({
   selector: 'app-marriage-service',
@@ -46,6 +48,8 @@ import { DatePipe } from '@angular/common';
     MatStepperModule,
     MatTimepickerModule,
     DatePipe,
+    AadharVerification,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './marriage-service.html',
   providers: [provideNativeDateAdapter()],
@@ -53,6 +57,7 @@ import { DatePipe } from '@angular/common';
 })
 export class MarriageService {
   isLinear = true;
+  stepIndex = 0;
 
   private marriageApi = inject(MarriageServiceApi);
 
@@ -72,8 +77,10 @@ export class MarriageService {
 
   private router = inject(Router);
 
+  private route = inject(ActivatedRoute);
+
   firstFormGroup = new FormGroup({
-    brideAadharNumber: new FormControl('', [Validators.required]),
+    brideAadharNumber: new FormControl('', [Validators.required, Validators.pattern(/^\d{12}$/)]),
     brideAadharId: new FormControl('', [Validators.required]),
     brideName: new FormControl({ value: '', disabled: true }, [Validators.required]),
     brideFatherName: new FormControl('', [Validators.required]),
@@ -93,7 +100,7 @@ export class MarriageService {
   });
 
   secondFormGroup = new FormGroup({
-    groomAadharNumber: new FormControl('', [Validators.required]),
+    groomAadharNumber: new FormControl('', [Validators.required, Validators.pattern(/^\d{12}$/)]),
     groomAadharId: new FormControl('', [Validators.required]),
     groomName: new FormControl({ value: '', disabled: true }, [Validators.required]),
     groomFatherName: new FormControl('', [Validators.required]),
@@ -113,13 +120,13 @@ export class MarriageService {
   });
 
   thirdFormGroup = new FormGroup({
-    marriageDate: new FormControl('', [Validators.required]),
+    marriageDate: new FormControl<Date | string | null>(null, [Validators.required]),
     marriagePlace: new FormControl('', [Validators.required]),
     districtId: new FormControl('', [Validators.required]),
   });
 
   fourthFormGroup = new FormGroup({
-    witnessAadharNumber: new FormControl('', [Validators.required]),
+    witnessAadharNumber: new FormControl('', [Validators.required, Validators.pattern(/^\d{12}$/)]),
     witnessAadharId: new FormControl('', [Validators.required]),
     witnessName: new FormControl({ value: '', disabled: true }, [Validators.required]),
     witnessMobileNumber: new FormControl({ value: '', disabled: true }, [Validators.required]),
@@ -133,7 +140,7 @@ export class MarriageService {
     witnessState: new FormControl({ value: '', disabled: true }, [Validators.required]),
     witnessPinCode: new FormControl({ value: '', disabled: true }, [Validators.required]),
 
-    brahmanAadharNumber: new FormControl('', [Validators.required]),
+    brahmanAadharNumber: new FormControl('', [Validators.required, Validators.pattern(/^\d{12}$/)]),
     brahmanAadharId: new FormControl('', [Validators.required]),
     brahmanName: new FormControl({ value: '', disabled: true }, [Validators.required]),
     brahmanMobileNo: new FormControl({ value: '', disabled: true }, [Validators.required]),
@@ -167,6 +174,7 @@ export class MarriageService {
   groomPhoto!: File;
   invitationCard!: File;
 
+  applicationId = '';
   departmentId = '';
   officeDepartmentId = '';
   selectedSlotId = '';
@@ -182,8 +190,82 @@ export class MarriageService {
   marriageServiceId = '';
   serviceType: any;
 
+  isDraft = false;
+  isApplicationSubmitting = false;
+
   constructor() {
     this.selectDistricts();
+
+    this.route.queryParams.subscribe((params) => {
+      if (params['applicationId']) {
+        this.isDraft = true;
+        this.loadDraft(params['applicationId']);
+      }
+    });
+  }
+
+  loadDraft(applicationId: string) {
+    this.applicationApi.getById(applicationId).subscribe({
+      next: (response) => {
+        const application = response.data;
+        const marriage = application.serviceId as MarriageTypes.Detail;
+
+        this.applicationId = application._id;
+        this.marriageServiceId = marriage._id;
+
+        this.firstFormGroup.patchValue({
+          brideAadharId: marriage.brideAadharId._id,
+          brideAadharNumber: marriage.brideAadharId.aadharNumber,
+          brideFatherName: marriage.brideFatherName,
+          brideMotherName: marriage.brideMotherName,
+        });
+
+        this.secondFormGroup.patchValue({
+          groomAadharId: marriage.groomAadharId._id,
+          groomAadharNumber: marriage.groomAadharId.aadharNumber,
+          groomFatherName: marriage.groomFatherName,
+          groomMotherName: marriage.groomMotherName,
+        });
+
+        this.thirdFormGroup.patchValue({
+          marriageDate: marriage.marriageDate,
+          marriagePlace: marriage.marriagePlace,
+          districtId: marriage.marriageDistrict._id,
+        });
+
+        this.fourthFormGroup.patchValue({
+          witnessAadharId: marriage.witnessAadharId._id,
+          witnessAadharNumber: marriage.witnessAadharId.aadharNumber,
+          witnessRelation: marriage.witnessRelation,
+
+          brahmanAadharId: marriage.brahmanAadharId._id,
+          brahmanAadharNumber: marriage.brahmanAadharId.aadharNumber,
+        });
+
+        this.onBrideAadharVerified({
+          data: marriage.brideAadharId,
+        } as Auth.Apis.AadharDetailResponse);
+
+        this.onGroomAadharVerified({
+          data: marriage.groomAadharId,
+        } as Auth.Apis.AadharDetailResponse);
+
+        this.onWitnessAadharVerified({
+          data: marriage.witnessAadharId,
+        } as Auth.Apis.AadharDetailResponse);
+
+        this.onBrahmanAadharVerified({
+          data: marriage.brahmanAadharId,
+        } as Auth.Apis.AadharDetailResponse);
+
+        this.selectOffices(marriage.marriageDistrict._id);
+
+        this.stepIndex = 5;
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
   }
 
   selectDistricts() {
@@ -273,7 +355,7 @@ export class MarriageService {
     formData.append('groomFatherName', this.secondFormGroup.value.groomFatherName!);
     formData.append('groomMotherName', this.secondFormGroup.value.groomMotherName!);
 
-    formData.append('marriageDate', this.thirdFormGroup.value.marriageDate!);
+    formData.append('marriageDate', this.thirdFormGroup.value.marriageDate!.toString());
     formData.append('marriagePlace', this.thirdFormGroup.value.marriagePlace!);
     formData.append('marriageDistrict', this.thirdFormGroup.value.districtId!);
 
@@ -293,57 +375,20 @@ export class MarriageService {
 
     this.marriageApi.create(formData).subscribe({
       next: (response) => {
-        alert('Birth Certificate Applied Successfully');
+        alert('Marriage Certificate Applied Successfully');
+        const marriage = response.data.marriage;
+
+        this.marriageServiceId = marriage._id;
+
+        this.selectOffices(marriage.marriageDistrict);
+        this.applicationId = response.data.application._id;
+
         stepper.next();
-        this.selectOffices(response.data.marriageDistrict);
-        this.marriageServiceId = response.data._id;
       },
       error: (err) => {
         console.error(err);
       },
     });
-  }
-
-  verifyBrideAadhar() {
-    this.authApi
-      .aadharDetail({
-        aadharNumber: this.firstFormGroup.value.brideAadharNumber!,
-      })
-      .subscribe({
-        next: (response) => this.onBrideAadharVerified(response),
-
-        error: (err) => alert(err.error),
-      });
-  }
-
-  verifyGroomAadhar() {
-    this.authApi
-      .aadharDetail({ aadharNumber: this.secondFormGroup.value.groomAadharNumber! })
-      .subscribe({
-        next: (response) => this.onGroomAadharVerified(response),
-        error: (err) => alert(err.error),
-      });
-  }
-
-  verifyWitnessAadhar() {
-    this.authApi
-      .aadharDetail({
-        aadharNumber: this.fourthFormGroup.value.witnessAadharNumber!,
-      })
-      .subscribe({
-        next: (response) => this.onWitnessAadharVerified(response),
-
-        error: (err) => alert(err.error),
-      });
-  }
-
-  verifyBrahmanAadhar() {
-    this.authApi
-      .aadharDetail({ aadharNumber: this.fourthFormGroup.value.brahmanAadharNumber! })
-      .subscribe({
-        next: (response) => this.onBrahmanAadharVerified(response),
-        error: (err) => alert(err.error),
-      });
   }
 
   onBrideAadharVerified(event: Auth.Apis.AadharDetailResponse) {
@@ -362,6 +407,12 @@ export class MarriageService {
       brideState: event.data.address.state,
       bridePinCode: event.data.address.pinCode,
     });
+    if (
+      this.firstFormGroup.value.brideAadharNumber === this.secondFormGroup.value.groomAadharNumber
+    ) {
+      this.firstFormGroup.controls.brideAadharNumber.setErrors({ sameAadhar: true });
+      this.secondFormGroup.controls.groomAadharNumber.setErrors({ sameAadhar: true });
+    }
   }
 
   onGroomAadharVerified(event: Auth.Apis.AadharDetailResponse) {
@@ -380,6 +431,12 @@ export class MarriageService {
       groomState: event.data.address.state,
       groomPinCode: event.data.address.pinCode,
     });
+    if (
+      this.secondFormGroup.value.groomAadharNumber === this.firstFormGroup.value.brideAadharNumber
+    ) {
+      this.secondFormGroup.controls.groomAadharNumber.setErrors({ sameAadhar: true });
+      this.firstFormGroup.controls.brideAadharNumber.setErrors({ sameAadhar: true });
+    }
   }
   onWitnessAadharVerified(event: Auth.Apis.AadharDetailResponse) {
     this.fourthFormGroup.patchValue({
@@ -396,6 +453,21 @@ export class MarriageService {
       witnessState: event.data.address.state,
       witnessPinCode: event.data.address.pinCode,
     });
+
+    if (
+      this.fourthFormGroup.value.witnessAadharNumber === this.firstFormGroup.value.brideAadharNumber
+    ) {
+      this.fourthFormGroup.controls.witnessAadharNumber.setErrors({ sameAadhar: true });
+      this.firstFormGroup.controls.brideAadharNumber.setErrors({ sameAadhar: true });
+    }
+
+    if (
+      this.fourthFormGroup.value.witnessAadharNumber ===
+      this.secondFormGroup.value.groomAadharNumber
+    ) {
+      this.fourthFormGroup.controls.witnessAadharNumber.setErrors({ sameAadhar: true });
+      this.secondFormGroup.controls.groomAadharNumber.setErrors({ sameAadhar: true });
+    }
   }
   onBrahmanAadharVerified(event: Auth.Apis.AadharDetailResponse) {
     this.fourthFormGroup.patchValue({
@@ -404,6 +476,28 @@ export class MarriageService {
       brahmanName: `${event.data.firstName} ${event.data.middleName ?? ''} ${event.data.lastName}`,
       brahmanMobileNo: event.data.contact,
     });
+    if (
+      this.fourthFormGroup.value.brahmanAadharNumber === this.firstFormGroup.value.brideAadharNumber
+    ) {
+      this.fourthFormGroup.controls.brahmanAadharNumber.setErrors({ sameAadhar: true });
+      this.firstFormGroup.controls.brideAadharNumber.setErrors({ sameAadhar: true });
+    }
+
+    if (
+      this.fourthFormGroup.value.brahmanAadharNumber ===
+      this.secondFormGroup.value.groomAadharNumber
+    ) {
+      this.fourthFormGroup.controls.brahmanAadharNumber.setErrors({ sameAadhar: true });
+      this.secondFormGroup.controls.groomAadharNumber.setErrors({ sameAadhar: true });
+    }
+
+    if (
+      this.fourthFormGroup.value.brahmanAadharNumber ===
+      this.fourthFormGroup.value.witnessAadharNumber
+    ) {
+      this.fourthFormGroup.controls.brahmanAadharNumber.setErrors({ sameAadhar: true });
+      this.fourthFormGroup.controls.witnessAadharNumber.setErrors({ sameAadhar: true });
+    }
   }
 
   submitApplication() {
@@ -411,25 +505,22 @@ export class MarriageService {
       this.fourthFormGroup.markAllAsTouched();
       return;
     }
-
+    this.isApplicationSubmitting = true;
     this.applicationApi
-      .create({
-        serviceId: this.marriageServiceId,
-
+      .completeApplication(this.applicationId, {
         officeDepartmentId: this.officeDepartmentId,
-
         slotId: this.sixthFormGroup.value.slotTime!,
-
-        serviceType: this.serviceType,
       })
       .subscribe({
         next: () => {
+          this.isApplicationSubmitting = false;
           alert('Application Submitted Successfully');
 
           this.router.navigate(['/user-dashboard']);
         },
 
         error: (err) => {
+          this.isApplicationSubmitting = false;
           console.log(err);
         },
       });
@@ -505,7 +596,7 @@ export class MarriageService {
 
   private readonly _currentYear = new Date().getFullYear();
   readonly minDate = new Date(this._currentYear - 79, 0, 1);
-  readonly maxDate = new Date(this._currentYear + 0, 11, 31);
+  readonly maxDate = new Date();
 
   readonly slotMinDate = new Date(this._currentYear - 0, 0, 1);
   readonly slotMaxDate = new Date(this._currentYear + 1, 11, 31);

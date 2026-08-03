@@ -27,6 +27,7 @@ import { AuthApi } from '../../../@api/auth/auth.api';
 })
 export class ForgotPassword {
   hide = signal(true);
+  loading = false;
 
   showOtp = false;
 
@@ -34,12 +35,12 @@ export class ForgotPassword {
   private router = inject(Router);
 
   otpControls = [
-    new FormControl(''),
-    new FormControl(''),
-    new FormControl(''),
-    new FormControl(''),
-    new FormControl(''),
-    new FormControl(''),
+    new FormControl('', [Validators.required, Validators.pattern('[0-9]')]),
+    new FormControl('', [Validators.required, Validators.pattern('[0-9]')]),
+    new FormControl('', [Validators.required, Validators.pattern('[0-9]')]),
+    new FormControl('', [Validators.required, Validators.pattern('[0-9]')]),
+    new FormControl('', [Validators.required, Validators.pattern('[0-9]')]),
+    new FormControl('', [Validators.required, Validators.pattern('[0-9]')]),
   ];
 
   @Output() verified = new EventEmitter<{
@@ -47,7 +48,7 @@ export class ForgotPassword {
   }>();
 
   forgotPasswordForm = new FormGroup({
-    email: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required, Validators.email]),
   });
 
   onSubmit() {
@@ -55,7 +56,7 @@ export class ForgotPassword {
       this.forgotPasswordForm.markAllAsTouched();
       return;
     }
-
+    this.loading = true;
     this.authApi
       .forgotPassword({
         email: this.forgotPasswordForm.value.email!,
@@ -66,6 +67,7 @@ export class ForgotPassword {
           this.showOtp = true;
         },
         error: () => {
+          this.loading = false;
           alert('Something went wrong');
         },
       });

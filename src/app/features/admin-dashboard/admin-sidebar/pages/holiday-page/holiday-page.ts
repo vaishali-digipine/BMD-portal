@@ -40,8 +40,7 @@ export class HolidayPage {
   holidays = signal<Holiday.Detail[]>([]);
 
   page = 1;
-  limit = 10;
-
+  limit = 5;
   total = 0;
 
   displayedColumns: string[] = [
@@ -77,7 +76,7 @@ export class HolidayPage {
       next: (response) => {
         this.holidays.set(response.data);
         this.dataSource.data = response.data;
-        this.total = response.pagination.total;
+        this.total = response.pagination.totalDocuments;
       },
       error: (err) => {
         console.log(err);

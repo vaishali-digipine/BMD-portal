@@ -59,7 +59,13 @@
         </div>
 
         <div class="flex justify-center mt-4">
-          <button matButton="filled" type="submit" class="w-64">Sign Up</button>
+          <button matButton="filled" type="submit" class="w-64" [disabled]="isLoading">
+            @if (!isLoading) {
+              Sign Up
+            } @else {
+              <mat-spinner diameter="22"></mat-spinner>
+            }
+          </button>
         </div>
 
         <div class="text-center">

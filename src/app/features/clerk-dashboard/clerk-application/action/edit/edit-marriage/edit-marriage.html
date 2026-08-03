@@ -5,21 +5,13 @@
 
       <h3 class="text-xl font-semibold mb-5 text-slate-800">Bride Details</h3>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <mat-form-field appearance="fill">
-          <mat-label>Bride Email</mat-label>
-          <input matInput formControlName="brideEmail" />
-          <mat-error>Enter Bride Email</mat-error>
-        </mat-form-field>
-
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <mat-form-field appearance="fill">
           <mat-label>Bride Mobile Number</mat-label>
           <input matInput formControlName="brideMobileNumber" />
           <mat-error>Enter Mobile Number</mat-error>
         </mat-form-field>
-      </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-5">
         <mat-form-field appearance="fill">
           <mat-label>Bride Father Name</mat-label>
           <input matInput formControlName="brideFatherName" />
@@ -35,21 +27,13 @@
 
       <h3 class="text-xl font-semibold mb-5 text-slate-800">Groom Details</h3>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <mat-form-field appearance="fill">
-          <mat-label>Groom Email</mat-label>
-          <input matInput formControlName="groomEmail" />
-          <mat-error>Enter Groom Email</mat-error>
-        </mat-form-field>
-
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <mat-form-field appearance="fill">
           <mat-label>Groom Mobile Number</mat-label>
           <input matInput formControlName="groomMobileNumber" />
           <mat-error>Enter Mobile Number</mat-error>
         </mat-form-field>
-      </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-5">
         <mat-form-field appearance="fill">
           <mat-label>Groom Father Name</mat-label>
           <input matInput formControlName="groomFatherName" />
@@ -88,9 +72,9 @@
           <mat-label>District</mat-label>
 
           <mat-select formControlName="district">
-            @for (district of districts; track district) {
-              <mat-option [value]="district.value">
-                {{ district.viewValue }}
+            @for (district of districts; track district._id) {
+              <mat-option [value]="district._id">
+                {{ district.name }}
               </mat-option>
             }
           </mat-select>
@@ -101,35 +85,11 @@
 
       <h3 class="text-xl font-semibold mb-5 text-slate-800">Witness Details</h3>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <mat-form-field appearance="fill">
-          <mat-label>Witness Email</mat-label>
-          <input matInput formControlName="witnessEmail" />
-          <mat-error>Enter Witness Email</mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="fill">
-          <mat-label>Witness Mobile Number</mat-label>
-          <input matInput formControlName="witnessMobileNo" />
-          <mat-error>Enter Mobile Number</mat-error>
-        </mat-form-field>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-5">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <mat-form-field appearance="fill" class="w-full">
           <mat-label>Witness Relation</mat-label>
           <input matInput formControlName="witnessRelation" />
           <mat-error>Enter Witness Relation</mat-error>
-        </mat-form-field>
-      </div>
-
-      <h3 class="text-xl font-semibold mb-5 text-slate-800">Priest Details</h3>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <mat-form-field appearance="fill">
-          <mat-label>Priest Mobile Number</mat-label>
-          <input matInput formControlName="priestMobileNo" />
-          <mat-error>Enter Priest Mobile Number</mat-error>
         </mat-form-field>
       </div>
 

@@ -61,8 +61,6 @@ export class AadharVerification {
 
     this.authApi.verifyOtp({ aadharNumber: this.aadharControl.value, otpNumber: otp }).subscribe({
       next: (response) => {
-        // alert(response.message);
-
         this.verified.emit({
           verificationToken: response.verificationToken,
           data: response.data,
@@ -73,5 +71,17 @@ export class AadharVerification {
         alert(err.error);
       },
     });
+  }
+
+  focusNext(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    if (input.value.length !== 1) return;
+
+    const currentField = input.closest('mat-form-field');
+    const nextField = currentField?.nextElementSibling as HTMLElement | null;
+    const nextInput = nextField?.querySelector('input') as HTMLInputElement | null;
+
+    nextInput?.focus();
   }
 }

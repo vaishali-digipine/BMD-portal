@@ -11,11 +11,7 @@ export class OfficesApi {
   private path = `${environment.apiUrl}/offices`;
 
   create(payload: Office.Apis.CreatePayload) {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.post<Office.Apis.CreateResponse>(this.path, payload, { headers });
+    return this.http.post<Office.Apis.CreateResponse>(this.path, payload);
   }
 
   list(page: number, limit: number, search: string) {
@@ -29,10 +25,6 @@ export class OfficesApi {
   }
 
   delete(id: Office.Id) {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.delete<null>(`${this.path}/${id}`, { headers });
+    return this.http.delete<null>(`${this.path}/${id}`);
   }
 }

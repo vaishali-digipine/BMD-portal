@@ -13,9 +13,9 @@ export namespace Application {
     _id: Id;
     applicationNumber: string;
     userId: User.Id;
-    clerkId: User.Id;
-    officeDepartmentId: string;
-    slotId: Slot.Id;
+    clerkId: User.Id | null;
+    officeDepartmentId: OfficeDepartment.Detail | null;
+    slotId: Slot.Id | null;
     serviceId: BirthService.Id | MarriageService.Id | DeathService.Id;
     serviceType: EServiceType;
     status: EApplicationStatus;
@@ -40,8 +40,8 @@ export namespace Application {
     export interface Create {
       officeDepartmentId: string;
       slotId: string;
-      serviceId: string;
-      serviceType: EServiceType;
+      // serviceId: string;
+      // serviceType: EServiceType;
     }
 
     export type CreateResponse = Response.Normal<Detail>;
@@ -55,19 +55,39 @@ export namespace Application {
 
     export type GetResponse = Response.Normal<Detail>;
 
-    export interface ListResponse {
-      message: string;
-      pagination: {
-        page: number;
-        limit: number;
-        totalApplications: number;
-        totalPages: number;
-      };
+    //
 
-      data: Detail[];
-    }
+    // export interface ListResponse {
+    //   message: string;
+    //   pagination: {
+    //     page: number;
+    //     limit: number;
+    //     totalDocuments: number;
+    //     totalPages: number;
+    //   };
+
+    //   data: Detail[];
+    // }
+    export type ListResponse = Response.Paginated<Detail>;
 
     export type DeleteResponse = Response.Normal<null>;
+
+    export interface CompleteApplication {
+      officeDepartmentId: string;
+      slotId: string;
+    }
+
+    export interface CompleteApplicationData {
+      application: Detail;
+    }
+
+    export type CompleteApplicationResponse = Response.Normal<CompleteApplicationData>;
+
+    export interface ResumeData {
+      application: Detail;
+    }
+
+    export type ResumeResponse = Response.Normal<ResumeData>;
   }
 }
 
@@ -81,4 +101,5 @@ export enum EApplicationStatus {
   pending = 'pending',
   accepted = 'accepted',
   rejected = 'rejected',
+  draft = 'draft',
 }

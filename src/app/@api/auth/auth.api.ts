@@ -12,21 +12,12 @@ export class AuthApi {
   private path = environment.apiUrl;
 
   login(payload: Auth.Apis.LoginPayload) {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.post<Auth.Apis.LoginResponse>(`${this.path}/auth/login`, payload, { headers });
+    return this.http.post<Auth.Apis.LoginResponse>(`${this.path}/auth/login`, payload);
   }
 
   userList(page: number, limit: number, search: string) {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
     return this.http.get<Auth.Apis.UserListResponse>(
       `${this.path}/users?paginate=true&page=${page}&limit=${limit}&search=${search}`,
-      { headers },
     );
   }
 
@@ -52,14 +43,9 @@ export class AuthApi {
   }
 
   forgotPassword(payload: Auth.Apis.ForgotPasswordPayload) {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
     return this.http.post<Auth.Apis.ForgotPasswordResponse>(
       `${this.path}/auth/forgot-password`,
       payload,
-      { headers },
     );
   }
 
@@ -78,68 +64,32 @@ export class AuthApi {
   }
 
   register(payload: Auth.Apis.RegisterPayload) {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.post<Auth.Apis.RegisterResponse>(`${this.path}/auth/register`, payload, {
-      headers,
-    });
+    return this.http.post<Auth.Apis.RegisterResponse>(`${this.path}/auth/register`, payload);
   }
 
   registerClerk(payload: FormData) {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.post<Auth.Apis.ClerkRegisterResponse>(`${this.path}/clerks`, payload, {
-      headers,
-    });
+    return this.http.post<Auth.Apis.ClerkRegisterResponse>(`${this.path}/clerks`, payload);
   }
 
   clerkList(page: number, limit: number, search: string) {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
     return this.http.get<Auth.Apis.ClerkListResponse>(
       `${this.path}/clerks?paginate=true&page=${page}&limit=${limit}&search=${search}&sortBy=employeeId&sortOrder=asc`,
-      { headers },
     );
   }
 
   deleteClerk(id: string) {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.delete(`${this.path}/clerks/${id}`, { headers });
+    return this.http.delete(`${this.path}/clerks/${id}`);
   }
 
   deleteUser(id: string) {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.delete(`${this.path}/users/${id}`, { headers });
+    return this.http.delete(`${this.path}/users/${id}`);
   }
 
   profile() {
-    const token = localStorage.getItem('accessToken');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
-    return this.http.get<Auth.Apis.ProfileResponse>(`${this.path}/auth/profile`, { headers });
+    return this.http.get<Auth.Apis.ProfileResponse>(`${this.path}/auth/profile`);
   }
 
   logout() {
-    const token = localStorage.getItem('accessToken');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.post<Auth.Apis.LogoutResponse>(`${this.path}/auth/logout`, {}, { headers });
+    return this.http.post<Auth.Apis.LogoutResponse>(`${this.path}/auth/logout`, {});
   }
 }

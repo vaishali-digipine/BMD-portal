@@ -1,12 +1,8 @@
 interface TPagination {
-  totalDepartments: number;
-  totalOffices: number;
-  totalDistricts: number;
-  totalStates: number;
-  totalRecords: number;
   page: number;
   limit: number;
-  total: number;
+  totalPage: number;
+  totalDocuments: number;
 }
 export namespace Response {
   export interface Normal<T> {

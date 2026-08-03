@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -11,7 +11,7 @@ import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatTimepickerModule } from '@angular/material/timepicker';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AadharVerification } from '../../../../shared/aadhar-verification/aadhar-verification';
 import { EmailField } from '../../../../shared/email-field/email-field';
 import { BirthServicesApi } from '../../../../@api/birthService/birth-services.api';
@@ -27,6 +27,8 @@ import { District } from '../../../../@api/districts/districts.type';
 import { Office } from '../../../../@api/offices/offices.type';
 import { Auth } from '../../../../@api/auth/auth.type';
 import { DatePipe } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { BirthService as BirthTypes } from '../../../../@api/birthService/birthServices.type';
 
 @Component({
   selector: 'app-birth-service',
@@ -46,6 +48,8 @@ import { DatePipe } from '@angular/common';
     MatHint,
     MatTimepickerModule,
     MatStepperModule,
+    AadharVerification,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './birth-service.html',
   providers: [provideNativeDateAdapter()],
@@ -53,6 +57,7 @@ import { DatePipe } from '@angular/common';
 })
 export class BirthService {
   isLinear = true;
+  stepIndex = 0;
 
   private birthApi = inject(BirthServicesApi);
 
@@ -71,14 +76,18 @@ export class BirthService {
   private slotApi = inject(SlotApi);
 
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   firstFormGroup = new FormGroup({
     babyName: new FormControl('', [Validators.required]),
-    birthTime: new FormControl('', [Validators.required]),
+    birthTime: new FormControl('', [
+      Validators.required,
+      // Validators.pattern(/^([01]\d|2[0-3]):([0-5]\d)$/),
+    ]),
     birthPlace: new FormControl('', [Validators.required]),
-    birthDate: new FormControl('', [Validators.required]),
+    birthDate: new FormControl<Date | null>(null, [Validators.required]),
     gender: new FormControl('', [Validators.required]),
-    weight: new FormControl('', [Validators.required]),
+    weight: new FormControl('', [Validators.required, Validators.min(0.1), Validators.max(10)]),
     districtId: new FormControl('', Validators.required),
   });
 
@@ -97,10 +106,10 @@ export class BirthService {
     fatherPinCode: new FormControl({ value: '', disabled: true }, [Validators.required]),
 
     fatherAadharId: new FormControl('', Validators.required),
-    fatherAadharNumber: new FormControl('', Validators.required),
+    fatherAadharNumber: new FormControl('', [Validators.required, Validators.pattern(/^\d{12}$/)]),
 
     motherAadharId: new FormControl('', Validators.required),
-    motherAadharNumber: new FormControl('', Validators.required),
+    motherAadharNumber: new FormControl('', [Validators.required, Validators.pattern(/^\d{12}$/)]),
     motherName: new FormControl({ value: '', disabled: true }, [Validators.required]),
     motherContactNumber: new FormControl({ value: '', disabled: true }, [Validators.required]),
     motherEmail: new FormControl({ value: '', disabled: true }, [Validators.required]),
@@ -138,7 +147,8 @@ export class BirthService {
 
   private readonly _currentYear = new Date().getFullYear();
   readonly minDate = new Date(this._currentYear - 79, 0, 1);
-  readonly maxDate = new Date(this._currentYear + 0, 11, 31);
+
+  readonly maxDate = new Date();
 
   readonly slotMinDate = new Date(this._currentYear - 0, 0, 1);
   readonly slotMaxDate = new Date(this._currentYear + 1, 11, 31);
@@ -162,10 +172,62 @@ export class BirthService {
   offices: Office.Detail[] = [];
 
   birthServiceId = '';
+  applicationId = '';
+
+  isDraft = false;
   serviceType: any;
+  isApplicationSubmitting = false;
 
   constructor() {
     this.selectDistricts();
+
+    this.route.queryParams.subscribe((params) => {
+      if (params['applicationId']) {
+        this.isDraft = true;
+        this.loadDraft(params['applicationId']);
+      }
+    });
+  }
+
+  loadDraft(applicationId: string) {
+    this.applicationApi.getById(applicationId).subscribe({
+      next: (response) => {
+        const application = response.data;
+        const birth = application.serviceId as BirthTypes.Detail;
+
+        this.applicationId = application._id;
+        this.birthServiceId = birth._id;
+
+        this.firstFormGroup.patchValue({
+          babyName: birth.birthName,
+          birthDate: birth.birthDate,
+          birthTime: birth.birthTime,
+          districtId: birth.birthDistrict._id,
+          birthPlace: birth.birthPlace,
+          gender: birth.birthGender,
+          weight: String(birth.birthWeight),
+        });
+
+        this.secondFormGroup.patchValue({
+          fatherAadharId: birth.fatherAadharId._id,
+          fatherAadharNumber: birth.fatherAadharId.aadharNumber,
+
+          motherAadharId: birth.motherAadharId._id,
+          motherAadharNumber: birth.motherAadharId.aadharNumber,
+        });
+
+        this.onFatherAadharVerified({
+          data: birth.fatherAadharId,
+        } as Auth.Apis.AadharDetailResponse);
+
+        this.onMotherAadharVerified({
+          data: birth.motherAadharId,
+        } as Auth.Apis.AadharDetailResponse);
+
+        this.selectOffices(birth.birthDistrict._id);
+        this.stepIndex = 3;
+      },
+    });
   }
 
   selectDistricts() {
@@ -192,7 +254,11 @@ export class BirthService {
     this.officeApi.selectOffice(districtId).subscribe({
       next: (response) => {
         this.offices = response.data;
+        // if (this.isDraft) {
+        //   this.stepIndex = 3;
+        // }
       },
+
       error: (err) => console.log(err),
     });
   }
@@ -279,15 +345,20 @@ export class BirthService {
     if (
       this.firstFormGroup.invalid ||
       this.secondFormGroup.invalid ||
-      this.thirdFormGroup.invalid
+      (!this.isDraft && this.thirdFormGroup.invalid)
     ) {
+      return;
+    }
+    if (this.isDraft) {
+      stepper.next();
+
       return;
     }
 
     const formData = new FormData();
 
     formData.append('birthName', this.firstFormGroup.value.babyName!);
-    formData.append('birthDate', this.firstFormGroup.value.birthDate!);
+    formData.append('birthDate', this.firstFormGroup.value.birthDate!.toISOString());
     formData.append('birthTime', this.firstFormGroup.value.birthTime!);
     formData.append('birthDistrict', this.firstFormGroup.value.districtId!);
     formData.append('birthPlace', this.firstFormGroup.value.birthPlace!);
@@ -306,35 +377,19 @@ export class BirthService {
     this.birthApi.create(formData).subscribe({
       next: (response) => {
         alert('Birth Certificate Applied Successfully');
+        const birth = response.data.birth;
+
+        this.birthServiceId = birth._id;
+
+        this.selectOffices(birth.birthDistrict);
+        this.applicationId = response.data.application._id;
+
         stepper.next();
-        this.selectOffices(response.data.birthDistrict);
-        this.birthServiceId = response.data._id;
       },
       error: (err) => {
         console.error(err);
       },
     });
-  }
-
-  verifyFatherAadhar() {
-    this.authApi
-      .aadharDetail({
-        aadharNumber: this.secondFormGroup.value.fatherAadharNumber!,
-      })
-      .subscribe({
-        next: (response) => this.onFatherAadharVerified(response),
-
-        error: (err) => alert(err.error),
-      });
-  }
-
-  verifyMotherAadhar() {
-    this.authApi
-      .aadharDetail({ aadharNumber: this.secondFormGroup.value.motherAadharNumber! })
-      .subscribe({
-        next: (response) => this.onMotherAadharVerified(response),
-        error: (err) => alert(err.error),
-      });
   }
 
   onFatherAadharVerified(event: Auth.Apis.AadharDetailResponse) {
@@ -359,6 +414,18 @@ export class BirthService {
       PermanentState: event.data.address.state,
       PermanentPinCode: event.data.address.pinCode,
     });
+    if (
+      this.secondFormGroup.value.fatherAadharNumber ===
+      this.secondFormGroup.value.motherAadharNumber
+    ) {
+      this.secondFormGroup.controls.fatherAadharNumber.setErrors({
+        sameAadhar: true,
+      });
+
+      this.secondFormGroup.controls.motherAadharNumber.setErrors({
+        sameAadhar: true,
+      });
+    }
   }
 
   onMotherAadharVerified(event: Auth.Apis.AadharDetailResponse) {
@@ -376,32 +443,47 @@ export class BirthService {
       motherState: event.data.address.state,
       motherPinCode: event.data.address.pinCode,
     });
+    if (
+      this.secondFormGroup.value.motherAadharNumber ===
+      this.secondFormGroup.value.fatherAadharNumber
+    ) {
+      this.secondFormGroup.controls.motherAadharNumber.setErrors({
+        sameAadhar: true,
+      });
+
+      this.secondFormGroup.controls.fatherAadharNumber.setErrors({
+        sameAadhar: true,
+      });
+    }
   }
 
   submitApplication() {
+    console.log({
+      applicationId: this.applicationId,
+      officeDepartmentId: this.officeDepartmentId,
+      slotId: this.fourthFormGroup.value.slotTime,
+    });
     if (this.fourthFormGroup.invalid) {
       this.fourthFormGroup.markAllAsTouched();
       return;
     }
 
+    this.isApplicationSubmitting = true;
     this.applicationApi
-      .create({
-        serviceId: this.birthServiceId,
-
+      .completeApplication(this.applicationId, {
         officeDepartmentId: this.officeDepartmentId,
-
         slotId: this.fourthFormGroup.value.slotTime!,
-
-        serviceType: this.serviceType,
       })
       .subscribe({
         next: () => {
+          this.isApplicationSubmitting = false;
           alert('Application Submitted Successfully');
 
           this.router.navigate(['/user-dashboard']);
         },
 
         error: (err) => {
+          this.isApplicationSubmitting = false;
           console.log(err);
         },
       });

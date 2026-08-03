@@ -4,7 +4,15 @@
 
     <input matInput type="text" [formControl]="aadharControl" />
 
-    <mat-error>Enter Valid Aadhar Number</mat-error>
+    <mat-error>
+      @if (aadharControl.hasError('required')) {
+        Aadhaar Number is required.
+      } @else if (aadharControl.hasError('pattern')) {
+        Enter a valid Aadhaar Number.
+      } @else if (aadharControl.hasError('sameAadhar')) {
+        Aadhaar number is already used.
+      }
+    </mat-error>
   </mat-form-field>
 
   <div class="flex items-start">
@@ -23,9 +31,16 @@
 
 <div class="flex items-center gap-3 mb-4">
   <div class="flex justify-center items-center mb-3">
-    @for (control of otpControls; track $index) {
+    @for (control of otpControls; track $index; let i = $index) {
       <mat-form-field appearance="outline" class="w-16 h-16 text-extrabold text-center p-1">
-        <input matInput maxlength="1" [formControl]="control" class="text-center" />
+        <input
+          #otp
+          matInput
+          maxlength="1"
+          [formControl]="control"
+          class="text-center"
+          (input)="focusNext($event)"
+        />
       </mat-form-field>
     }
   </div>

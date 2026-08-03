@@ -154,7 +154,14 @@
         </div>
 
         <div class="flex justify-center mt-4">
-          <button matButton="filled" type="submit" class="w-64">Register</button>
+          <button matButton="filled" type="submit" class="w-64" [disabled]="isLoading">
+            @if (!isLoading) {
+              Register
+            }
+            @if (isLoading) {
+              <mat-spinner diameter="22"></mat-spinner>
+            }
+          </button>
         </div>
       </form>
     </mat-card>
